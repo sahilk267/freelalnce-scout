@@ -1,0 +1,24 @@
+{
+  "backupFilename": "backup-2026-07-19-19-48-24-515.sqlitedb.gz",
+  "timestamp": "2026-07-19T19:48:24.521Z",
+  "firestoreRecordCount": 0,
+  "sqliteRecordCount": 0,
+  "backupDurationMs": 232,
+  "fileSize": 793,
+  "sha256Checksum": "8b09eadc6a4997d4e72caade0328ad89264f908a16dfcfbcc7f1a32a58fdc299",
+  "integrityStatus": "VALID",
+  "integrityDetails": {
+    "pragmaOk": true,
+    "recordCountOk": true,
+    "checksumOk": true,
+    "missingCount": 0,
+    "duplicateIdCount": 0,
+    "duplicateNameCount": 0
+  },
+  "appVersion": "1.0.0",
+  "databaseVersion": "0",
+  "migrationVersion": "3",
+  "healthScore": 100,
+  "healthStatus": "Healthy",
+  "compressionEnabled": true
+}

@@ -1,0 +1,3 @@
+#!/bin/sh
+npm run index
+git add docs/PROJECT_INDEX.json docs/PROJECT_INDEX.md

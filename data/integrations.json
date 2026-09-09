@@ -1,0 +1,19 @@
+{
+  "smtp": {
+    "host": "mail.hostinger.com",
+    "port": 465,
+    "username": "",
+    "password": "",
+    "configured": false
+  },
+  "telegram": {
+    "token": "8815918869:AAGC3Wbd9vbX_BIaXYZCimmo21PYcNhWNdU",
+    "chatId": "-1003793331993",
+    "configured": true,
+    "botUsername": "FreeLancerScout_BOT",
+    "updatedAt": "2026-09-03T00:15:29.730Z"
+  },
+  "gmail": {
+    "configured": true
+  }
+}

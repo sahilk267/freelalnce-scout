@@ -1,0 +1,6952 @@
+[
+  {
+    "operationId": "sched-bkp-1788711130911",
+    "timestamp": "2026-09-06T16:12:11.210Z",
+    "durationMs": 299,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1788711130912",
+    "timestamp": "2026-09-06T16:12:11.209Z",
+    "durationMs": 297,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1788710423720",
+    "timestamp": "2026-09-06T16:00:23.761Z",
+    "durationMs": 41,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1788710423721",
+    "timestamp": "2026-09-06T16:00:23.759Z",
+    "durationMs": 38,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1788706823720",
+    "timestamp": "2026-09-06T15:00:23.869Z",
+    "durationMs": 149,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1788706823720",
+    "timestamp": "2026-09-06T15:00:23.868Z",
+    "durationMs": 148,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1788703223720",
+    "timestamp": "2026-09-06T14:00:23.772Z",
+    "durationMs": 52,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1788703223720",
+    "timestamp": "2026-09-06T14:00:23.771Z",
+    "durationMs": 51,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1788699623720",
+    "timestamp": "2026-09-06T13:00:23.785Z",
+    "durationMs": 65,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1788699623720",
+    "timestamp": "2026-09-06T13:00:23.784Z",
+    "durationMs": 64,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1788696023718",
+    "timestamp": "2026-09-06T12:00:23.782Z",
+    "durationMs": 63,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1788696023719",
+    "timestamp": "2026-09-06T12:00:23.780Z",
+    "durationMs": 61,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1788692423718",
+    "timestamp": "2026-09-06T11:00:23.802Z",
+    "durationMs": 84,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1788692423718",
+    "timestamp": "2026-09-06T11:00:23.801Z",
+    "durationMs": 83,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1788688828719",
+    "timestamp": "2026-09-06T10:00:29.034Z",
+    "durationMs": 314,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1788688828719",
+    "timestamp": "2026-09-06T10:00:29.032Z",
+    "durationMs": 313,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1788688802568",
+    "timestamp": "2026-09-06T10:00:02.863Z",
+    "durationMs": 295,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1788688802569",
+    "timestamp": "2026-09-06T10:00:02.861Z",
+    "durationMs": 293,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1788688544873",
+    "timestamp": "2026-09-06T09:55:45.576Z",
+    "durationMs": 703,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1788688544874",
+    "timestamp": "2026-09-06T09:55:45.575Z",
+    "durationMs": 701,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1788474847414",
+    "timestamp": "2026-09-03T22:34:07.641Z",
+    "durationMs": 227,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1788474847415",
+    "timestamp": "2026-09-03T22:34:07.640Z",
+    "durationMs": 225,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1788474836322",
+    "timestamp": "2026-09-03T22:33:56.776Z",
+    "durationMs": 454,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1788474836323",
+    "timestamp": "2026-09-03T22:33:56.775Z",
+    "durationMs": 452,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1788394511932",
+    "timestamp": "2026-09-03T00:15:11.932Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1788394511927",
+    "timestamp": "2026-09-03T00:15:11.928Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1788394511919",
+    "timestamp": "2026-09-03T00:15:11.920Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1788394511651",
+    "timestamp": "2026-09-03T00:15:11.651Z",
+    "durationMs": 0,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1788394439598",
+    "timestamp": "2026-09-03T00:13:59.640Z",
+    "durationMs": 42,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1788394439598",
+    "timestamp": "2026-09-03T00:13:59.639Z",
+    "durationMs": 41,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1788393674743",
+    "timestamp": "2026-09-03T00:01:15.043Z",
+    "durationMs": 300,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1788393674744",
+    "timestamp": "2026-09-03T00:01:15.042Z",
+    "durationMs": 298,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1788393639988",
+    "timestamp": "2026-09-03T00:00:40.311Z",
+    "durationMs": 323,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1788393639989",
+    "timestamp": "2026-09-03T00:00:40.310Z",
+    "durationMs": 321,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1788393377615",
+    "timestamp": "2026-09-02T23:56:17.879Z",
+    "durationMs": 264,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1788393377616",
+    "timestamp": "2026-09-02T23:56:17.878Z",
+    "durationMs": 262,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1788393356949",
+    "timestamp": "2026-09-02T23:55:57.218Z",
+    "durationMs": 269,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1788393356949",
+    "timestamp": "2026-09-02T23:55:57.216Z",
+    "durationMs": 267,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1788393332536",
+    "timestamp": "2026-09-02T23:55:32.537Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1788393332532",
+    "timestamp": "2026-09-02T23:55:32.532Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1788393332524",
+    "timestamp": "2026-09-02T23:55:32.525Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1788393332255",
+    "timestamp": "2026-09-02T23:55:32.255Z",
+    "durationMs": 0,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1788393313029",
+    "timestamp": "2026-09-02T23:55:13.029Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1788393313024",
+    "timestamp": "2026-09-02T23:55:13.025Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1788393313016",
+    "timestamp": "2026-09-02T23:55:13.017Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1788393312747",
+    "timestamp": "2026-09-02T23:55:12.748Z",
+    "durationMs": 1,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1788392640387",
+    "timestamp": "2026-09-02T23:44:00.628Z",
+    "durationMs": 241,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1788392640388",
+    "timestamp": "2026-09-02T23:44:00.627Z",
+    "durationMs": 239,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1788392590365",
+    "timestamp": "2026-09-02T23:43:10.615Z",
+    "durationMs": 250,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1788392590366",
+    "timestamp": "2026-09-02T23:43:10.614Z",
+    "durationMs": 248,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1788392039970",
+    "timestamp": "2026-09-02T23:34:00.238Z",
+    "durationMs": 268,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1788392039970",
+    "timestamp": "2026-09-02T23:34:00.237Z",
+    "durationMs": 267,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1788392026860",
+    "timestamp": "2026-09-02T23:33:46.860Z",
+    "durationMs": 0,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1788392026558",
+    "timestamp": "2026-09-02T23:33:46.558Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1788392026553",
+    "timestamp": "2026-09-02T23:33:46.554Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1788392026545",
+    "timestamp": "2026-09-02T23:33:46.546Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1788391743930",
+    "timestamp": "2026-09-02T23:29:04.265Z",
+    "durationMs": 334,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1788391743930",
+    "timestamp": "2026-09-02T23:29:04.263Z",
+    "durationMs": 333,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1786447063392",
+    "timestamp": "2026-08-11T11:17:43.710Z",
+    "durationMs": 317,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786447063392",
+    "timestamp": "2026-08-11T11:17:43.709Z",
+    "durationMs": 317,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1786447049571",
+    "timestamp": "2026-08-11T11:17:30.081Z",
+    "durationMs": 510,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786447049571",
+    "timestamp": "2026-08-11T11:17:30.080Z",
+    "durationMs": 509,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786404827426",
+    "timestamp": "2026-08-10T23:33:47.426Z",
+    "durationMs": 0,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1786404827131",
+    "timestamp": "2026-08-10T23:33:47.132Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786404827127",
+    "timestamp": "2026-08-10T23:33:47.128Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786404827120",
+    "timestamp": "2026-08-10T23:33:47.121Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1786404779395",
+    "timestamp": "2026-08-10T23:32:59.395Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786404779390",
+    "timestamp": "2026-08-10T23:32:59.391Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786404779345",
+    "timestamp": "2026-08-10T23:32:59.346Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786404778002",
+    "timestamp": "2026-08-10T23:32:58.002Z",
+    "durationMs": 0,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1786404701357",
+    "timestamp": "2026-08-10T23:31:41.646Z",
+    "durationMs": 289,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786404701358",
+    "timestamp": "2026-08-10T23:31:41.645Z",
+    "durationMs": 287,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1786404083930",
+    "timestamp": "2026-08-10T23:21:24.089Z",
+    "durationMs": 159,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786404083930",
+    "timestamp": "2026-08-10T23:21:24.088Z",
+    "durationMs": 158,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1786400488930",
+    "timestamp": "2026-08-10T22:21:29.202Z",
+    "durationMs": 272,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786400488931",
+    "timestamp": "2026-08-10T22:21:29.201Z",
+    "durationMs": 270,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1786400465240",
+    "timestamp": "2026-08-10T22:21:05.240Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786400465236",
+    "timestamp": "2026-08-10T22:21:05.236Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786400465228",
+    "timestamp": "2026-08-10T22:21:05.229Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786400464716",
+    "timestamp": "2026-08-10T22:21:04.716Z",
+    "durationMs": 0,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1786399454265",
+    "timestamp": "2026-08-10T22:04:14.606Z",
+    "durationMs": 341,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786399454266",
+    "timestamp": "2026-08-10T22:04:14.605Z",
+    "durationMs": 339,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1786399439099",
+    "timestamp": "2026-08-10T22:03:59.099Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786399439094",
+    "timestamp": "2026-08-10T22:03:59.095Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786399439086",
+    "timestamp": "2026-08-10T22:03:59.087Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786399438839",
+    "timestamp": "2026-08-10T22:03:58.839Z",
+    "durationMs": 0,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1786399292819",
+    "timestamp": "2026-08-10T22:01:32.819Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786399292814",
+    "timestamp": "2026-08-10T22:01:32.815Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786399292807",
+    "timestamp": "2026-08-10T22:01:32.808Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786399291127",
+    "timestamp": "2026-08-10T22:01:31.128Z",
+    "durationMs": 1,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1786399235046",
+    "timestamp": "2026-08-10T22:00:35.046Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786399235042",
+    "timestamp": "2026-08-10T22:00:35.042Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786399235034",
+    "timestamp": "2026-08-10T22:00:35.035Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786399234162",
+    "timestamp": "2026-08-10T22:00:34.162Z",
+    "durationMs": 0,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1786399184115",
+    "timestamp": "2026-08-10T21:59:44.115Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786399184111",
+    "timestamp": "2026-08-10T21:59:44.111Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786399184103",
+    "timestamp": "2026-08-10T21:59:44.104Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786399181239",
+    "timestamp": "2026-08-10T21:59:41.239Z",
+    "durationMs": 0,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1786396481079",
+    "timestamp": "2026-08-10T21:14:41.347Z",
+    "durationMs": 268,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786396481079",
+    "timestamp": "2026-08-10T21:14:41.346Z",
+    "durationMs": 267,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786396465490",
+    "timestamp": "2026-08-10T21:14:25.490Z",
+    "durationMs": 0,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1786396465227",
+    "timestamp": "2026-08-10T21:14:25.228Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786396465223",
+    "timestamp": "2026-08-10T21:14:25.224Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786396465216",
+    "timestamp": "2026-08-10T21:14:25.217Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1786395808895",
+    "timestamp": "2026-08-10T21:03:29.210Z",
+    "durationMs": 315,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786395808895",
+    "timestamp": "2026-08-10T21:03:29.209Z",
+    "durationMs": 314,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1786380631826",
+    "timestamp": "2026-08-10T16:50:31.826Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786380631822",
+    "timestamp": "2026-08-10T16:50:31.823Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786380631816",
+    "timestamp": "2026-08-10T16:50:31.816Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786380630048",
+    "timestamp": "2026-08-10T16:50:30.048Z",
+    "durationMs": 0,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1786377972352",
+    "timestamp": "2026-08-10T16:06:12.671Z",
+    "durationMs": 319,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786377972353",
+    "timestamp": "2026-08-10T16:06:12.670Z",
+    "durationMs": 317,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786377949012",
+    "timestamp": "2026-08-10T16:05:49.012Z",
+    "durationMs": 0,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1786377948733",
+    "timestamp": "2026-08-10T16:05:48.733Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786377948729",
+    "timestamp": "2026-08-10T16:05:48.729Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786377948722",
+    "timestamp": "2026-08-10T16:05:48.722Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1786377919362",
+    "timestamp": "2026-08-10T16:05:19.362Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786377919358",
+    "timestamp": "2026-08-10T16:05:19.358Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786377919349",
+    "timestamp": "2026-08-10T16:05:19.350Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786377919108",
+    "timestamp": "2026-08-10T16:05:19.108Z",
+    "durationMs": 0,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786377894147",
+    "timestamp": "2026-08-10T16:04:54.147Z",
+    "durationMs": 0,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1786377893874",
+    "timestamp": "2026-08-10T16:04:53.874Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786377893870",
+    "timestamp": "2026-08-10T16:04:53.871Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786377893862",
+    "timestamp": "2026-08-10T16:04:53.863Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1786374391205",
+    "timestamp": "2026-08-10T15:06:31.407Z",
+    "durationMs": 202,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786374391205",
+    "timestamp": "2026-08-10T15:06:31.406Z",
+    "durationMs": 201,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1786370796205",
+    "timestamp": "2026-08-10T14:06:36.553Z",
+    "durationMs": 348,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786370796206",
+    "timestamp": "2026-08-10T14:06:36.552Z",
+    "durationMs": 346,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1786313661785",
+    "timestamp": "2026-08-09T22:14:21.785Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786313661781",
+    "timestamp": "2026-08-09T22:14:21.781Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786313661774",
+    "timestamp": "2026-08-09T22:14:21.775Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786313661522",
+    "timestamp": "2026-08-09T22:14:21.523Z",
+    "durationMs": 1,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1786313297887",
+    "timestamp": "2026-08-09T22:08:18.207Z",
+    "durationMs": 320,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786313297888",
+    "timestamp": "2026-08-09T22:08:18.206Z",
+    "durationMs": 318,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1786313278238",
+    "timestamp": "2026-08-09T22:07:58.238Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786313278234",
+    "timestamp": "2026-08-09T22:07:58.235Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786313278227",
+    "timestamp": "2026-08-09T22:07:58.228Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786313277230",
+    "timestamp": "2026-08-09T22:07:57.230Z",
+    "durationMs": 0,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1786313241058",
+    "timestamp": "2026-08-09T22:07:21.058Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786313241054",
+    "timestamp": "2026-08-09T22:07:21.055Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786313241048",
+    "timestamp": "2026-08-09T22:07:21.049Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786313240793",
+    "timestamp": "2026-08-09T22:07:20.793Z",
+    "durationMs": 0,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1786313210336",
+    "timestamp": "2026-08-09T22:06:50.336Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786313210332",
+    "timestamp": "2026-08-09T22:06:50.333Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786313210323",
+    "timestamp": "2026-08-09T22:06:50.324Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786313210078",
+    "timestamp": "2026-08-09T22:06:50.078Z",
+    "durationMs": 0,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1786313174941",
+    "timestamp": "2026-08-09T22:06:14.941Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786313174937",
+    "timestamp": "2026-08-09T22:06:14.938Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786313174931",
+    "timestamp": "2026-08-09T22:06:14.932Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786313174408",
+    "timestamp": "2026-08-09T22:06:14.409Z",
+    "durationMs": 1,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1786313119342",
+    "timestamp": "2026-08-09T22:05:19.342Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786313119338",
+    "timestamp": "2026-08-09T22:05:19.338Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786313119331",
+    "timestamp": "2026-08-09T22:05:19.332Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786313119089",
+    "timestamp": "2026-08-09T22:05:19.090Z",
+    "durationMs": 1,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1786312506685",
+    "timestamp": "2026-08-09T21:55:06.957Z",
+    "durationMs": 272,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786312506686",
+    "timestamp": "2026-08-09T21:55:06.956Z",
+    "durationMs": 270,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1786312486093",
+    "timestamp": "2026-08-09T21:54:46.094Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786312486090",
+    "timestamp": "2026-08-09T21:54:46.090Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786312486083",
+    "timestamp": "2026-08-09T21:54:46.084Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786312485837",
+    "timestamp": "2026-08-09T21:54:45.837Z",
+    "durationMs": 0,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1786311792176",
+    "timestamp": "2026-08-09T21:43:12.511Z",
+    "durationMs": 335,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786311792177",
+    "timestamp": "2026-08-09T21:43:12.510Z",
+    "durationMs": 333,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1786311755074",
+    "timestamp": "2026-08-09T21:42:35.075Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786311755069",
+    "timestamp": "2026-08-09T21:42:35.069Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786311755062",
+    "timestamp": "2026-08-09T21:42:35.063Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786311754537",
+    "timestamp": "2026-08-09T21:42:34.538Z",
+    "durationMs": 1,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1786310613239",
+    "timestamp": "2026-08-09T21:23:33.472Z",
+    "durationMs": 233,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786310613239",
+    "timestamp": "2026-08-09T21:23:33.471Z",
+    "durationMs": 232,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1786310586048",
+    "timestamp": "2026-08-09T21:23:06.049Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786310586044",
+    "timestamp": "2026-08-09T21:23:06.045Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786310586037",
+    "timestamp": "2026-08-09T21:23:06.038Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786310585788",
+    "timestamp": "2026-08-09T21:23:05.788Z",
+    "durationMs": 0,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1786310347397",
+    "timestamp": "2026-08-09T21:19:07.686Z",
+    "durationMs": 288,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786310347398",
+    "timestamp": "2026-08-09T21:19:07.685Z",
+    "durationMs": 287,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1786310182831",
+    "timestamp": "2026-08-09T21:16:23.053Z",
+    "durationMs": 222,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786310182832",
+    "timestamp": "2026-08-09T21:16:23.052Z",
+    "durationMs": 220,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786310160854",
+    "timestamp": "2026-08-09T21:16:00.854Z",
+    "durationMs": 0,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1786310160577",
+    "timestamp": "2026-08-09T21:16:00.578Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786310160574",
+    "timestamp": "2026-08-09T21:16:00.574Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786310160567",
+    "timestamp": "2026-08-09T21:16:00.568Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1786310096315",
+    "timestamp": "2026-08-09T21:14:56.598Z",
+    "durationMs": 283,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786310096315",
+    "timestamp": "2026-08-09T21:14:56.597Z",
+    "durationMs": 282,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1786309985837",
+    "timestamp": "2026-08-09T21:13:06.081Z",
+    "durationMs": 244,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786309985837",
+    "timestamp": "2026-08-09T21:13:06.080Z",
+    "durationMs": 243,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1786309675679",
+    "timestamp": "2026-08-09T21:07:55.902Z",
+    "durationMs": 223,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786309675680",
+    "timestamp": "2026-08-09T21:07:55.901Z",
+    "durationMs": 221,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1786309533645",
+    "timestamp": "2026-08-09T21:05:33.702Z",
+    "durationMs": 57,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786309533646",
+    "timestamp": "2026-08-09T21:05:33.701Z",
+    "durationMs": 55,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1786308204928",
+    "timestamp": "2026-08-09T20:43:25.241Z",
+    "durationMs": 313,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786308204928",
+    "timestamp": "2026-08-09T20:43:25.240Z",
+    "durationMs": 312,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1786297870179",
+    "timestamp": "2026-08-09T17:51:10.690Z",
+    "durationMs": 511,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786297870179",
+    "timestamp": "2026-08-09T17:51:10.689Z",
+    "durationMs": 510,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1786297539973",
+    "timestamp": "2026-08-09T17:45:40.337Z",
+    "durationMs": 364,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786297539973",
+    "timestamp": "2026-08-09T17:45:40.336Z",
+    "durationMs": 363,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1786292413865",
+    "timestamp": "2026-08-09T16:20:13.866Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786292413860",
+    "timestamp": "2026-08-09T16:20:13.861Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786292413852",
+    "timestamp": "2026-08-09T16:20:13.853Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786292413572",
+    "timestamp": "2026-08-09T16:20:13.572Z",
+    "durationMs": 0,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1786292314401",
+    "timestamp": "2026-08-09T16:18:34.401Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786292314397",
+    "timestamp": "2026-08-09T16:18:34.398Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786292314390",
+    "timestamp": "2026-08-09T16:18:34.391Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786292314125",
+    "timestamp": "2026-08-09T16:18:34.125Z",
+    "durationMs": 0,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1786292238373",
+    "timestamp": "2026-08-09T16:17:18.374Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786292238369",
+    "timestamp": "2026-08-09T16:17:18.370Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786292238362",
+    "timestamp": "2026-08-09T16:17:18.363Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786292238078",
+    "timestamp": "2026-08-09T16:17:18.078Z",
+    "durationMs": 0,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1786292165807",
+    "timestamp": "2026-08-09T16:16:05.807Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786292165803",
+    "timestamp": "2026-08-09T16:16:05.803Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786292165796",
+    "timestamp": "2026-08-09T16:16:05.797Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786292165508",
+    "timestamp": "2026-08-09T16:16:05.508Z",
+    "durationMs": 0,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1786292135911",
+    "timestamp": "2026-08-09T16:15:35.912Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786292135907",
+    "timestamp": "2026-08-09T16:15:35.908Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786292135900",
+    "timestamp": "2026-08-09T16:15:35.901Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786292135614",
+    "timestamp": "2026-08-09T16:15:35.614Z",
+    "durationMs": 0,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1786292124793",
+    "timestamp": "2026-08-09T16:15:25.143Z",
+    "durationMs": 350,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786292124793",
+    "timestamp": "2026-08-09T16:15:25.142Z",
+    "durationMs": 349,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786292111557",
+    "timestamp": "2026-08-09T16:15:11.557Z",
+    "durationMs": 0,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1786292110852",
+    "timestamp": "2026-08-09T16:15:10.852Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786292110846",
+    "timestamp": "2026-08-09T16:15:10.847Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786292110839",
+    "timestamp": "2026-08-09T16:15:10.840Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1786291278374",
+    "timestamp": "2026-08-09T16:01:18.743Z",
+    "durationMs": 368,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786291278375",
+    "timestamp": "2026-08-09T16:01:18.742Z",
+    "durationMs": 367,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1786288982655",
+    "timestamp": "2026-08-09T15:23:02.979Z",
+    "durationMs": 324,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786288982656",
+    "timestamp": "2026-08-09T15:23:02.978Z",
+    "durationMs": 322,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786288970388",
+    "timestamp": "2026-08-09T15:22:50.388Z",
+    "durationMs": 0,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1786288970066",
+    "timestamp": "2026-08-09T15:22:50.066Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786288970059",
+    "timestamp": "2026-08-09T15:22:50.060Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786288970051",
+    "timestamp": "2026-08-09T15:22:50.052Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1786288943162",
+    "timestamp": "2026-08-09T15:22:23.785Z",
+    "durationMs": 623,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786288943163",
+    "timestamp": "2026-08-09T15:22:23.784Z",
+    "durationMs": 621,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786200693900",
+    "timestamp": "2026-08-08T14:51:33.900Z",
+    "durationMs": 0,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1786200693613",
+    "timestamp": "2026-08-08T14:51:33.613Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786200693607",
+    "timestamp": "2026-08-08T14:51:33.607Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786200693599",
+    "timestamp": "2026-08-08T14:51:33.600Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1786200530534",
+    "timestamp": "2026-08-08T14:48:51.772Z",
+    "durationMs": 1238,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786200530535",
+    "timestamp": "2026-08-08T14:48:51.771Z",
+    "durationMs": 1236,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786055666713",
+    "timestamp": "2026-08-06T22:34:26.713Z",
+    "durationMs": 0,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1786055666142",
+    "timestamp": "2026-08-06T22:34:26.142Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786055666136",
+    "timestamp": "2026-08-06T22:34:26.136Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786055666128",
+    "timestamp": "2026-08-06T22:34:26.129Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1786055224516",
+    "timestamp": "2026-08-06T22:27:05.164Z",
+    "durationMs": 648,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786055224517",
+    "timestamp": "2026-08-06T22:27:05.163Z",
+    "durationMs": 646,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786055189652",
+    "timestamp": "2026-08-06T22:26:29.652Z",
+    "durationMs": 0,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1786055189347",
+    "timestamp": "2026-08-06T22:26:29.348Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786055189341",
+    "timestamp": "2026-08-06T22:26:29.342Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1786055189333",
+    "timestamp": "2026-08-06T22:26:29.334Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1786055151207",
+    "timestamp": "2026-08-06T22:25:52.498Z",
+    "durationMs": 1291,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786055151207",
+    "timestamp": "2026-08-06T22:25:52.497Z",
+    "durationMs": 1290,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1786055104898",
+    "timestamp": "2026-08-06T22:25:05.999Z",
+    "durationMs": 1101,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1786055104899",
+    "timestamp": "2026-08-06T22:25:05.999Z",
+    "durationMs": 1100,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1785622169675",
+    "timestamp": "2026-08-01T22:09:29.675Z",
+    "durationMs": 0,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1785622169422",
+    "timestamp": "2026-08-01T22:09:29.422Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1785622169418",
+    "timestamp": "2026-08-01T22:09:29.418Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1785622169412",
+    "timestamp": "2026-08-01T22:09:29.413Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1785622122053",
+    "timestamp": "2026-08-01T22:08:43.091Z",
+    "durationMs": 1038,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1785622122053",
+    "timestamp": "2026-08-01T22:08:43.091Z",
+    "durationMs": 1038,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1785337497646",
+    "timestamp": "2026-07-29T15:04:57.646Z",
+    "durationMs": 0,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1785337497319",
+    "timestamp": "2026-07-29T15:04:57.319Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1785337497313",
+    "timestamp": "2026-07-29T15:04:57.314Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1785337497306",
+    "timestamp": "2026-07-29T15:04:57.307Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1785335626709",
+    "timestamp": "2026-07-29T14:33:47.691Z",
+    "durationMs": 981,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1785335626709",
+    "timestamp": "2026-07-29T14:33:47.690Z",
+    "durationMs": 981,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1785332026708",
+    "timestamp": "2026-07-29T13:33:47.678Z",
+    "durationMs": 970,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1785332026708",
+    "timestamp": "2026-07-29T13:33:47.676Z",
+    "durationMs": 968,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1785328431707",
+    "timestamp": "2026-07-29T12:33:52.616Z",
+    "durationMs": 909,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1785328431707",
+    "timestamp": "2026-07-29T12:33:52.615Z",
+    "durationMs": 908,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1785328418182",
+    "timestamp": "2026-07-29T12:33:38.182Z",
+    "durationMs": 0,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1785328417895",
+    "timestamp": "2026-07-29T12:33:37.895Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1785328417889",
+    "timestamp": "2026-07-29T12:33:37.889Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1785328417883",
+    "timestamp": "2026-07-29T12:33:37.884Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1785325620093",
+    "timestamp": "2026-07-29T11:47:06.750Z",
+    "durationMs": 6657,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [
+      "7 PERMISSION_DENIED: Missing or insufficient permissions."
+    ],
+    "errors": [],
+    "retries": 3,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1785325620093",
+    "timestamp": "2026-07-29T11:47:06.749Z",
+    "durationMs": 6656,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "7 PERMISSION_DENIED: Missing or insufficient permissions."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1785322020092",
+    "timestamp": "2026-07-29T10:47:06.620Z",
+    "durationMs": 6528,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [
+      "7 PERMISSION_DENIED: Missing or insufficient permissions."
+    ],
+    "errors": [],
+    "retries": 3,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1785322020092",
+    "timestamp": "2026-07-29T10:47:06.619Z",
+    "durationMs": 6527,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "7 PERMISSION_DENIED: Missing or insufficient permissions."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1785318420091",
+    "timestamp": "2026-07-29T09:47:06.657Z",
+    "durationMs": 6566,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [
+      "7 PERMISSION_DENIED: Missing or insufficient permissions."
+    ],
+    "errors": [],
+    "retries": 3,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1785318420092",
+    "timestamp": "2026-07-29T09:47:06.655Z",
+    "durationMs": 6563,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "7 PERMISSION_DENIED: Missing or insufficient permissions."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1785314825090",
+    "timestamp": "2026-07-29T08:47:12.000Z",
+    "durationMs": 6910,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [
+      "7 PERMISSION_DENIED: Missing or insufficient permissions."
+    ],
+    "errors": [],
+    "retries": 3,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1785314825092",
+    "timestamp": "2026-07-29T08:47:11.999Z",
+    "durationMs": 6907,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "7 PERMISSION_DENIED: Missing or insufficient permissions."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784588212677",
+    "timestamp": "2026-07-20T22:56:52.677Z",
+    "durationMs": 0,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1784588212381",
+    "timestamp": "2026-07-20T22:56:52.382Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1784588212376",
+    "timestamp": "2026-07-20T22:56:52.377Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1784588212369",
+    "timestamp": "2026-07-20T22:56:52.370Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1784585526400",
+    "timestamp": "2026-07-20T22:12:12.933Z",
+    "durationMs": 6533,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [
+      "7 PERMISSION_DENIED: Missing or insufficient permissions."
+    ],
+    "errors": [],
+    "retries": 3,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784585526401",
+    "timestamp": "2026-07-20T22:12:12.932Z",
+    "durationMs": 6531,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "7 PERMISSION_DENIED: Missing or insufficient permissions."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784585381173",
+    "timestamp": "2026-07-20T22:09:41.174Z",
+    "durationMs": 1,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1784585380924",
+    "timestamp": "2026-07-20T22:09:40.925Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1784585380921",
+    "timestamp": "2026-07-20T22:09:40.922Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1784585380915",
+    "timestamp": "2026-07-20T22:09:40.916Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1784584889981",
+    "timestamp": "2026-07-20T22:01:36.513Z",
+    "durationMs": 6532,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [
+      "7 PERMISSION_DENIED: Missing or insufficient permissions."
+    ],
+    "errors": [],
+    "retries": 3,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784584889982",
+    "timestamp": "2026-07-20T22:01:36.511Z",
+    "durationMs": 6529,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "7 PERMISSION_DENIED: Missing or insufficient permissions."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784584866401",
+    "timestamp": "2026-07-20T22:01:06.401Z",
+    "durationMs": 0,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1784584866100",
+    "timestamp": "2026-07-20T22:01:06.100Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1784584866096",
+    "timestamp": "2026-07-20T22:01:06.096Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1784584866089",
+    "timestamp": "2026-07-20T22:01:06.089Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1784584210169",
+    "timestamp": "2026-07-20T21:50:16.700Z",
+    "durationMs": 6531,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [
+      "7 PERMISSION_DENIED: Cloud Firestore API has not been used in project ais-asia-southeast1-83f44bb3b0 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/firestore.googleapis.com/overview?project=ais-asia-southeast1-83f44bb3b0 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+    ],
+    "errors": [],
+    "retries": 3,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784584210169",
+    "timestamp": "2026-07-20T21:50:16.699Z",
+    "durationMs": 6529,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "7 PERMISSION_DENIED: Cloud Firestore API has not been used in project ais-asia-southeast1-83f44bb3b0 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/firestore.googleapis.com/overview?project=ais-asia-southeast1-83f44bb3b0 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784584194338",
+    "timestamp": "2026-07-20T21:49:54.339Z",
+    "durationMs": 1,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1784584193715",
+    "timestamp": "2026-07-20T21:49:53.715Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1784584193711",
+    "timestamp": "2026-07-20T21:49:53.712Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1784584193704",
+    "timestamp": "2026-07-20T21:49:53.705Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1784584158650",
+    "timestamp": "2026-07-20T21:49:25.500Z",
+    "durationMs": 6850,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [
+      "7 PERMISSION_DENIED: Cloud Firestore API has not been used in project ais-asia-southeast1-83f44bb3b0 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/firestore.googleapis.com/overview?project=ais-asia-southeast1-83f44bb3b0 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+    ],
+    "errors": [],
+    "retries": 3,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784584158651",
+    "timestamp": "2026-07-20T21:49:25.498Z",
+    "durationMs": 6847,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "7 PERMISSION_DENIED: Cloud Firestore API has not been used in project ais-asia-southeast1-83f44bb3b0 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/firestore.googleapis.com/overview?project=ais-asia-southeast1-83f44bb3b0 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1784583841865",
+    "timestamp": "2026-07-20T21:44:08.383Z",
+    "durationMs": 6518,
+    "operation": "scheduler",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [
+      "5 NOT_FOUND: "
+    ],
+    "errors": [
+      "5 NOT_FOUND: "
+    ],
+    "retries": 3,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784583841865",
+    "timestamp": "2026-07-20T21:44:08.382Z",
+    "durationMs": 6517,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "5 NOT_FOUND: "
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1784583820781",
+    "timestamp": "2026-07-20T21:43:40.781Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1784583820776",
+    "timestamp": "2026-07-20T21:43:40.777Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1784583820769",
+    "timestamp": "2026-07-20T21:43:40.770Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784583820490",
+    "timestamp": "2026-07-20T21:43:40.491Z",
+    "durationMs": 1,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1784583812407",
+    "timestamp": "2026-07-20T21:43:39.370Z",
+    "durationMs": 6962,
+    "operation": "scheduler",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [
+      "5 NOT_FOUND: "
+    ],
+    "errors": [
+      "5 NOT_FOUND: "
+    ],
+    "retries": 3,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784583812408",
+    "timestamp": "2026-07-20T21:43:39.368Z",
+    "durationMs": 6960,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "5 NOT_FOUND: "
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1784583757002",
+    "timestamp": "2026-07-20T21:42:45.350Z",
+    "durationMs": 8348,
+    "operation": "scheduler",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [
+      "5 NOT_FOUND: "
+    ],
+    "errors": [
+      "5 NOT_FOUND: "
+    ],
+    "retries": 3,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784583757002",
+    "timestamp": "2026-07-20T21:42:45.349Z",
+    "durationMs": 8347,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "5 NOT_FOUND: "
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1784583328250",
+    "timestamp": "2026-07-20T21:35:34.635Z",
+    "durationMs": 6385,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [
+      "7 PERMISSION_DENIED: Missing or insufficient permissions."
+    ],
+    "errors": [],
+    "retries": 3,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784583328251",
+    "timestamp": "2026-07-20T21:35:34.634Z",
+    "durationMs": 6383,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "7 PERMISSION_DENIED: Missing or insufficient permissions."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1784583312520",
+    "timestamp": "2026-07-20T21:35:12.520Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1784583312517",
+    "timestamp": "2026-07-20T21:35:12.517Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1784583312511",
+    "timestamp": "2026-07-20T21:35:12.512Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784583312030",
+    "timestamp": "2026-07-20T21:35:12.030Z",
+    "durationMs": 0,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1784583305455",
+    "timestamp": "2026-07-20T21:35:11.860Z",
+    "durationMs": 6404,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [
+      "7 PERMISSION_DENIED: Missing or insufficient permissions."
+    ],
+    "errors": [],
+    "retries": 3,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784583305456",
+    "timestamp": "2026-07-20T21:35:11.859Z",
+    "durationMs": 6403,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "7 PERMISSION_DENIED: Missing or insufficient permissions."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1784583196053",
+    "timestamp": "2026-07-20T21:33:22.407Z",
+    "durationMs": 6354,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [
+      "7 PERMISSION_DENIED: Missing or insufficient permissions."
+    ],
+    "errors": [],
+    "retries": 3,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784583196053",
+    "timestamp": "2026-07-20T21:33:22.406Z",
+    "durationMs": 6353,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "7 PERMISSION_DENIED: Missing or insufficient permissions."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1784583180340",
+    "timestamp": "2026-07-20T21:33:06.878Z",
+    "durationMs": 6538,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [
+      "7 PERMISSION_DENIED: Missing or insufficient permissions."
+    ],
+    "errors": [],
+    "retries": 3,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784583180341",
+    "timestamp": "2026-07-20T21:33:06.877Z",
+    "durationMs": 6536,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "7 PERMISSION_DENIED: Missing or insufficient permissions."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784583153310",
+    "timestamp": "2026-07-20T21:32:33.310Z",
+    "durationMs": 0,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1784583153048",
+    "timestamp": "2026-07-20T21:32:33.049Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1784583153045",
+    "timestamp": "2026-07-20T21:32:33.045Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1784583153038",
+    "timestamp": "2026-07-20T21:32:33.039Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1784582441485",
+    "timestamp": "2026-07-20T21:20:48.239Z",
+    "durationMs": 6753,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [
+      "7 PERMISSION_DENIED: Missing or insufficient permissions."
+    ],
+    "errors": [],
+    "retries": 3,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784582441486",
+    "timestamp": "2026-07-20T21:20:48.237Z",
+    "durationMs": 6751,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "7 PERMISSION_DENIED: Missing or insufficient permissions."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784558150905",
+    "timestamp": "2026-07-20T14:35:50.905Z",
+    "durationMs": 0,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1784558150643",
+    "timestamp": "2026-07-20T14:35:50.643Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1784558150639",
+    "timestamp": "2026-07-20T14:35:50.639Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1784558150632",
+    "timestamp": "2026-07-20T14:35:50.633Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1784558023948",
+    "timestamp": "2026-07-20T14:33:50.459Z",
+    "durationMs": 6511,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [
+      "7 PERMISSION_DENIED: Missing or insufficient permissions."
+    ],
+    "errors": [],
+    "retries": 3,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784558023948",
+    "timestamp": "2026-07-20T14:33:50.458Z",
+    "durationMs": 6510,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "7 PERMISSION_DENIED: Missing or insufficient permissions."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1784557927082",
+    "timestamp": "2026-07-20T14:32:13.896Z",
+    "durationMs": 6814,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [
+      "7 PERMISSION_DENIED: Missing or insufficient permissions."
+    ],
+    "errors": [],
+    "retries": 3,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784557927083",
+    "timestamp": "2026-07-20T14:32:13.895Z",
+    "durationMs": 6812,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "7 PERMISSION_DENIED: Missing or insufficient permissions."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1784557522644",
+    "timestamp": "2026-07-20T14:25:28.995Z",
+    "durationMs": 6351,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [
+      "7 PERMISSION_DENIED: Missing or insufficient permissions."
+    ],
+    "errors": [],
+    "retries": 3,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784557522645",
+    "timestamp": "2026-07-20T14:25:28.994Z",
+    "durationMs": 6349,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "7 PERMISSION_DENIED: Missing or insufficient permissions."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1784557121413",
+    "timestamp": "2026-07-20T14:18:47.479Z",
+    "durationMs": 6066,
+    "operation": "scheduler",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [
+      "5 NOT_FOUND: "
+    ],
+    "errors": [
+      "5 NOT_FOUND: "
+    ],
+    "retries": 3,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784557121414",
+    "timestamp": "2026-07-20T14:18:47.478Z",
+    "durationMs": 6064,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "5 NOT_FOUND: "
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1784557105725",
+    "timestamp": "2026-07-20T14:18:33.544Z",
+    "durationMs": 7819,
+    "operation": "scheduler",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [
+      "5 NOT_FOUND: "
+    ],
+    "errors": [
+      "5 NOT_FOUND: "
+    ],
+    "retries": 3,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784557105726",
+    "timestamp": "2026-07-20T14:18:33.543Z",
+    "durationMs": 7817,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "5 NOT_FOUND: "
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1784556865492",
+    "timestamp": "2026-07-20T14:14:32.313Z",
+    "durationMs": 6821,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [
+      "7 PERMISSION_DENIED: Missing or insufficient permissions."
+    ],
+    "errors": [],
+    "retries": 3,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784556865493",
+    "timestamp": "2026-07-20T14:14:32.312Z",
+    "durationMs": 6819,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "7 PERMISSION_DENIED: Missing or insufficient permissions."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1784498188046",
+    "timestamp": "2026-07-19T21:56:28.047Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1784498188043",
+    "timestamp": "2026-07-19T21:56:28.044Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1784498188036",
+    "timestamp": "2026-07-19T21:56:28.037Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784498187787",
+    "timestamp": "2026-07-19T21:56:27.787Z",
+    "durationMs": 0,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1784498164457",
+    "timestamp": "2026-07-19T21:56:10.820Z",
+    "durationMs": 6363,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [
+      "7 PERMISSION_DENIED: Missing or insufficient permissions."
+    ],
+    "errors": [],
+    "retries": 3,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784498164460",
+    "timestamp": "2026-07-19T21:56:10.819Z",
+    "durationMs": 6359,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "7 PERMISSION_DENIED: Missing or insufficient permissions."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1784498105534",
+    "timestamp": "2026-07-19T21:55:11.963Z",
+    "durationMs": 6429,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [
+      "7 PERMISSION_DENIED: Missing or insufficient permissions."
+    ],
+    "errors": [],
+    "retries": 3,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784498105535",
+    "timestamp": "2026-07-19T21:55:11.963Z",
+    "durationMs": 6428,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "7 PERMISSION_DENIED: Missing or insufficient permissions."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1784498057838",
+    "timestamp": "2026-07-19T21:54:17.838Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1784498057835",
+    "timestamp": "2026-07-19T21:54:17.835Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1784498057829",
+    "timestamp": "2026-07-19T21:54:17.830Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784498057579",
+    "timestamp": "2026-07-19T21:54:17.580Z",
+    "durationMs": 1,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1784497955416",
+    "timestamp": "2026-07-19T21:52:41.899Z",
+    "durationMs": 6483,
+    "operation": "scheduler",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "7 PERMISSION_DENIED: Missing or insufficient permissions."
+    ],
+    "retries": 3,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784497955416",
+    "timestamp": "2026-07-19T21:52:41.898Z",
+    "durationMs": 6482,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "7 PERMISSION_DENIED: Missing or insufficient permissions."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1784497924636",
+    "timestamp": "2026-07-19T21:52:04.636Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1784497924633",
+    "timestamp": "2026-07-19T21:52:04.634Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1784497924628",
+    "timestamp": "2026-07-19T21:52:04.629Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784497924387",
+    "timestamp": "2026-07-19T21:52:04.387Z",
+    "durationMs": 0,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1784497812136",
+    "timestamp": "2026-07-19T21:50:18.723Z",
+    "durationMs": 6587,
+    "operation": "scheduler",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "7 PERMISSION_DENIED: Missing or insufficient permissions."
+    ],
+    "retries": 3,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784497812137",
+    "timestamp": "2026-07-19T21:50:18.722Z",
+    "durationMs": 6585,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "7 PERMISSION_DENIED: Missing or insufficient permissions."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784497787234",
+    "timestamp": "2026-07-19T21:49:47.234Z",
+    "durationMs": 0,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1784497786944",
+    "timestamp": "2026-07-19T21:49:46.945Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1784497786942",
+    "timestamp": "2026-07-19T21:49:46.942Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1784497786936",
+    "timestamp": "2026-07-19T21:49:46.937Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1784496274479",
+    "timestamp": "2026-07-19T21:24:34.714Z",
+    "durationMs": 235,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784496274479",
+    "timestamp": "2026-07-19T21:24:34.714Z",
+    "durationMs": 235,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784496226472",
+    "timestamp": "2026-07-19T21:23:46.472Z",
+    "durationMs": 0,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1784496226206",
+    "timestamp": "2026-07-19T21:23:46.206Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1784496226202",
+    "timestamp": "2026-07-19T21:23:46.203Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1784496226196",
+    "timestamp": "2026-07-19T21:23:46.197Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1784495942107",
+    "timestamp": "2026-07-19T21:19:08.498Z",
+    "durationMs": 6391,
+    "operation": "scheduler",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "7 PERMISSION_DENIED: Missing or insufficient permissions."
+    ],
+    "retries": 3,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784495942108",
+    "timestamp": "2026-07-19T21:19:08.497Z",
+    "durationMs": 6389,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "7 PERMISSION_DENIED: Missing or insufficient permissions."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1784495923086",
+    "timestamp": "2026-07-19T21:18:43.087Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1784495923084",
+    "timestamp": "2026-07-19T21:18:43.084Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1784495923078",
+    "timestamp": "2026-07-19T21:18:43.079Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784495922618",
+    "timestamp": "2026-07-19T21:18:42.618Z",
+    "durationMs": 0,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1784494519258",
+    "timestamp": "2026-07-19T20:55:25.894Z",
+    "durationMs": 6636,
+    "operation": "scheduler",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "7 PERMISSION_DENIED: Missing or insufficient permissions."
+    ],
+    "retries": 3,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784494519258",
+    "timestamp": "2026-07-19T20:55:25.893Z",
+    "durationMs": 6635,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "7 PERMISSION_DENIED: Missing or insufficient permissions."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1784494479839",
+    "timestamp": "2026-07-19T20:54:39.839Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1784494479834",
+    "timestamp": "2026-07-19T20:54:39.835Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1784494479828",
+    "timestamp": "2026-07-19T20:54:39.829Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784494479577",
+    "timestamp": "2026-07-19T20:54:39.577Z",
+    "durationMs": 0,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1784494312378",
+    "timestamp": "2026-07-19T20:51:52.632Z",
+    "durationMs": 254,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784494312379",
+    "timestamp": "2026-07-19T20:51:52.631Z",
+    "durationMs": 252,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1784493971300",
+    "timestamp": "2026-07-19T20:46:17.737Z",
+    "durationMs": 6437,
+    "operation": "scheduler",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "7 PERMISSION_DENIED: Missing or insufficient permissions."
+    ],
+    "retries": 3,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784493971301",
+    "timestamp": "2026-07-19T20:46:17.736Z",
+    "durationMs": 6435,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "7 PERMISSION_DENIED: Missing or insufficient permissions."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1784493672072",
+    "timestamp": "2026-07-19T20:41:18.390Z",
+    "durationMs": 6318,
+    "operation": "scheduler",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "7 PERMISSION_DENIED: Missing or insufficient permissions."
+    ],
+    "retries": 3,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784493672072",
+    "timestamp": "2026-07-19T20:41:18.390Z",
+    "durationMs": 6317,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "7 PERMISSION_DENIED: Missing or insufficient permissions."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784493648704",
+    "timestamp": "2026-07-19T20:40:48.704Z",
+    "durationMs": 0,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1784493648449",
+    "timestamp": "2026-07-19T20:40:48.449Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1784493648446",
+    "timestamp": "2026-07-19T20:40:48.447Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1784493648441",
+    "timestamp": "2026-07-19T20:40:48.442Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1784493616121",
+    "timestamp": "2026-07-19T20:40:22.705Z",
+    "durationMs": 6584,
+    "operation": "scheduler",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "7 PERMISSION_DENIED: Missing or insufficient permissions."
+    ],
+    "retries": 3,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784493616122",
+    "timestamp": "2026-07-19T20:40:22.705Z",
+    "durationMs": 6583,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "7 PERMISSION_DENIED: Missing or insufficient permissions."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784493560954",
+    "timestamp": "2026-07-19T20:39:20.954Z",
+    "durationMs": 0,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1784493560643",
+    "timestamp": "2026-07-19T20:39:20.644Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1784493560640",
+    "timestamp": "2026-07-19T20:39:20.641Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1784493560634",
+    "timestamp": "2026-07-19T20:39:20.635Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1784493480380",
+    "timestamp": "2026-07-19T20:38:06.736Z",
+    "durationMs": 6356,
+    "operation": "scheduler",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "7 PERMISSION_DENIED: Missing or insufficient permissions."
+    ],
+    "retries": 3,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784493480381",
+    "timestamp": "2026-07-19T20:38:06.735Z",
+    "durationMs": 6354,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "7 PERMISSION_DENIED: Missing or insufficient permissions."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784493101876",
+    "timestamp": "2026-07-19T20:31:41.876Z",
+    "durationMs": 0,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1784493101585",
+    "timestamp": "2026-07-19T20:31:41.585Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1784493101581",
+    "timestamp": "2026-07-19T20:31:41.582Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1784493101574",
+    "timestamp": "2026-07-19T20:31:41.575Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1784493015568",
+    "timestamp": "2026-07-19T20:30:15.568Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1784493015564",
+    "timestamp": "2026-07-19T20:30:15.565Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1784493015557",
+    "timestamp": "2026-07-19T20:30:15.558Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784493015293",
+    "timestamp": "2026-07-19T20:30:15.293Z",
+    "durationMs": 0,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1784492801535",
+    "timestamp": "2026-07-19T20:26:47.688Z",
+    "durationMs": 6153,
+    "operation": "scheduler",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "7 PERMISSION_DENIED: Missing or insufficient permissions."
+    ],
+    "retries": 3,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784492801536",
+    "timestamp": "2026-07-19T20:26:47.687Z",
+    "durationMs": 6151,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "7 PERMISSION_DENIED: Missing or insufficient permissions."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1784492775826",
+    "timestamp": "2026-07-19T20:26:15.826Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1784492775823",
+    "timestamp": "2026-07-19T20:26:15.824Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1784492775817",
+    "timestamp": "2026-07-19T20:26:15.818Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784492775559",
+    "timestamp": "2026-07-19T20:26:15.559Z",
+    "durationMs": 0,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1784492693648",
+    "timestamp": "2026-07-19T20:24:53.649Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1784492693645",
+    "timestamp": "2026-07-19T20:24:53.646Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1784492693639",
+    "timestamp": "2026-07-19T20:24:53.640Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784492693385",
+    "timestamp": "2026-07-19T20:24:53.385Z",
+    "durationMs": 0,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1784492680696",
+    "timestamp": "2026-07-19T20:24:47.306Z",
+    "durationMs": 6610,
+    "operation": "scheduler",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "7 PERMISSION_DENIED: Missing or insufficient permissions."
+    ],
+    "retries": 3,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784492680697",
+    "timestamp": "2026-07-19T20:24:47.306Z",
+    "durationMs": 6609,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "7 PERMISSION_DENIED: Missing or insufficient permissions."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784492647067",
+    "timestamp": "2026-07-19T20:24:07.067Z",
+    "durationMs": 0,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1784492646782",
+    "timestamp": "2026-07-19T20:24:06.783Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1784492646779",
+    "timestamp": "2026-07-19T20:24:06.780Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1784492646773",
+    "timestamp": "2026-07-19T20:24:06.774Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1784490525160",
+    "timestamp": "2026-07-19T19:48:45.459Z",
+    "durationMs": 299,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784490525161",
+    "timestamp": "2026-07-19T19:48:45.458Z",
+    "durationMs": 297,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784490508753",
+    "timestamp": "2026-07-19T19:48:28.753Z",
+    "durationMs": 0,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1784490508180",
+    "timestamp": "2026-07-19T19:48:28.180Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1784490508176",
+    "timestamp": "2026-07-19T19:48:28.177Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1784490508170",
+    "timestamp": "2026-07-19T19:48:28.171Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1784490504282",
+    "timestamp": "2026-07-19T19:48:24.523Z",
+    "durationMs": 241,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784490504282",
+    "timestamp": "2026-07-19T19:48:24.522Z",
+    "durationMs": 240,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1784490379617",
+    "timestamp": "2026-07-19T19:46:24.481Z",
+    "durationMs": 4864,
+    "operation": "scheduler",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Firebase: Error (auth/admin-restricted-operation)."
+    ],
+    "retries": 3,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784490379618",
+    "timestamp": "2026-07-19T19:46:24.480Z",
+    "durationMs": 4862,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Firebase: Error (auth/admin-restricted-operation)."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784490370134",
+    "timestamp": "2026-07-19T19:46:10.134Z",
+    "durationMs": 0,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1784490369858",
+    "timestamp": "2026-07-19T19:46:09.859Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1784490369854",
+    "timestamp": "2026-07-19T19:46:09.855Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1784490369839",
+    "timestamp": "2026-07-19T19:46:09.840Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1784489638374",
+    "timestamp": "2026-07-19T19:34:04.755Z",
+    "durationMs": 6381,
+    "operation": "scheduler",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "7 PERMISSION_DENIED: Missing or insufficient permissions."
+    ],
+    "retries": 3,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784489638374",
+    "timestamp": "2026-07-19T19:34:04.754Z",
+    "durationMs": 6380,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "7 PERMISSION_DENIED: Missing or insufficient permissions."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1784489620905",
+    "timestamp": "2026-07-19T19:33:40.905Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1784489620902",
+    "timestamp": "2026-07-19T19:33:40.903Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1784489620896",
+    "timestamp": "2026-07-19T19:33:40.897Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784489620670",
+    "timestamp": "2026-07-19T19:33:40.670Z",
+    "durationMs": 0,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1784488664354",
+    "timestamp": "2026-07-19T19:17:50.741Z",
+    "durationMs": 6387,
+    "operation": "scheduler",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Missing or insufficient permissions."
+    ],
+    "retries": 3,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784488664355",
+    "timestamp": "2026-07-19T19:17:50.740Z",
+    "durationMs": 6385,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Missing or insufficient permissions."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784488628166",
+    "timestamp": "2026-07-19T19:17:08.166Z",
+    "durationMs": 0,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1784488627888",
+    "timestamp": "2026-07-19T19:17:07.888Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1784488627885",
+    "timestamp": "2026-07-19T19:17:07.886Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1784488627879",
+    "timestamp": "2026-07-19T19:17:07.880Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1784488481604",
+    "timestamp": "2026-07-19T19:14:48.204Z",
+    "durationMs": 6600,
+    "operation": "scheduler",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Missing or insufficient permissions."
+    ],
+    "retries": 3,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784488481605",
+    "timestamp": "2026-07-19T19:14:48.203Z",
+    "durationMs": 6598,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Missing or insufficient permissions."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1784486827624",
+    "timestamp": "2026-07-19T18:47:14.064Z",
+    "durationMs": 6440,
+    "operation": "scheduler",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Missing or insufficient permissions."
+    ],
+    "retries": 3,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784486827625",
+    "timestamp": "2026-07-19T18:47:14.063Z",
+    "durationMs": 6438,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Missing or insufficient permissions."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1784486774315",
+    "timestamp": "2026-07-19T18:46:14.315Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1784486774313",
+    "timestamp": "2026-07-19T18:46:14.313Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1784486774307",
+    "timestamp": "2026-07-19T18:46:14.308Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784486774067",
+    "timestamp": "2026-07-19T18:46:14.067Z",
+    "durationMs": 0,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784486560074",
+    "timestamp": "2026-07-19T18:42:40.074Z",
+    "durationMs": 0,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1784486559766",
+    "timestamp": "2026-07-19T18:42:39.767Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1784486559763",
+    "timestamp": "2026-07-19T18:42:39.764Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1784486559758",
+    "timestamp": "2026-07-19T18:42:39.759Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1784486554549",
+    "timestamp": "2026-07-19T18:42:34.817Z",
+    "durationMs": 268,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784486554549",
+    "timestamp": "2026-07-19T18:42:34.816Z",
+    "durationMs": 267,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1784486337000",
+    "timestamp": "2026-07-19T18:38:57.595Z",
+    "durationMs": 595,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1784486337001",
+    "timestamp": "2026-07-19T18:38:57.594Z",
+    "durationMs": 593,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1783965220008",
+    "timestamp": "2026-07-13T17:53:40.008Z",
+    "durationMs": 0,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1783965219646",
+    "timestamp": "2026-07-13T17:53:39.647Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1783965219643",
+    "timestamp": "2026-07-13T17:53:39.643Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1783965219636",
+    "timestamp": "2026-07-13T17:53:39.637Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1783965213400",
+    "timestamp": "2026-07-13T17:53:33.700Z",
+    "durationMs": 300,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1783965213401",
+    "timestamp": "2026-07-13T17:53:33.700Z",
+    "durationMs": 299,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1783962729037",
+    "timestamp": "2026-07-13T17:12:09.426Z",
+    "durationMs": 389,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1783962729038",
+    "timestamp": "2026-07-13T17:12:09.426Z",
+    "durationMs": 388,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1783962700369",
+    "timestamp": "2026-07-13T17:11:40.370Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1783962700366",
+    "timestamp": "2026-07-13T17:11:40.366Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1783962700358",
+    "timestamp": "2026-07-13T17:11:40.359Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1783962699986",
+    "timestamp": "2026-07-13T17:11:39.986Z",
+    "durationMs": 0,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1783962693335",
+    "timestamp": "2026-07-13T17:11:33.637Z",
+    "durationMs": 302,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1783962693336",
+    "timestamp": "2026-07-13T17:11:33.636Z",
+    "durationMs": 300,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1783961977048",
+    "timestamp": "2026-07-13T16:59:37.450Z",
+    "durationMs": 402,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1783961977049",
+    "timestamp": "2026-07-13T16:59:37.450Z",
+    "durationMs": 401,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1783961953332",
+    "timestamp": "2026-07-13T16:59:13.332Z",
+    "durationMs": 0,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1783961952982",
+    "timestamp": "2026-07-13T16:59:12.982Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1783961952978",
+    "timestamp": "2026-07-13T16:59:12.979Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1783961952971",
+    "timestamp": "2026-07-13T16:59:12.972Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1783961946561",
+    "timestamp": "2026-07-13T16:59:06.823Z",
+    "durationMs": 262,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1783961946561",
+    "timestamp": "2026-07-13T16:59:06.822Z",
+    "durationMs": 261,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1783961888045",
+    "timestamp": "2026-07-13T16:58:08.045Z",
+    "durationMs": 0,
+    "operation": "backup",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "Data validation failed: Candidate {\"id\":\"\",\"name\":\"Alice\",\"skills\":[],\"experienceYears\":1,\"locationPreference\":\"\"} has missing required properties."
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-s2f-1783961887679",
+    "timestamp": "2026-07-13T16:58:07.680Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1783961887676",
+    "timestamp": "2026-07-13T16:58:07.676Z",
+    "durationMs": 0,
+    "operation": "migration",
+    "status": "failure",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [
+      "SQLite Bulk Save transaction failed: Disk Full"
+    ],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "mig-f2s-1783961887668",
+    "timestamp": "2026-07-13T16:58:07.669Z",
+    "durationMs": 1,
+    "operation": "migration",
+    "status": "success",
+    "recordsProcessed": 2,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  },
+  {
+    "operationId": "sched-bkp-1783961884688",
+    "timestamp": "2026-07-13T16:58:05.012Z",
+    "durationMs": 324,
+    "operation": "scheduler",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "scheduler_daemon",
+    "environment": "development"
+  },
+  {
+    "operationId": "bkp-1783961884689",
+    "timestamp": "2026-07-13T16:58:05.011Z",
+    "durationMs": 322,
+    "operation": "backup",
+    "status": "success",
+    "recordsProcessed": 0,
+    "warnings": [],
+    "errors": [],
+    "retries": 0,
+    "user": "system_admin",
+    "environment": "development"
+  }
+]

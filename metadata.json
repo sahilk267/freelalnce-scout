@@ -1,0 +1,8 @@
+{
+  "name": "Aziz Assistant Reqruiter",
+  "description": "Enterprise AI Operating System and Multi-Agent Orchestrator",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

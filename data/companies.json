@@ -1,0 +1,63 @@
+[
+  {
+    "id": "aaditechs-primary",
+    "name": "Aaditech Solution",
+    "website": "https://aaditechs.in/",
+    "description": "IT & Infrastructure, Enterprise Systems, Open-Source Implementation, Web/App Engineering & AI Automation",
+    "isPrimary": true,
+    "categories": [
+      "Aaditech Solution – IT & Infrastructure",
+      "Tech & Software",
+      "Design & Creative"
+    ],
+    "targetKeywords": [
+      "Microsoft 365",
+      "Exchange Online",
+      "Active Directory",
+      "Windows Server",
+      "System Administration",
+      "Network Engineering",
+      "Firewall",
+      "VPN",
+      "Cloud Migration",
+      "Remote IT Support",
+      "Cybersecurity",
+      "AI Automation",
+      "Python Automation",
+      "React",
+      "Node.js",
+      "TypeScript",
+      "Next.js",
+      "Python",
+      "Full-Stack",
+      "DevOps",
+      "CCTV",
+      "Networking"
+    ],
+    "negativeKeywords": [
+      "Data Entry",
+      "Virtual Assistant",
+      "Typing",
+      "Cold Calling",
+      "Copy Paste"
+    ],
+    "physicalLocations": [
+      "Mumbai",
+      "Navi Mumbai",
+      "Thane",
+      "MMR"
+    ],
+    "allowRemote": true,
+    "telegramEnabled": true,
+    "telegramChatId": "-1003793331993",
+    "hostingerEnabled": true,
+    "hostingerEmail": "contact@aaditechs.in",
+    "gmailEnabled": true,
+    "gmailEmail": "sahil.k00267@gmail.com",
+    "status": "active",
+    "leadsCount": 137,
+    "lastScoutedAt": "2026-09-04T01:14:06.517Z",
+    "createdAt": "2026-09-03T18:00:00.000Z",
+    "updatedAt": "2026-09-04T01:23:00.000Z"
+  }
+]

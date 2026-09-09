@@ -1,0 +1,1074 @@
+[
+  {
+    "filePath": "src/App.tsx",
+    "purpose": "Module file",
+    "exports": [],
+    "imports": [
+      "react",
+      "./components/Sidebar",
+      "./components/Studio",
+      "./components/JobSearch",
+      "./components/Ats",
+      "./components/MemoryManager",
+      "./components/Diagnostics",
+      "./components/Terminal",
+      "./components/Integrations",
+      "./components/AgentDashboard",
+      "./components/FreelancerDashboard",
+      "./types"
+    ]
+  },
+  {
+    "filePath": "src/components/AgentDashboard.tsx",
+    "purpose": "Module file",
+    "exports": [],
+    "imports": [
+      "react",
+      "motion/react"
+    ]
+  },
+  {
+    "filePath": "src/components/Ats.tsx",
+    "purpose": "Module file",
+    "exports": [],
+    "imports": [
+      "react"
+    ]
+  },
+  {
+    "filePath": "src/components/Diagnostics.tsx",
+    "purpose": "Exports BackupManifest, StructuredLog, OperationProgress",
+    "exports": [
+      "interface BackupManifest",
+      "interface StructuredLog",
+      "interface OperationProgress",
+      "interface RestorePreviewResult"
+    ],
+    "imports": [
+      "react",
+      "../types"
+    ]
+  },
+  {
+    "filePath": "src/components/FreelancerDashboard.tsx",
+    "purpose": "Module file",
+    "exports": [],
+    "imports": [
+      "react",
+      "../domain/providers/RemotePlatformsCatalog"
+    ]
+  },
+  {
+    "filePath": "src/components/Integrations.tsx",
+    "purpose": "Module file",
+    "exports": [],
+    "imports": [
+      "react"
+    ]
+  },
+  {
+    "filePath": "src/components/JobSearch.tsx",
+    "purpose": "Module file",
+    "exports": [],
+    "imports": [
+      "react",
+      "../types"
+    ]
+  },
+  {
+    "filePath": "src/components/MemoryManager.tsx",
+    "purpose": "Module file",
+    "exports": [],
+    "imports": [
+      "react",
+      "lucide-react",
+      "../types"
+    ]
+  },
+  {
+    "filePath": "src/components/Sidebar.tsx",
+    "purpose": "Module file",
+    "exports": [],
+    "imports": [
+      "react",
+      "../types"
+    ]
+  },
+  {
+    "filePath": "src/components/Studio.tsx",
+    "purpose": "Module file",
+    "exports": [],
+    "imports": [
+      "react",
+      "lucide-react"
+    ]
+  },
+  {
+    "filePath": "src/components/Terminal.tsx",
+    "purpose": "Module file",
+    "exports": [],
+    "imports": [
+      "react",
+      "lucide-react",
+      "../types"
+    ]
+  },
+  {
+    "filePath": "src/domain/agent/AgentConfig.ts",
+    "purpose": "Exports AgentConfig",
+    "exports": [
+      "class AgentConfig"
+    ],
+    "imports": [
+      "./types"
+    ]
+  },
+  {
+    "filePath": "src/domain/agent/AgentFramework.test.ts",
+    "purpose": "Create a concrete MockAgent to test the abstract BaseAgent and scheduling",
+    "exports": [],
+    "imports": [
+      "vitest",
+      "./BaseAgent",
+      "./EventBus",
+      "./TaskQueue",
+      "./AgentManager",
+      "./WorkflowEngine",
+      "./types"
+    ]
+  },
+  {
+    "filePath": "src/domain/agent/AgentManager.ts",
+    "purpose": "Exports AgentManager",
+    "exports": [
+      "class AgentManager"
+    ],
+    "imports": [
+      "./BaseAgent",
+      "./types",
+      "./TaskQueue",
+      "./EventBus"
+    ]
+  },
+  {
+    "filePath": "src/domain/agent/AgentMonitor.ts",
+    "purpose": "Exports AgentMonitor",
+    "exports": [
+      "class AgentMonitor"
+    ],
+    "imports": [
+      "./types",
+      "./AgentManager",
+      "./TaskQueue"
+    ]
+  },
+  {
+    "filePath": "src/domain/agent/AgentStatePersistence.ts",
+    "purpose": "Exports AgentStatePersistence",
+    "exports": [
+      "class AgentStatePersistence"
+    ],
+    "imports": [
+      "fs",
+      "path",
+      "./TaskQueue",
+      "./AgentManager",
+      "./WorkflowEngine",
+      "./EventBus",
+      "./SystemOperationalAgent",
+      "./FreelancerAgent"
+    ]
+  },
+  {
+    "filePath": "src/domain/agent/BaseAgent.ts",
+    "purpose": "Module file",
+    "exports": [],
+    "imports": [
+      "./types"
+    ]
+  },
+  {
+    "filePath": "src/domain/agent/EventBus.ts",
+    "purpose": "Highly reliable, concurrent-safe System Event Bus Tracks telemetry, status updates, audits, and UI triggers.",
+    "exports": [
+      "class EventBus",
+      "class MessageBus"
+    ],
+    "imports": [
+      "./types"
+    ]
+  },
+  {
+    "filePath": "src/domain/agent/FreelancerAgent.ts",
+    "purpose": "Exports FreelancerAgent",
+    "exports": [
+      "class FreelancerAgent extends BaseAgent"
+    ],
+    "imports": [
+      "./BaseAgent",
+      "./types",
+      "./EventBus",
+      "@google/genai",
+      "../di/DIContainer",
+      "../repositories/SQLiteFreelancerRepository",
+      "../repositories/ICandidateRepository",
+      "../services/NotificationService",
+      "../providers/freelance/FreelancerProvider",
+      "../providers/freelance/UpworkProvider",
+      "../providers/freelance/PeoplePerHourProvider",
+      "../providers/freelance/GuruProvider",
+      "../providers/freelance/FiverrProProvider",
+      "../providers/InitialPlatformSeed"
+    ]
+  },
+  {
+    "filePath": "src/domain/agent/freelancerTypes.ts",
+    "purpose": "Exports NormalizedFreelanceProject, ProposalTone, ProposalStatus",
+    "exports": [
+      "interface NormalizedFreelanceProject",
+      "type ProposalTone",
+      "type ProposalStatus",
+      "interface FreelanceProposal",
+      "interface FreelancerExecutionRecord",
+      "interface FreelancerLog",
+      "interface FreelancerAgentState",
+      "interface FreelancerNotification",
+      "interface FreelancerConfig",
+      "interface FreelancerDashboardData"
+    ],
+    "imports": []
+  },
+  {
+    "filePath": "src/domain/agent/MemoryInterface.ts",
+    "purpose": "Exports WorkingMemory, LongTermMemory, SemanticMemory",
+    "exports": [
+      "class WorkingMemory implements IWorkingMemory",
+      "class LongTermMemory implements ILongTermMemory",
+      "class SemanticMemory implements ISemanticMemory",
+      "class EpisodicMemory implements IEpisodicMemory",
+      "class VectorMemory implements IVectorMemory"
+    ],
+    "imports": []
+  },
+  {
+    "filePath": "src/domain/agent/ModelRouter.ts",
+    "purpose": "Real Server-Side Gemini API Model Provider",
+    "exports": [
+      "class GeminiModelProvider implements IModelProvider",
+      "class GenericModelProvider implements IModelProvider",
+      "class ModelRouter"
+    ],
+    "imports": [
+      "./types",
+      "@google/genai"
+    ]
+  },
+  {
+    "filePath": "src/domain/agent/SystemOperationalAgent.ts",
+    "purpose": "Exports SystemOperationalAgent",
+    "exports": [
+      "class SystemOperationalAgent extends BaseAgent"
+    ],
+    "imports": [
+      "./BaseAgent",
+      "./types",
+      "./ToolFramework"
+    ]
+  },
+  {
+    "filePath": "src/domain/agent/TaskQueue.ts",
+    "purpose": "Exports TaskQueue",
+    "exports": [
+      "class TaskQueue"
+    ],
+    "imports": [
+      "./types",
+      "./EventBus"
+    ]
+  },
+  {
+    "filePath": "src/domain/agent/ToolFramework.ts",
+    "purpose": "1. Filesystem Access Tool",
+    "exports": [
+      "class FilesystemTool implements Tool",
+      "class BrowserTool implements Tool",
+      "class TerminalTool implements Tool",
+      "class MemoryTool implements Tool",
+      "class EmailTool implements Tool",
+      "class CalendarTool implements Tool",
+      "class HttpTool implements Tool",
+      "class GitTool implements Tool",
+      "class DatabaseTool implements Tool",
+      "class ToolRegistry"
+    ],
+    "imports": [
+      "./types",
+      "./EventBus"
+    ]
+  },
+  {
+    "filePath": "src/domain/agent/types.ts",
+    "purpose": "========================================== AGENT LIFECYCLE & CORE TYPES",
+    "exports": [
+      "type AgentStatus",
+      "interface AgentProgress",
+      "interface AgentState",
+      "type TaskStatus",
+      "interface Task",
+      "type EventType",
+      "interface SystemEvent",
+      "type EventCallback",
+      "interface MessageEnvelope",
+      "type MessageCallback",
+      "type WorkflowNodeType",
+      "interface WorkflowNode",
+      "interface Workflow",
+      "interface ToolParameter",
+      "interface ToolDefinition",
+      "interface ToolContext",
+      "interface Tool",
+      "interface IWorkingMemory",
+      "interface ILongTermMemory",
+      "interface ISemanticMemory",
+      "interface IEpisodicMemory",
+      "interface IVectorMemory",
+      "interface ModelRequest",
+      "interface ModelResponse",
+      "interface IModelProvider",
+      "interface AgentSystemConfig",
+      "interface AgentMetrics"
+    ],
+    "imports": []
+  },
+  {
+    "filePath": "src/domain/agent/WorkflowEngine.ts",
+    "purpose": "Exports WorkflowEngine",
+    "exports": [
+      "class WorkflowEngine"
+    ],
+    "imports": [
+      "./types",
+      "./AgentManager",
+      "./EventBus"
+    ]
+  },
+  {
+    "filePath": "src/domain/di/DIContainer.ts",
+    "purpose": "Exports DIContainer",
+    "exports": [
+      "class DIContainer"
+    ],
+    "imports": [
+      "dotenv",
+      "../repositories/InMemoryCandidateRepository",
+      "../repositories/FirestoreCandidateRepository",
+      "../repositories/SQLiteBackupRepository",
+      "../repositories/SQLiteFreelancerRepository",
+      "../services/MatchingService",
+      "../providers/AggregatedJobProvider",
+      "../providers/FreelanceScoutProvider",
+      "../providers/GeminiClientProvider",
+      "../services/BackupService",
+      "../services/MigrationService",
+      "../repositories/InMemoryContactRepository",
+      "../services/PersistenceConfigService",
+      "../services/StructuredLoggerService",
+      "../services/GlobalOperationLockService",
+      "../services/ProgressTrackerService",
+      "../services/RetryService",
+      "../services/BackupStorageService",
+      "../services/SchedulerService"
+    ]
+  },
+  {
+    "filePath": "src/domain/freelancer_extensions.test.ts",
+    "purpose": "Module file",
+    "exports": [],
+    "imports": [
+      "vitest",
+      "./repositories/SQLiteFreelancerRepository",
+      "./services/ResumeParserService",
+      "./services/NotificationService",
+      "./agent/freelancerTypes"
+    ]
+  },
+  {
+    "filePath": "src/domain/freelancer.test.ts",
+    "purpose": "Mock providers",
+    "exports": [],
+    "imports": [
+      "vitest",
+      "./di/DIContainer",
+      "./repositories/SQLiteFreelancerRepository",
+      "./repositories/SQLiteBackupRepository",
+      "./agent/FreelancerAgent",
+      "./agent/types",
+      "./agent/freelancerTypes",
+      "./repositories/ICandidateRepository",
+      "./models/Candidate",
+      "./providers/freelance/FreelancerProvider",
+      "./providers/freelance/UpworkProvider",
+      "./providers/freelance/PeoplePerHourProvider",
+      "./providers/freelance/GuruProvider",
+      "./providers/freelance/FiverrProProvider"
+    ]
+  },
+  {
+    "filePath": "src/domain/index.ts",
+    "purpose": "Export Models Export Interfaces / Providers",
+    "exports": [],
+    "imports": []
+  },
+  {
+    "filePath": "src/domain/models/Candidate.ts",
+    "purpose": "Candidate entity model for recruitment sourcing and ATS match workflows.",
+    "exports": [
+      "interface Candidate"
+    ],
+    "imports": []
+  },
+  {
+    "filePath": "src/domain/models/Contact.ts",
+    "purpose": "Exports ContactMetadata, ResponseStatus, Contact",
+    "exports": [
+      "interface ContactMetadata",
+      "type ResponseStatus",
+      "interface Contact",
+      "function normalizeEmail (email?: string): string",
+      "function normalizeLinkedInUrl (url?: string): string",
+      "function isDuplicateContact (c1: Partial<Contact>, c2: Partial<Contact>): boolean",
+      "function canQueueOutreach (contact: Contact): boolean",
+      "function createContact (data: Partial<Contact> &"
+    ],
+    "imports": []
+  },
+  {
+    "filePath": "src/domain/models/FreelanceProject.ts",
+    "purpose": "Exports FreelanceProject",
+    "exports": [
+      "interface FreelanceProject"
+    ],
+    "imports": []
+  },
+  {
+    "filePath": "src/domain/models/Job.ts",
+    "purpose": "Exports Job",
+    "exports": [
+      "interface Job"
+    ],
+    "imports": []
+  },
+  {
+    "filePath": "src/domain/models/MatchResult.ts",
+    "purpose": "Exports MatchResult",
+    "exports": [
+      "interface MatchResult"
+    ],
+    "imports": []
+  },
+  {
+    "filePath": "src/domain/providers.test.ts",
+    "purpose": "Module file",
+    "exports": [],
+    "imports": [
+      "vitest",
+      "./providers/FreelanceScoutProvider",
+      "./providers/GeminiClientProvider"
+    ]
+  },
+  {
+    "filePath": "src/domain/providers/AggregatedJobProvider.test.ts",
+    "purpose": "Module file",
+    "exports": [],
+    "imports": [
+      "vitest",
+      "./RemoteOkJobProvider",
+      "./HimalayasJobProvider",
+      "./ArbeitnowJobProvider",
+      "./AggregatedJobProvider"
+    ]
+  },
+  {
+    "filePath": "src/domain/providers/AggregatedJobProvider.ts",
+    "purpose": "Exports AggregatedJobProvider",
+    "exports": [
+      "class AggregatedJobProvider implements IJobProvider"
+    ],
+    "imports": [
+      "../models/Job",
+      "./IJobProvider",
+      "./RemotiveJobProvider",
+      "./RemoteOkJobProvider",
+      "./HimalayasJobProvider",
+      "./ArbeitnowJobProvider",
+      "./InitialPlatformSeed"
+    ]
+  },
+  {
+    "filePath": "src/domain/providers/ArbeitnowJobProvider.ts",
+    "purpose": "Exports ArbeitnowJobProvider",
+    "exports": [
+      "class ArbeitnowJobProvider implements IJobProvider"
+    ],
+    "imports": [
+      "../models/Job",
+      "./IJobProvider"
+    ]
+  },
+  {
+    "filePath": "src/domain/providers/freelance/FiverrProProvider.ts",
+    "purpose": "Exports FiverrProProvider",
+    "exports": [
+      "class FiverrProProvider"
+    ],
+    "imports": [
+      "../../agent/freelancerTypes",
+      "../../utils/resilientFetch",
+      "../../di/DIContainer"
+    ]
+  },
+  {
+    "filePath": "src/domain/providers/freelance/FreelancerProvider.ts",
+    "purpose": "Exports FreelancerProvider",
+    "exports": [
+      "class FreelancerProvider"
+    ],
+    "imports": [
+      "../../agent/freelancerTypes",
+      "../../utils/resilientFetch",
+      "../../di/DIContainer"
+    ]
+  },
+  {
+    "filePath": "src/domain/providers/freelance/GuruProvider.ts",
+    "purpose": "Exports GuruProvider",
+    "exports": [
+      "class GuruProvider"
+    ],
+    "imports": [
+      "../../agent/freelancerTypes",
+      "../../utils/resilientFetch",
+      "../../di/DIContainer"
+    ]
+  },
+  {
+    "filePath": "src/domain/providers/freelance/PeoplePerHourProvider.ts",
+    "purpose": "Exports PeoplePerHourProvider",
+    "exports": [
+      "class PeoplePerHourProvider"
+    ],
+    "imports": [
+      "../../agent/freelancerTypes",
+      "../../utils/resilientFetch",
+      "../../di/DIContainer"
+    ]
+  },
+  {
+    "filePath": "src/domain/providers/freelance/UpworkProvider.ts",
+    "purpose": "Exports UpworkProvider",
+    "exports": [
+      "class UpworkProvider"
+    ],
+    "imports": [
+      "../../agent/freelancerTypes",
+      "../../utils/resilientFetch",
+      "../../di/DIContainer"
+    ]
+  },
+  {
+    "filePath": "src/domain/providers/FreelanceScoutProvider.ts",
+    "purpose": "Exports FreelanceScoutProvider",
+    "exports": [
+      "class FreelanceScoutProvider implements IFreelanceProvider"
+    ],
+    "imports": [
+      "../models/FreelanceProject",
+      "./IFreelanceProvider",
+      "./InitialPlatformSeed"
+    ]
+  },
+  {
+    "filePath": "src/domain/providers/GeminiClientProvider.ts",
+    "purpose": "Exports GeminiClientProvider",
+    "exports": [
+      "class GeminiClientProvider implements IAIClientProvider"
+    ],
+    "imports": [
+      "@google/genai",
+      "./IAIClientProvider"
+    ]
+  },
+  {
+    "filePath": "src/domain/providers/HimalayasJobProvider.ts",
+    "purpose": "Exports HimalayasJobProvider",
+    "exports": [
+      "class HimalayasJobProvider implements IJobProvider"
+    ],
+    "imports": [
+      "../models/Job",
+      "./IJobProvider"
+    ]
+  },
+  {
+    "filePath": "src/domain/providers/IAIClientProvider.ts",
+    "purpose": "Exports IAIClientProvider",
+    "exports": [
+      "interface IAIClientProvider"
+    ],
+    "imports": [
+      "@google/genai"
+    ]
+  },
+  {
+    "filePath": "src/domain/providers/IFreelanceProvider.ts",
+    "purpose": "Exports IFreelanceProvider",
+    "exports": [
+      "interface IFreelanceProvider"
+    ],
+    "imports": [
+      "../models/FreelanceProject"
+    ]
+  },
+  {
+    "filePath": "src/domain/providers/IJobProvider.ts",
+    "purpose": "Exports IJobProvider",
+    "exports": [
+      "interface IJobProvider"
+    ],
+    "imports": [
+      "../models/Job"
+    ]
+  },
+  {
+    "filePath": "src/domain/providers/InitialPlatformSeed.ts",
+    "purpose": "Exports getInitialSeedProjectsForAll40Platforms",
+    "exports": [
+      "function getInitialSeedProjectsForAll40Platforms (): NormalizedFreelanceProject[]"
+    ],
+    "imports": [
+      "../agent/freelancerTypes",
+      "./RemotePlatformsCatalog"
+    ]
+  },
+  {
+    "filePath": "src/domain/providers/RemoteOkJobProvider.ts",
+    "purpose": "Exports RemoteOkJobProvider",
+    "exports": [
+      "class RemoteOkJobProvider implements IJobProvider"
+    ],
+    "imports": [
+      "../models/Job",
+      "./IJobProvider"
+    ]
+  },
+  {
+    "filePath": "src/domain/providers/RemotePlatformsCatalog.ts",
+    "purpose": "Exports RemotePlatformInfo, REMOTE_PLATFORMS_40",
+    "exports": [
+      "interface RemotePlatformInfo",
+      "const REMOTE_PLATFORMS_40 : RemotePlatformInfo[]"
+    ],
+    "imports": []
+  },
+  {
+    "filePath": "src/domain/providers/RemotiveJobProvider.ts",
+    "purpose": "Exports RemotiveJobProvider",
+    "exports": [
+      "class RemotiveJobProvider implements IJobProvider"
+    ],
+    "imports": [
+      "../models/Job",
+      "./IJobProvider"
+    ]
+  },
+  {
+    "filePath": "src/domain/repositories/Contact.test.ts",
+    "purpose": "Module file",
+    "exports": [],
+    "imports": [
+      "vitest",
+      "./InMemoryContactRepository"
+    ]
+  },
+  {
+    "filePath": "src/domain/repositories/FirestoreCandidateRepository.ts",
+    "purpose": "Exports FirestoreCandidateRepository",
+    "exports": [
+      "class FirestoreCandidateRepository implements ICandidateRepository"
+    ],
+    "imports": [
+      "firebase-admin/app",
+      "firebase-admin/firestore",
+      "fs",
+      "path",
+      "../models/Candidate",
+      "./ICandidateRepository",
+      "./SQLiteBackupRepository"
+    ]
+  },
+  {
+    "filePath": "src/domain/repositories/ICandidateRepository.ts",
+    "purpose": "Exports ICandidateRepository",
+    "exports": [
+      "interface ICandidateRepository"
+    ],
+    "imports": [
+      "../models/Candidate"
+    ]
+  },
+  {
+    "filePath": "src/domain/repositories/IContactRepository.ts",
+    "purpose": "Exports IContactRepository",
+    "exports": [
+      "interface IContactRepository"
+    ],
+    "imports": [
+      "../models/Contact"
+    ]
+  },
+  {
+    "filePath": "src/domain/repositories/InMemoryCandidateRepository.ts",
+    "purpose": "Exports InMemoryCandidateRepository",
+    "exports": [
+      "class InMemoryCandidateRepository implements ICandidateRepository"
+    ],
+    "imports": [
+      "../models/Candidate",
+      "./ICandidateRepository"
+    ]
+  },
+  {
+    "filePath": "src/domain/repositories/InMemoryContactRepository.ts",
+    "purpose": "Exports InMemoryContactRepository",
+    "exports": [
+      "class InMemoryContactRepository implements IContactRepository"
+    ],
+    "imports": [
+      "../models/Contact",
+      "./IContactRepository"
+    ]
+  },
+  {
+    "filePath": "src/domain/repositories/SQLiteBackupRepository.ts",
+    "purpose": "Exports SQLiteBackupRepository",
+    "exports": [
+      "class SQLiteBackupRepository implements ICandidateRepository"
+    ],
+    "imports": [
+      "better-sqlite3",
+      "fs",
+      "path",
+      "../models/Candidate",
+      "./ICandidateRepository"
+    ]
+  },
+  {
+    "filePath": "src/domain/repositories/SQLiteFreelancerRepository.ts",
+    "purpose": "Exports SQLiteFreelancerRepository",
+    "exports": [
+      "class SQLiteFreelancerRepository"
+    ],
+    "imports": [
+      "better-sqlite3",
+      "fs",
+      "path",
+      "../providers/InitialPlatformSeed"
+    ]
+  },
+  {
+    "filePath": "src/domain/services/AuditRunnerService.ts",
+    "purpose": "Exports AuditIssue, AuditIndexSummary, IndexedFileEntry",
+    "exports": [
+      "interface AuditIssue",
+      "interface AuditIndexSummary",
+      "interface IndexedFileEntry",
+      "interface AuditIndex",
+      "class AuditRunnerService"
+    ],
+    "imports": [
+      "fs",
+      "path"
+    ]
+  },
+  {
+    "filePath": "src/domain/services/BackupService.test.ts",
+    "purpose": "Module file",
+    "exports": [],
+    "imports": [
+      "vitest",
+      "./BackupService",
+      "../models/Candidate"
+    ]
+  },
+  {
+    "filePath": "src/domain/services/BackupService.ts",
+    "purpose": "Exports BackupService",
+    "exports": [
+      "class BackupService implements IBackupService"
+    ],
+    "imports": [
+      "./IBackupService",
+      "../repositories/FirestoreCandidateRepository",
+      "../repositories/SQLiteBackupRepository",
+      "./PersistenceConfigService",
+      "./StructuredLoggerService",
+      "./GlobalOperationLockService",
+      "./ProgressTrackerService",
+      "./RetryService",
+      "./BackupStorageService",
+      "../models/Candidate",
+      "crypto",
+      "fs",
+      "path"
+    ]
+  },
+  {
+    "filePath": "src/domain/services/BackupStorageService.ts",
+    "purpose": "Exports BackupManifest, BackupStorageService",
+    "exports": [
+      "interface BackupManifest",
+      "class BackupStorageService"
+    ],
+    "imports": [
+      "fs",
+      "path",
+      "zlib",
+      "crypto",
+      "../repositories/SQLiteBackupRepository",
+      "./PersistenceConfigService",
+      "../models/Candidate"
+    ]
+  },
+  {
+    "filePath": "src/domain/services/GlobalOperationLockService.ts",
+    "purpose": "Exports GlobalOperationLockService",
+    "exports": [
+      "class GlobalOperationLockService"
+    ],
+    "imports": []
+  },
+  {
+    "filePath": "src/domain/services/IBackupService.ts",
+    "purpose": "Exports BackupResult, RestoreResult, RestorePreviewResult",
+    "exports": [
+      "interface BackupResult",
+      "interface RestoreResult",
+      "interface RestorePreviewResult",
+      "interface DetailedHealthReport",
+      "interface IBackupService"
+    ],
+    "imports": []
+  },
+  {
+    "filePath": "src/domain/services/IMatchingService.ts",
+    "purpose": "Exports IMatchingService",
+    "exports": [
+      "interface IMatchingService"
+    ],
+    "imports": [
+      "../models/Candidate",
+      "../models/Job",
+      "../models/MatchResult"
+    ]
+  },
+  {
+    "filePath": "src/domain/services/IMigrationService.ts",
+    "purpose": "Exports MigrationStepProgress, ProgressCallback, MigrationResult",
+    "exports": [
+      "interface MigrationStepProgress",
+      "type ProgressCallback",
+      "interface MigrationResult",
+      "interface IMigrationService"
+    ],
+    "imports": []
+  },
+  {
+    "filePath": "src/domain/services/MatchingService.ts",
+    "purpose": "Exports MatchingService",
+    "exports": [
+      "class MatchingService implements IMatchingService"
+    ],
+    "imports": [
+      "../models/Candidate",
+      "../models/Job",
+      "../models/MatchResult",
+      "./IMatchingService"
+    ]
+  },
+  {
+    "filePath": "src/domain/services/MigrationService.test.ts",
+    "purpose": "Module file",
+    "exports": [],
+    "imports": [
+      "vitest",
+      "./MigrationService",
+      "../models/Candidate",
+      "./IMigrationService"
+    ]
+  },
+  {
+    "filePath": "src/domain/services/MigrationService.ts",
+    "purpose": "Exports MigrationService",
+    "exports": [
+      "class MigrationService implements IMigrationService"
+    ],
+    "imports": [
+      "./IMigrationService",
+      "../repositories/FirestoreCandidateRepository",
+      "../repositories/SQLiteBackupRepository",
+      "./PersistenceConfigService",
+      "./GlobalOperationLockService",
+      "./ProgressTrackerService",
+      "./RetryService",
+      "./StructuredLoggerService",
+      "../models/Candidate"
+    ]
+  },
+  {
+    "filePath": "src/domain/services/NotificationService.ts",
+    "purpose": "Exports NotificationService",
+    "exports": [
+      "class NotificationService"
+    ],
+    "imports": [
+      "../repositories/SQLiteFreelancerRepository",
+      "../agent/freelancerTypes"
+    ]
+  },
+  {
+    "filePath": "src/domain/services/PersistenceConfigService.ts",
+    "purpose": "Exports PersistenceConfig, PersistenceConfigService",
+    "exports": [
+      "interface PersistenceConfig",
+      "class PersistenceConfigService"
+    ],
+    "imports": []
+  },
+  {
+    "filePath": "src/domain/services/ProgressTrackerService.ts",
+    "purpose": "Exports OperationProgress, ProgressTrackerService",
+    "exports": [
+      "interface OperationProgress",
+      "class ProgressTrackerService"
+    ],
+    "imports": []
+  },
+  {
+    "filePath": "src/domain/services/ResumeParserService.ts",
+    "purpose": "Exports ResumeParserService",
+    "exports": [
+      "class ResumeParserService"
+    ],
+    "imports": [
+      "@google/genai",
+      "../models/Candidate"
+    ]
+  },
+  {
+    "filePath": "src/domain/services/RetryService.ts",
+    "purpose": "Exports RetryService",
+    "exports": [
+      "class RetryService"
+    ],
+    "imports": [
+      "./PersistenceConfigService"
+    ]
+  },
+  {
+    "filePath": "src/domain/services/SchedulerService.ts",
+    "purpose": "Exports SchedulerService",
+    "exports": [
+      "class SchedulerService"
+    ],
+    "imports": [
+      "./PersistenceConfigService",
+      "./GlobalOperationLockService",
+      "./StructuredLoggerService",
+      "./IBackupService",
+      "./RetryService"
+    ]
+  },
+  {
+    "filePath": "src/domain/services/StructuredLoggerService.ts",
+    "purpose": "Exports StructuredLog, StructuredLoggerService",
+    "exports": [
+      "interface StructuredLog",
+      "class StructuredLoggerService"
+    ],
+    "imports": [
+      "fs",
+      "path"
+    ]
+  },
+  {
+    "filePath": "src/domain/sprint1.test.ts",
+    "purpose": "Module file",
+    "exports": [],
+    "imports": [
+      "vitest"
+    ]
+  },
+  {
+    "filePath": "src/domain/test-script-runner.ts",
+    "purpose": "Module file",
+    "exports": [],
+    "imports": [
+      "dotenv",
+      "./di/DIContainer",
+      "./repositories/ICandidateRepository",
+      "./services/IBackupService"
+    ]
+  },
+  {
+    "filePath": "src/domain/utils/jsonHelper.test.ts",
+    "purpose": "Module file",
+    "exports": [],
+    "imports": [
+      "vitest",
+      "./jsonHelper"
+    ]
+  },
+  {
+    "filePath": "src/domain/utils/jsonHelper.ts",
+    "purpose": "Exports ParseResult, cleanAndParseJSON",
+    "exports": [
+      "interface ParseResult",
+      "function cleanAndParseJSON (text: string | null | undefined): ParseResult"
+    ],
+    "imports": []
+  },
+  {
+    "filePath": "src/domain/utils/resilientFetch.ts",
+    "purpose": "Exports ResilientFetchOptions, clearFetchCache",
+    "exports": [
+      "interface ResilientFetchOptions",
+      "function clearFetchCache (): void"
+    ],
+    "imports": []
+  },
+  {
+    "filePath": "src/main.tsx",
+    "purpose": "Module file",
+    "exports": [],
+    "imports": [
+      "react",
+      "react-dom/client",
+      "./App.tsx"
+    ]
+  },
+  {
+    "filePath": "src/types.ts",
+    "purpose": "Exports ModuleId, SystemModule, SystemLog",
+    "exports": [
+      "type ModuleId",
+      "interface SystemModule",
+      "interface SystemLog",
+      "interface DiagnosticMetrics",
+      "interface JobRecord",
+      "interface FreelanceProject",
+      "interface MemoryEntry",
+      "interface TerminalLine"
+    ],
+    "imports": []
+  }
+]

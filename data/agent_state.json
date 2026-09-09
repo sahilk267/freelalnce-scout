@@ -1,0 +1,983 @@
+{
+  "timestamp": "2026-09-08T17:49:22.385Z",
+  "isQueuePaused": false,
+  "tasks": [
+    {
+      "id": "task-sched-1786310010860",
+      "agentId": "agent-scout",
+      "priority": 5,
+      "createdTime": "2026-08-09T21:13:30.860Z",
+      "retries": 3,
+      "maxRetries": 3,
+      "currentStep": "Scheduled Trigger",
+      "progress": 0,
+      "status": "Failed",
+      "logs": [
+        "[2026-08-09T21:13:30.861Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-09T21:13:30.862Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-09T21:13:30.862Z] Task scheduled for retry #1 in 2s.",
+        "[2026-08-09T21:13:32.955Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-09T21:13:32.955Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-09T21:13:32.955Z] Task scheduled for retry #2 in 4s.",
+        "[2026-08-09T21:13:36.957Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-09T21:13:36.957Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-09T21:13:36.957Z] Task scheduled for retry #3 in 8s.",
+        "[2026-08-09T21:13:44.979Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-09T21:13:44.979Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-09T21:13:44.979Z] Task failed after reaching maximum retries (3)."
+      ],
+      "metadata": {
+        "action": "run_scheduler"
+      },
+      "startedTime": "2026-08-09T21:13:44.979Z",
+      "delayedUntil": "2026-08-09T21:13:44.957Z",
+      "finishedTime": "2026-08-09T21:13:44.979Z"
+    },
+    {
+      "id": "task-sched-1786310918275",
+      "agentId": "agent-scout",
+      "priority": 5,
+      "createdTime": "2026-08-09T21:28:38.275Z",
+      "retries": 3,
+      "maxRetries": 3,
+      "currentStep": "Scheduled Trigger",
+      "progress": 0,
+      "status": "Failed",
+      "logs": [
+        "[2026-08-09T21:28:38.276Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-09T21:28:38.277Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-09T21:28:38.277Z] Task scheduled for retry #1 in 2s.",
+        "[2026-08-09T21:28:40.600Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-09T21:28:40.600Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-09T21:28:40.600Z] Task scheduled for retry #2 in 4s.",
+        "[2026-08-09T21:28:44.603Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-09T21:28:44.603Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-09T21:28:44.603Z] Task scheduled for retry #3 in 8s.",
+        "[2026-08-09T21:28:52.610Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-09T21:28:52.610Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-09T21:28:52.610Z] Task failed after reaching maximum retries (3)."
+      ],
+      "metadata": {
+        "action": "run_scheduler"
+      },
+      "startedTime": "2026-08-09T21:28:52.610Z",
+      "delayedUntil": "2026-08-09T21:28:52.603Z",
+      "finishedTime": "2026-08-09T21:28:52.610Z"
+    },
+    {
+      "id": "task-sched-1786311827198",
+      "agentId": "agent-scout",
+      "priority": 5,
+      "createdTime": "2026-08-09T21:43:47.198Z",
+      "retries": 3,
+      "maxRetries": 3,
+      "currentStep": "Scheduled Trigger",
+      "progress": 0,
+      "status": "Failed",
+      "logs": [
+        "[2026-08-09T21:43:47.199Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-09T21:43:47.200Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-09T21:43:47.200Z] Task scheduled for retry #1 in 2s.",
+        "[2026-08-09T21:43:49.340Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-09T21:43:49.340Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-09T21:43:49.340Z] Task scheduled for retry #2 in 4s.",
+        "[2026-08-09T21:43:53.342Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-09T21:43:53.342Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-09T21:43:53.342Z] Task scheduled for retry #3 in 8s.",
+        "[2026-08-09T21:44:01.345Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-09T21:44:01.345Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-09T21:44:01.345Z] Task failed after reaching maximum retries (3)."
+      ],
+      "metadata": {
+        "action": "run_scheduler"
+      },
+      "startedTime": "2026-08-09T21:44:01.345Z",
+      "delayedUntil": "2026-08-09T21:44:01.342Z",
+      "finishedTime": "2026-08-09T21:44:01.345Z"
+    },
+    {
+      "id": "task-sched-1786312731714",
+      "agentId": "agent-scout",
+      "priority": 5,
+      "createdTime": "2026-08-09T21:58:51.714Z",
+      "retries": 3,
+      "maxRetries": 3,
+      "currentStep": "Scheduled Trigger",
+      "progress": 0,
+      "status": "Failed",
+      "logs": [
+        "[2026-08-09T21:58:51.715Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-09T21:58:51.715Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-09T21:58:51.715Z] Task scheduled for retry #1 in 2s.",
+        "[2026-08-09T21:58:53.959Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-09T21:58:53.959Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-09T21:58:53.959Z] Task scheduled for retry #2 in 4s.",
+        "[2026-08-09T21:58:57.962Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-09T21:58:57.963Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-09T21:58:57.963Z] Task scheduled for retry #3 in 8s.",
+        "[2026-08-09T21:59:05.966Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-09T21:59:05.966Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-09T21:59:05.966Z] Task failed after reaching maximum retries (3)."
+      ],
+      "metadata": {
+        "action": "run_scheduler"
+      },
+      "startedTime": "2026-08-09T21:59:05.966Z",
+      "delayedUntil": "2026-08-09T21:59:05.963Z",
+      "finishedTime": "2026-08-09T21:59:05.966Z"
+    },
+    {
+      "id": "task-sched-1786313632957",
+      "agentId": "agent-scout",
+      "priority": 5,
+      "createdTime": "2026-08-09T22:13:52.957Z",
+      "retries": 3,
+      "maxRetries": 3,
+      "currentStep": "Scheduled Trigger",
+      "progress": 0,
+      "status": "Failed",
+      "logs": [
+        "[2026-08-09T22:13:52.958Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-09T22:13:52.959Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-09T22:13:52.959Z] Task scheduled for retry #1 in 2s.",
+        "[2026-08-09T22:13:55.213Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-09T22:13:55.214Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-09T22:13:55.214Z] Task scheduled for retry #2 in 4s.",
+        "[2026-08-09T22:13:59.216Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-09T22:13:59.216Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-09T22:13:59.216Z] Task scheduled for retry #3 in 8s.",
+        "[2026-08-09T22:14:07.223Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-09T22:14:07.223Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-09T22:14:07.223Z] Task failed after reaching maximum retries (3)."
+      ],
+      "metadata": {
+        "action": "run_scheduler"
+      },
+      "startedTime": "2026-08-09T22:14:07.223Z",
+      "delayedUntil": "2026-08-09T22:14:07.216Z",
+      "finishedTime": "2026-08-09T22:14:07.223Z"
+    },
+    {
+      "id": "task-sched-1786371701339",
+      "agentId": "agent-scout",
+      "priority": 5,
+      "createdTime": "2026-08-10T14:21:41.339Z",
+      "retries": 3,
+      "maxRetries": 3,
+      "currentStep": "Scheduled Trigger",
+      "progress": 0,
+      "status": "Failed",
+      "logs": [
+        "[2026-08-10T14:21:41.340Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T14:21:41.341Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T14:21:41.341Z] Task scheduled for retry #1 in 2s.",
+        "[2026-08-10T14:21:43.988Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T14:21:43.988Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T14:21:43.988Z] Task scheduled for retry #2 in 4s.",
+        "[2026-08-10T14:21:47.990Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T14:21:47.991Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T14:21:47.991Z] Task scheduled for retry #3 in 8s.",
+        "[2026-08-10T14:21:55.998Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T14:21:55.998Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T14:21:55.998Z] Task failed after reaching maximum retries (3)."
+      ],
+      "metadata": {
+        "action": "run_scheduler"
+      },
+      "startedTime": "2026-08-10T14:21:55.998Z",
+      "delayedUntil": "2026-08-10T14:21:55.991Z",
+      "finishedTime": "2026-08-10T14:21:55.998Z"
+    },
+    {
+      "id": "task-sched-1786372601416",
+      "agentId": "agent-scout",
+      "priority": 5,
+      "createdTime": "2026-08-10T14:36:41.416Z",
+      "retries": 3,
+      "maxRetries": 3,
+      "currentStep": "Scheduled Trigger",
+      "progress": 0,
+      "status": "Failed",
+      "logs": [
+        "[2026-08-10T14:36:41.417Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T14:36:41.417Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T14:36:41.417Z] Task scheduled for retry #1 in 2s.",
+        "[2026-08-10T14:36:43.702Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T14:36:43.702Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T14:36:43.702Z] Task scheduled for retry #2 in 4s.",
+        "[2026-08-10T14:36:47.702Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T14:36:47.702Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T14:36:47.702Z] Task scheduled for retry #3 in 8s.",
+        "[2026-08-10T14:36:55.709Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T14:36:55.709Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T14:36:55.709Z] Task failed after reaching maximum retries (3)."
+      ],
+      "metadata": {
+        "action": "run_scheduler"
+      },
+      "startedTime": "2026-08-10T14:36:55.709Z",
+      "delayedUntil": "2026-08-10T14:36:55.702Z",
+      "finishedTime": "2026-08-10T14:36:55.709Z"
+    },
+    {
+      "id": "task-sched-1786373501495",
+      "agentId": "agent-scout",
+      "priority": 5,
+      "createdTime": "2026-08-10T14:51:41.495Z",
+      "retries": 3,
+      "maxRetries": 3,
+      "currentStep": "Scheduled Trigger",
+      "progress": 0,
+      "status": "Failed",
+      "logs": [
+        "[2026-08-10T14:51:41.496Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T14:51:41.496Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T14:51:41.496Z] Task scheduled for retry #1 in 2s.",
+        "[2026-08-10T14:51:44.400Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T14:51:44.400Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T14:51:44.400Z] Task scheduled for retry #2 in 4s.",
+        "[2026-08-10T14:51:48.402Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T14:51:48.402Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T14:51:48.402Z] Task scheduled for retry #3 in 8s.",
+        "[2026-08-10T14:51:56.407Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T14:51:56.407Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T14:51:56.407Z] Task failed after reaching maximum retries (3)."
+      ],
+      "metadata": {
+        "action": "run_scheduler"
+      },
+      "startedTime": "2026-08-10T14:51:56.407Z",
+      "delayedUntil": "2026-08-10T14:51:56.402Z",
+      "finishedTime": "2026-08-10T14:51:56.407Z"
+    },
+    {
+      "id": "task-sched-1786374401582",
+      "agentId": "agent-scout",
+      "priority": 5,
+      "createdTime": "2026-08-10T15:06:41.582Z",
+      "retries": 3,
+      "maxRetries": 3,
+      "currentStep": "Scheduled Trigger",
+      "progress": 0,
+      "status": "Failed",
+      "logs": [
+        "[2026-08-10T15:06:41.583Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T15:06:41.584Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T15:06:41.584Z] Task scheduled for retry #1 in 2s.",
+        "[2026-08-10T15:06:44.083Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T15:06:44.083Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T15:06:44.083Z] Task scheduled for retry #2 in 4s.",
+        "[2026-08-10T15:06:48.085Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T15:06:48.086Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T15:06:48.086Z] Task scheduled for retry #3 in 8s.",
+        "[2026-08-10T15:06:56.094Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T15:06:56.094Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T15:06:56.094Z] Task failed after reaching maximum retries (3)."
+      ],
+      "metadata": {
+        "action": "run_scheduler"
+      },
+      "startedTime": "2026-08-10T15:06:56.094Z",
+      "delayedUntil": "2026-08-10T15:06:56.086Z",
+      "finishedTime": "2026-08-10T15:06:56.094Z"
+    },
+    {
+      "id": "task-sched-1786375301636",
+      "agentId": "agent-scout",
+      "priority": 5,
+      "createdTime": "2026-08-10T15:21:41.636Z",
+      "retries": 3,
+      "maxRetries": 3,
+      "currentStep": "Scheduled Trigger",
+      "progress": 0,
+      "status": "Failed",
+      "logs": [
+        "[2026-08-10T15:21:41.638Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T15:21:41.638Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T15:21:41.638Z] Task scheduled for retry #1 in 2s.",
+        "[2026-08-10T15:21:43.721Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T15:21:43.722Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T15:21:43.722Z] Task scheduled for retry #2 in 4s.",
+        "[2026-08-10T15:21:47.724Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T15:21:47.725Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T15:21:47.725Z] Task scheduled for retry #3 in 8s.",
+        "[2026-08-10T15:21:55.729Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T15:21:55.729Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T15:21:55.729Z] Task failed after reaching maximum retries (3)."
+      ],
+      "metadata": {
+        "action": "run_scheduler"
+      },
+      "startedTime": "2026-08-10T15:21:55.729Z",
+      "delayedUntil": "2026-08-10T15:21:55.725Z",
+      "finishedTime": "2026-08-10T15:21:55.729Z"
+    },
+    {
+      "id": "task-sched-1786376201699",
+      "agentId": "agent-scout",
+      "priority": 5,
+      "createdTime": "2026-08-10T15:36:41.699Z",
+      "retries": 3,
+      "maxRetries": 3,
+      "currentStep": "Scheduled Trigger",
+      "progress": 0,
+      "status": "Failed",
+      "logs": [
+        "[2026-08-10T15:36:41.701Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T15:36:41.701Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T15:36:41.701Z] Task scheduled for retry #1 in 2s.",
+        "[2026-08-10T15:36:44.428Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T15:36:44.428Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T15:36:44.428Z] Task scheduled for retry #2 in 4s.",
+        "[2026-08-10T15:36:48.432Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T15:36:48.432Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T15:36:48.432Z] Task scheduled for retry #3 in 8s.",
+        "[2026-08-10T15:36:56.438Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T15:36:56.438Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T15:36:56.438Z] Task failed after reaching maximum retries (3)."
+      ],
+      "metadata": {
+        "action": "run_scheduler"
+      },
+      "startedTime": "2026-08-10T15:36:56.438Z",
+      "delayedUntil": "2026-08-10T15:36:56.432Z",
+      "finishedTime": "2026-08-10T15:36:56.438Z"
+    },
+    {
+      "id": "task-sched-1786377101764",
+      "agentId": "agent-scout",
+      "priority": 5,
+      "createdTime": "2026-08-10T15:51:41.764Z",
+      "retries": 3,
+      "maxRetries": 3,
+      "currentStep": "Scheduled Trigger",
+      "progress": 0,
+      "status": "Failed",
+      "logs": [
+        "[2026-08-10T15:51:41.765Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T15:51:41.766Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T15:51:41.766Z] Task scheduled for retry #1 in 2s.",
+        "[2026-08-10T15:51:44.135Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T15:51:44.135Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T15:51:44.135Z] Task scheduled for retry #2 in 4s.",
+        "[2026-08-10T15:51:48.136Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T15:51:48.136Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T15:51:48.136Z] Task scheduled for retry #3 in 8s.",
+        "[2026-08-10T15:51:56.143Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T15:51:56.144Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T15:51:56.144Z] Task failed after reaching maximum retries (3)."
+      ],
+      "metadata": {
+        "action": "run_scheduler"
+      },
+      "startedTime": "2026-08-10T15:51:56.143Z",
+      "delayedUntil": "2026-08-10T15:51:56.136Z",
+      "finishedTime": "2026-08-10T15:51:56.144Z"
+    },
+    {
+      "id": "task-sched-1786378007369",
+      "agentId": "agent-scout",
+      "priority": 5,
+      "createdTime": "2026-08-10T16:06:47.369Z",
+      "retries": 3,
+      "maxRetries": 3,
+      "currentStep": "Scheduled Trigger",
+      "progress": 0,
+      "status": "Failed",
+      "logs": [
+        "[2026-08-10T16:06:47.370Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T16:06:47.371Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T16:06:47.371Z] Task scheduled for retry #1 in 2s.",
+        "[2026-08-10T16:06:49.482Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T16:06:49.482Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T16:06:49.482Z] Task scheduled for retry #2 in 4s.",
+        "[2026-08-10T16:06:53.483Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T16:06:53.483Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T16:06:53.483Z] Task scheduled for retry #3 in 8s.",
+        "[2026-08-10T16:07:01.489Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T16:07:01.490Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T16:07:01.490Z] Task failed after reaching maximum retries (3)."
+      ],
+      "metadata": {
+        "action": "run_scheduler"
+      },
+      "startedTime": "2026-08-10T16:07:01.489Z",
+      "delayedUntil": "2026-08-10T16:07:01.483Z",
+      "finishedTime": "2026-08-10T16:07:01.490Z"
+    },
+    {
+      "id": "task-sched-1786378907430",
+      "agentId": "agent-scout",
+      "priority": 5,
+      "createdTime": "2026-08-10T16:21:47.430Z",
+      "retries": 3,
+      "maxRetries": 3,
+      "currentStep": "Scheduled Trigger",
+      "progress": 0,
+      "status": "Failed",
+      "logs": [
+        "[2026-08-10T16:21:47.432Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T16:21:47.432Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T16:21:47.432Z] Task scheduled for retry #1 in 2s.",
+        "[2026-08-10T16:21:50.284Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T16:21:50.284Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T16:21:50.284Z] Task scheduled for retry #2 in 4s.",
+        "[2026-08-10T16:21:54.287Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T16:21:54.288Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T16:21:54.288Z] Task scheduled for retry #3 in 8s.",
+        "[2026-08-10T16:22:02.293Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T16:22:02.293Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T16:22:02.293Z] Task failed after reaching maximum retries (3)."
+      ],
+      "metadata": {
+        "action": "run_scheduler"
+      },
+      "startedTime": "2026-08-10T16:22:02.293Z",
+      "delayedUntil": "2026-08-10T16:22:02.288Z",
+      "finishedTime": "2026-08-10T16:22:02.293Z"
+    },
+    {
+      "id": "task-sched-1786379807520",
+      "agentId": "agent-scout",
+      "priority": 5,
+      "createdTime": "2026-08-10T16:36:47.520Z",
+      "retries": 3,
+      "maxRetries": 3,
+      "currentStep": "Scheduled Trigger",
+      "progress": 0,
+      "status": "Failed",
+      "logs": [
+        "[2026-08-10T16:36:47.521Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T16:36:47.522Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T16:36:47.522Z] Task scheduled for retry #1 in 2s.",
+        "[2026-08-10T16:36:50.079Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T16:36:50.079Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T16:36:50.079Z] Task scheduled for retry #2 in 4s.",
+        "[2026-08-10T16:36:54.082Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T16:36:54.083Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T16:36:54.083Z] Task scheduled for retry #3 in 8s.",
+        "[2026-08-10T16:37:02.091Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T16:37:02.091Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T16:37:02.091Z] Task failed after reaching maximum retries (3)."
+      ],
+      "metadata": {
+        "action": "run_scheduler"
+      },
+      "startedTime": "2026-08-10T16:37:02.091Z",
+      "delayedUntil": "2026-08-10T16:37:02.083Z",
+      "finishedTime": "2026-08-10T16:37:02.091Z"
+    },
+    {
+      "id": "task-sched-1786396716127",
+      "agentId": "agent-scout",
+      "priority": 5,
+      "createdTime": "2026-08-10T21:18:36.127Z",
+      "retries": 3,
+      "maxRetries": 3,
+      "currentStep": "Scheduled Trigger",
+      "progress": 0,
+      "status": "Failed",
+      "logs": [
+        "[2026-08-10T21:18:36.129Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T21:18:36.129Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T21:18:36.129Z] Task scheduled for retry #1 in 2s.",
+        "[2026-08-10T21:18:38.374Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T21:18:38.374Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T21:18:38.374Z] Task scheduled for retry #2 in 4s.",
+        "[2026-08-10T21:18:42.376Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T21:18:42.377Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T21:18:42.377Z] Task scheduled for retry #3 in 8s.",
+        "[2026-08-10T21:18:50.383Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T21:18:50.384Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T21:18:50.384Z] Task failed after reaching maximum retries (3)."
+      ],
+      "metadata": {
+        "action": "run_scheduler"
+      },
+      "startedTime": "2026-08-10T21:18:50.383Z",
+      "delayedUntil": "2026-08-10T21:18:50.377Z",
+      "finishedTime": "2026-08-10T21:18:50.384Z"
+    },
+    {
+      "id": "task-sched-1786397616189",
+      "agentId": "agent-scout",
+      "priority": 5,
+      "createdTime": "2026-08-10T21:33:36.189Z",
+      "retries": 3,
+      "maxRetries": 3,
+      "currentStep": "Scheduled Trigger",
+      "progress": 0,
+      "status": "Failed",
+      "logs": [
+        "[2026-08-10T21:33:36.191Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T21:33:36.191Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T21:33:36.191Z] Task scheduled for retry #1 in 2s.",
+        "[2026-08-10T21:33:39.132Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T21:33:39.132Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T21:33:39.132Z] Task scheduled for retry #2 in 4s.",
+        "[2026-08-10T21:33:43.136Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T21:33:43.136Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T21:33:43.136Z] Task scheduled for retry #3 in 8s.",
+        "[2026-08-10T21:33:51.141Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T21:33:51.142Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T21:33:51.142Z] Task failed after reaching maximum retries (3)."
+      ],
+      "metadata": {
+        "action": "run_scheduler"
+      },
+      "startedTime": "2026-08-10T21:33:51.141Z",
+      "delayedUntil": "2026-08-10T21:33:51.136Z",
+      "finishedTime": "2026-08-10T21:33:51.142Z"
+    },
+    {
+      "id": "task-sched-1786398516269",
+      "agentId": "agent-scout",
+      "priority": 5,
+      "createdTime": "2026-08-10T21:48:36.269Z",
+      "retries": 3,
+      "maxRetries": 3,
+      "currentStep": "Scheduled Trigger",
+      "progress": 0,
+      "status": "Failed",
+      "logs": [
+        "[2026-08-10T21:48:36.270Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T21:48:36.271Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T21:48:36.271Z] Task scheduled for retry #1 in 2s.",
+        "[2026-08-10T21:48:38.785Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T21:48:38.786Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T21:48:38.786Z] Task scheduled for retry #2 in 4s.",
+        "[2026-08-10T21:48:42.788Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T21:48:42.788Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T21:48:42.788Z] Task scheduled for retry #3 in 8s.",
+        "[2026-08-10T21:48:50.792Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T21:48:50.793Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T21:48:50.793Z] Task failed after reaching maximum retries (3)."
+      ],
+      "metadata": {
+        "action": "run_scheduler"
+      },
+      "startedTime": "2026-08-10T21:48:50.792Z",
+      "delayedUntil": "2026-08-10T21:48:50.788Z",
+      "finishedTime": "2026-08-10T21:48:50.793Z"
+    },
+    {
+      "id": "task-sched-1786399416354",
+      "agentId": "agent-scout",
+      "priority": 5,
+      "createdTime": "2026-08-10T22:03:36.354Z",
+      "retries": 3,
+      "maxRetries": 3,
+      "currentStep": "Scheduled Trigger",
+      "progress": 0,
+      "status": "Failed",
+      "logs": [
+        "[2026-08-10T22:03:36.355Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T22:03:36.356Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T22:03:36.356Z] Task scheduled for retry #1 in 2s.",
+        "[2026-08-10T22:03:38.535Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T22:03:38.535Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T22:03:38.535Z] Task scheduled for retry #2 in 4s.",
+        "[2026-08-10T22:03:42.537Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T22:03:42.537Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T22:03:42.537Z] Task scheduled for retry #3 in 8s.",
+        "[2026-08-10T22:03:50.543Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T22:03:50.544Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T22:03:50.544Z] Task failed after reaching maximum retries (3)."
+      ],
+      "metadata": {
+        "action": "run_scheduler"
+      },
+      "startedTime": "2026-08-10T22:03:50.543Z",
+      "delayedUntil": "2026-08-10T22:03:50.537Z",
+      "finishedTime": "2026-08-10T22:03:50.544Z"
+    },
+    {
+      "id": "task-sched-1786400319333",
+      "agentId": "agent-scout",
+      "priority": 5,
+      "createdTime": "2026-08-10T22:18:39.333Z",
+      "retries": 3,
+      "maxRetries": 3,
+      "currentStep": "Scheduled Trigger",
+      "progress": 0,
+      "status": "Failed",
+      "logs": [
+        "[2026-08-10T22:18:39.334Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T22:18:39.335Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T22:18:39.335Z] Task scheduled for retry #1 in 2s.",
+        "[2026-08-10T22:18:42.103Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T22:18:42.103Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T22:18:42.103Z] Task scheduled for retry #2 in 4s.",
+        "[2026-08-10T22:18:46.105Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T22:18:46.105Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T22:18:46.105Z] Task scheduled for retry #3 in 8s.",
+        "[2026-08-10T22:18:54.112Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T22:18:54.112Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T22:18:54.112Z] Task failed after reaching maximum retries (3)."
+      ],
+      "metadata": {
+        "action": "run_scheduler"
+      },
+      "startedTime": "2026-08-10T22:18:54.112Z",
+      "delayedUntil": "2026-08-10T22:18:54.105Z",
+      "finishedTime": "2026-08-10T22:18:54.112Z"
+    },
+    {
+      "id": "task-sched-1786401224007",
+      "agentId": "agent-scout",
+      "priority": 5,
+      "createdTime": "2026-08-10T22:33:44.007Z",
+      "retries": 3,
+      "maxRetries": 3,
+      "currentStep": "Scheduled Trigger",
+      "progress": 0,
+      "status": "Failed",
+      "logs": [
+        "[2026-08-10T22:33:44.009Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T22:33:44.009Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T22:33:44.009Z] Task scheduled for retry #1 in 2s.",
+        "[2026-08-10T22:33:46.655Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T22:33:46.655Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T22:33:46.655Z] Task scheduled for retry #2 in 4s.",
+        "[2026-08-10T22:33:50.671Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T22:33:50.671Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T22:33:50.671Z] Task scheduled for retry #3 in 8s.",
+        "[2026-08-10T22:33:58.678Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T22:33:58.679Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T22:33:58.679Z] Task failed after reaching maximum retries (3)."
+      ],
+      "metadata": {
+        "action": "run_scheduler"
+      },
+      "startedTime": "2026-08-10T22:33:58.678Z",
+      "delayedUntil": "2026-08-10T22:33:58.671Z",
+      "finishedTime": "2026-08-10T22:33:58.679Z"
+    },
+    {
+      "id": "task-sched-1786402124082",
+      "agentId": "agent-scout",
+      "priority": 5,
+      "createdTime": "2026-08-10T22:48:44.082Z",
+      "retries": 3,
+      "maxRetries": 3,
+      "currentStep": "Scheduled Trigger",
+      "progress": 0,
+      "status": "Failed",
+      "logs": [
+        "[2026-08-10T22:48:44.084Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T22:48:44.084Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T22:48:44.084Z] Task scheduled for retry #1 in 2s.",
+        "[2026-08-10T22:48:46.399Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T22:48:46.400Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T22:48:46.400Z] Task scheduled for retry #2 in 4s.",
+        "[2026-08-10T22:48:50.404Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T22:48:50.404Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T22:48:50.404Z] Task scheduled for retry #3 in 8s.",
+        "[2026-08-10T22:48:58.409Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T22:48:58.409Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T22:48:58.409Z] Task failed after reaching maximum retries (3)."
+      ],
+      "metadata": {
+        "action": "run_scheduler"
+      },
+      "startedTime": "2026-08-10T22:48:58.408Z",
+      "delayedUntil": "2026-08-10T22:48:58.404Z",
+      "finishedTime": "2026-08-10T22:48:58.409Z"
+    },
+    {
+      "id": "task-sched-1786403024129",
+      "agentId": "agent-scout",
+      "priority": 5,
+      "createdTime": "2026-08-10T23:03:44.129Z",
+      "retries": 3,
+      "maxRetries": 3,
+      "currentStep": "Scheduled Trigger",
+      "progress": 0,
+      "status": "Failed",
+      "logs": [
+        "[2026-08-10T23:03:44.130Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T23:03:44.130Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T23:03:44.130Z] Task scheduled for retry #1 in 2s.",
+        "[2026-08-10T23:03:47.108Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T23:03:47.108Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T23:03:47.108Z] Task scheduled for retry #2 in 4s.",
+        "[2026-08-10T23:03:51.110Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T23:03:51.110Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T23:03:51.110Z] Task scheduled for retry #3 in 8s.",
+        "[2026-08-10T23:03:59.113Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T23:03:59.113Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T23:03:59.113Z] Task failed after reaching maximum retries (3)."
+      ],
+      "metadata": {
+        "action": "run_scheduler"
+      },
+      "startedTime": "2026-08-10T23:03:59.113Z",
+      "delayedUntil": "2026-08-10T23:03:59.110Z",
+      "finishedTime": "2026-08-10T23:03:59.113Z"
+    },
+    {
+      "id": "task-sched-1786403924207",
+      "agentId": "agent-scout",
+      "priority": 5,
+      "createdTime": "2026-08-10T23:18:44.207Z",
+      "retries": 3,
+      "maxRetries": 3,
+      "currentStep": "Scheduled Trigger",
+      "progress": 0,
+      "status": "Failed",
+      "logs": [
+        "[2026-08-10T23:18:44.209Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T23:18:44.209Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T23:18:44.209Z] Task scheduled for retry #1 in 2s.",
+        "[2026-08-10T23:18:46.792Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T23:18:46.792Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T23:18:46.792Z] Task scheduled for retry #2 in 4s.",
+        "[2026-08-10T23:18:50.795Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T23:18:50.796Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T23:18:50.796Z] Task scheduled for retry #3 in 8s.",
+        "[2026-08-10T23:18:58.802Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-08-10T23:18:58.802Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-08-10T23:18:58.802Z] Task failed after reaching maximum retries (3)."
+      ],
+      "metadata": {
+        "action": "run_scheduler"
+      },
+      "startedTime": "2026-08-10T23:18:58.802Z",
+      "delayedUntil": "2026-08-10T23:18:58.796Z",
+      "finishedTime": "2026-08-10T23:18:58.802Z"
+    },
+    {
+      "id": "task-search-1788392368073",
+      "agentId": "agent-scout",
+      "priority": 10,
+      "createdTime": "2026-09-02T23:39:28.073Z",
+      "retries": 3,
+      "maxRetries": 3,
+      "currentStep": "Pending Scrape",
+      "progress": 0,
+      "status": "Failed",
+      "logs": [
+        "[2026-09-02T23:39:28.074Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-09-02T23:39:28.075Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-09-02T23:39:28.075Z] Task scheduled for retry #1 in 2s.",
+        "[2026-09-02T23:39:30.590Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-09-02T23:39:30.590Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-09-02T23:39:30.590Z] Task scheduled for retry #2 in 4s.",
+        "[2026-09-02T23:39:34.594Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-09-02T23:39:34.595Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-09-02T23:39:34.595Z] Task scheduled for retry #3 in 8s.",
+        "[2026-09-02T23:39:42.600Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-09-02T23:39:42.601Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-09-02T23:39:42.601Z] Task failed after reaching maximum retries (3)."
+      ],
+      "metadata": {
+        "action": "search_and_analyze"
+      },
+      "startedTime": "2026-09-02T23:39:42.600Z",
+      "delayedUntil": "2026-09-02T23:39:42.595Z",
+      "finishedTime": "2026-09-02T23:39:42.601Z"
+    },
+    {
+      "id": "task-sched-1788392655408",
+      "agentId": "agent-scout",
+      "priority": 5,
+      "createdTime": "2026-09-02T23:44:15.408Z",
+      "retries": 3,
+      "maxRetries": 3,
+      "currentStep": "Scheduled Trigger",
+      "progress": 0,
+      "status": "Failed",
+      "logs": [
+        "[2026-09-02T23:44:15.410Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-09-02T23:44:15.410Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-09-02T23:44:15.410Z] Task scheduled for retry #1 in 2s.",
+        "[2026-09-02T23:44:17.514Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-09-02T23:44:17.514Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-09-02T23:44:17.514Z] Task scheduled for retry #2 in 4s.",
+        "[2026-09-02T23:44:21.515Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-09-02T23:44:21.516Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-09-02T23:44:21.516Z] Task scheduled for retry #3 in 8s.",
+        "[2026-09-02T23:44:29.522Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-09-02T23:44:29.522Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-09-02T23:44:29.522Z] Task failed after reaching maximum retries (3)."
+      ],
+      "metadata": {
+        "action": "run_scheduler"
+      },
+      "startedTime": "2026-09-02T23:44:29.522Z",
+      "delayedUntil": "2026-09-02T23:44:29.516Z",
+      "finishedTime": "2026-09-02T23:44:29.522Z"
+    },
+    {
+      "id": "task-search-1788393209892",
+      "agentId": "agent-scout",
+      "priority": 10,
+      "createdTime": "2026-09-02T23:53:29.892Z",
+      "retries": 3,
+      "maxRetries": 3,
+      "currentStep": "Pending Scrape",
+      "progress": 0,
+      "status": "Failed",
+      "logs": [
+        "[2026-09-02T23:53:29.893Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-09-02T23:53:29.893Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-09-02T23:53:29.893Z] Task scheduled for retry #1 in 2s.",
+        "[2026-09-02T23:53:31.913Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-09-02T23:53:31.913Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-09-02T23:53:31.913Z] Task scheduled for retry #2 in 4s.",
+        "[2026-09-02T23:53:35.915Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-09-02T23:53:35.915Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-09-02T23:53:35.915Z] Task scheduled for retry #3 in 8s.",
+        "[2026-09-02T23:53:43.920Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-09-02T23:53:43.920Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-09-02T23:53:43.920Z] Task failed after reaching maximum retries (3)."
+      ],
+      "metadata": {
+        "action": "search_and_analyze"
+      },
+      "startedTime": "2026-09-02T23:53:43.920Z",
+      "delayedUntil": "2026-09-02T23:53:43.915Z",
+      "finishedTime": "2026-09-02T23:53:43.920Z"
+    },
+    {
+      "id": "task-sched-1788393562648",
+      "agentId": "agent-scout",
+      "priority": 5,
+      "createdTime": "2026-09-02T23:59:22.648Z",
+      "retries": 3,
+      "maxRetries": 3,
+      "currentStep": "Scheduled Trigger",
+      "progress": 0,
+      "status": "Failed",
+      "logs": [
+        "[2026-09-02T23:59:22.650Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-09-02T23:59:22.650Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-09-02T23:59:22.650Z] Task scheduled for retry #1 in 2s.",
+        "[2026-09-02T23:59:24.878Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-09-02T23:59:24.878Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-09-02T23:59:24.878Z] Task scheduled for retry #2 in 4s.",
+        "[2026-09-02T23:59:28.882Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-09-02T23:59:28.882Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-09-02T23:59:28.882Z] Task scheduled for retry #3 in 8s.",
+        "[2026-09-02T23:59:36.889Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-09-02T23:59:36.889Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-09-02T23:59:36.889Z] Task failed after reaching maximum retries (3)."
+      ],
+      "metadata": {
+        "action": "run_scheduler"
+      },
+      "startedTime": "2026-09-02T23:59:36.889Z",
+      "delayedUntil": "2026-09-02T23:59:36.882Z",
+      "finishedTime": "2026-09-02T23:59:36.889Z"
+    },
+    {
+      "id": "task-sched-1788394464617",
+      "agentId": "agent-scout",
+      "priority": 5,
+      "createdTime": "2026-09-03T00:14:24.617Z",
+      "retries": 3,
+      "maxRetries": 3,
+      "currentStep": "Scheduled Trigger",
+      "progress": 0,
+      "status": "Failed",
+      "logs": [
+        "[2026-09-03T00:14:24.619Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-09-03T00:14:24.620Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-09-03T00:14:24.620Z] Task scheduled for retry #1 in 2s.",
+        "[2026-09-03T00:14:26.658Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-09-03T00:14:26.659Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-09-03T00:14:26.659Z] Task scheduled for retry #2 in 4s.",
+        "[2026-09-03T00:14:30.661Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-09-03T00:14:30.661Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-09-03T00:14:30.661Z] Task scheduled for retry #3 in 8s.",
+        "[2026-09-03T00:14:38.667Z] Dispatching task execution to agent: Freelance Automation Scout",
+        "[2026-09-03T00:14:38.668Z] Error encountered: Cannot read properties of undefined (reading 'addLog')",
+        "[2026-09-03T00:14:38.668Z] Task failed after reaching maximum retries (3)."
+      ],
+      "metadata": {
+        "action": "run_scheduler"
+      },
+      "startedTime": "2026-09-03T00:14:38.667Z",
+      "delayedUntil": "2026-09-03T00:14:38.661Z",
+      "finishedTime": "2026-09-03T00:14:38.668Z"
+    }
+  ],
+  "agentStates": [
+    {
+      "agentId": "agent-crawler",
+      "status": "Idle",
+      "progress": {
+        "percentage": 0,
+        "currentStep": "Uninitialized"
+      },
+      "tasks": [],
+      "metadata": {},
+      "lastUpdated": "2026-09-08T17:49:22.385Z"
+    },
+    {
+      "agentId": "agent-matcher",
+      "status": "Idle",
+      "progress": {
+        "percentage": 0,
+        "currentStep": "Uninitialized"
+      },
+      "tasks": [],
+      "metadata": {},
+      "lastUpdated": "2026-09-08T17:49:22.385Z"
+    },
+    {
+      "agentId": "agent-smtp",
+      "status": "Idle",
+      "progress": {
+        "percentage": 0,
+        "currentStep": "Uninitialized"
+      },
+      "tasks": [],
+      "metadata": {},
+      "lastUpdated": "2026-09-08T17:49:22.385Z"
+    },
+    {
+      "agentId": "agent-scout",
+      "status": "Failed",
+      "progress": {
+        "percentage": 0,
+        "currentStep": "Execution Failed: Cannot read properties of undefined (reading 'addLog')"
+      },
+      "tasks": [
+        "task-sched-1786309110010",
+        "task-sched-1786310010860",
+        "task-sched-1786310918275",
+        "task-sched-1786311827198",
+        "task-sched-1786312731714",
+        "task-sched-1786313632957",
+        "task-sched-1786371701339",
+        "task-sched-1786372601416",
+        "task-sched-1786373501495",
+        "task-sched-1786374401582",
+        "task-sched-1786375301636",
+        "task-sched-1786376201699",
+        "task-sched-1786377101764",
+        "task-sched-1786378007369",
+        "task-sched-1786378907430",
+        "task-sched-1786379807520",
+        "task-sched-1786396716127",
+        "task-sched-1786397616189",
+        "task-sched-1786398516269",
+        "task-sched-1786399416354",
+        "task-sched-1786400319333",
+        "task-sched-1786401224007",
+        "task-sched-1786402124082",
+        "task-sched-1786403024129",
+        "task-sched-1786403924207",
+        "task-search-1788392368073",
+        "task-sched-1788392655408",
+        "task-search-1788393209892",
+        "task-sched-1788393562648",
+        "task-sched-1788394464617"
+      ],
+      "metadata": {},
+      "lastUpdated": "2026-09-08T17:49:22.385Z"
+    }
+  ],
+  "workflows": []
+}

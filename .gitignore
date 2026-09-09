@@ -1,0 +1,18 @@
+node_modules/
+build/
+dist/
+coverage/
+.DS_Store
+*.log
+.env*
+!.env.example
+
+# Local SQLite Databases
+*.sqlitedb
+*.sqlitedb-shm
+*.sqlitedb-wal
+*.db-shm
+*.db-wal
+
+# Firebase Credentials Config
+firebase-applet-config.json

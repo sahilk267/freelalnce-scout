@@ -1,0 +1,25 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default deny catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function isValidCandidate(candidate) {
+      return candidate.name is string && candidate.name.size() <= 100
+        && candidate.experienceYears is int
+        && candidate.locationPreference is string && candidate.locationPreference.size() <= 100
+        && candidate.skills is list && candidate.skills.size() <= 50;
+    }
+
+    match /candidates/{candidateId} {
+      allow read, write: if true;
+    }
+  }
+}

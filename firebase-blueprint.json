@@ -1,0 +1,38 @@
+{
+  "entities": {
+    "Candidate": {
+      "title": "Candidate",
+      "description": "A developer candidate looking for job opportunities",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier of the candidate"
+        },
+        "name": {
+          "type": "string",
+          "description": "Full name of the candidate"
+        },
+        "skills": {
+          "type": "array",
+          "description": "List of skills possessed by the candidate"
+        },
+        "experienceYears": {
+          "type": "integer",
+          "description": "Years of experience"
+        },
+        "locationPreference": {
+          "type": "string",
+          "description": "Preferred work location"
+        }
+      },
+      "required": ["name", "skills", "experienceYears", "locationPreference"]
+    }
+  },
+  "firestore": {
+    "/candidates/{candidateId}": {
+      "schema": "Candidate",
+      "description": "Collection of candidate profiles"
+    }
+  }
+}
