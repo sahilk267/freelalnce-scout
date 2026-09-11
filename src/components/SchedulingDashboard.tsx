@@ -15,14 +15,19 @@ import {
   RefreshCw, 
   Send, 
   ShieldAlert, 
+  ShieldCheck,
+  Key,
   Lock, 
   Check, 
   ExternalLink,
   History,
   ToggleLeft,
-  ToggleRight
+  ToggleRight,
+  Eye,
+  EyeOff
 } from "lucide-react";
 import { SchedulingSession, InterviewerSlot, SchedulingAuditLog } from "../domain/models/Scheduling";
+import { getAdminAuthHeaders, getAdminApiKey, setAdminApiKey } from "../utils/apiAuth";
 
 export default function SchedulingDashboard() {
   const [activeTab, setActiveTab] = useState<"recruiter" | "candidate_portal" | "audit_logs">("recruiter");
@@ -33,6 +38,12 @@ export default function SchedulingDashboard() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [actionSuccess, setActionSuccess] = useState<string | null>(null);
+
+  // Admin API key management state
+  const [apiKeyInput, setApiKeyInput] = useState(() => getAdminApiKey());
+  const [showKeyConfig, setShowKeyConfig] = useState(false);
+  const [isAuthError, setIsAuthError] = useState(false);
+  const [showKeySecret, setShowKeySecret] = useState(false);
 
   // Invite modal state
   const [showInviteModal, setShowInviteModal] = useState(false);
@@ -58,18 +69,28 @@ export default function SchedulingDashboard() {
     setError(null);
     try {
       const [resSessions, resLogs] = await Promise.all([
-        fetch("/api/scheduling/sessions"),
-        fetch("/api/scheduling/audit-logs")
+        fetch("/api/scheduling/sessions", { headers: getAdminAuthHeaders() }),
+        fetch("/api/scheduling/audit-logs", { headers: getAdminAuthHeaders() })
       ]);
 
-      if (resSessions.ok) {
-        const dataSessions = await resSessions.json();
-        setSessions(dataSessions);
+      if (resSessions.status === 401 || resLogs.status === 401) {
+        setIsAuthError(true);
+        setError("Admin Authorization Required (401): AZIZ_API_KEY is configured on the server. Please enter your API key to access recruiter scheduling.");
+        setSessions([]);
+        setAuditLogs([]);
+        return;
       }
-      if (resLogs.ok) {
-        const dataLogs = await resLogs.json();
-        setAuditLogs(dataLogs);
+
+      if (!resSessions.ok || !resLogs.ok) {
+        setError(`Failed to load scheduling data (HTTP ${resSessions.status}/${resLogs.status}).`);
+        return;
       }
+
+      setIsAuthError(false);
+      const dataSessions = await resSessions.json();
+      setSessions(dataSessions);
+      const dataLogs = await resLogs.json();
+      setAuditLogs(dataLogs);
     } catch (err: any) {
       setError(`Failed to load scheduling data: ${err.message}`);
     } finally {
@@ -79,7 +100,36 @@ export default function SchedulingDashboard() {
 
   useEffect(() => {
     fetchSessionsAndLogs();
+
+    const handleKeyUpdate = () => {
+      setApiKeyInput(getAdminApiKey());
+      fetchSessionsAndLogs();
+    };
+
+    const handleUnauthorized = (e: any) => {
+      if (e?.detail?.url && (e.detail.url.includes("/scheduling/") || e.detail.url.includes("/api/"))) {
+        setIsAuthError(true);
+        setError("Admin Authorization Required (401): Valid AZIZ_API_KEY required. Please configure your key below.");
+      }
+    };
+
+    window.addEventListener("aziz-api-key-updated", handleKeyUpdate);
+    window.addEventListener("aziz-api-unauthorized", handleUnauthorized);
+
+    return () => {
+      window.removeEventListener("aziz-api-key-updated", handleKeyUpdate);
+      window.removeEventListener("aziz-api-unauthorized", handleUnauthorized);
+    };
   }, []);
+
+  const handleSaveApiKey = (e: React.FormEvent) => {
+    e.preventDefault();
+    setAdminApiKey(apiKeyInput.trim());
+    setIsAuthError(false);
+    setShowKeyConfig(false);
+    setActionSuccess("AZIZ_API_KEY updated successfully.");
+    fetchSessionsAndLogs();
+  };
 
   const handleCreateInvite = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -90,7 +140,7 @@ export default function SchedulingDashboard() {
     try {
       const res = await fetch("/api/scheduling/invite", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: getAdminAuthHeaders({ "Content-Type": "application/json" }),
         body: JSON.stringify({
           candidateId: `cand_${Date.now()}`,
           candidateName,
@@ -109,7 +159,12 @@ export default function SchedulingDashboard() {
         setPortalToken(data.token);
         fetchSessionsAndLogs();
       } else {
-        setError(data.error || "Failed to generate candidate invite.");
+        if (res.status === 401) {
+          setIsAuthError(true);
+          setError("Unauthorized (401): Valid AZIZ_API_KEY is required to create invites.");
+        } else {
+          setError(data.error || "Failed to generate candidate invite.");
+        }
       }
     } catch (err: any) {
       setError(`Network error: ${err.message}`);
@@ -125,7 +180,7 @@ export default function SchedulingDashboard() {
     try {
       const res = await fetch("/api/scheduling/confirm", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: getAdminAuthHeaders({ "Content-Type": "application/json" }),
         body: JSON.stringify({ sessionId })
       });
       const data = await res.json();
@@ -133,12 +188,85 @@ export default function SchedulingDashboard() {
         setActionSuccess(`Booking confirmed successfully for session ${sessionId}.`);
         fetchSessionsAndLogs();
       } else {
-        setError(data.error || "Failed to confirm booking.");
+        if (res.status === 401) {
+          setIsAuthError(true);
+          setError("Unauthorized (401): Valid AZIZ_API_KEY is required to confirm bookings.");
+        } else {
+          setError(data.error || "Failed to confirm booking.");
+        }
       }
     } catch (err: any) {
       setError(`Confirmation failed: ${err.message}`);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleRecruiterCancelBooking = async (sessionId: string) => {
+    setLoading(true);
+    setActionSuccess(null);
+    setError(null);
+    try {
+      const res = await fetch("/api/scheduling/cancel", {
+        method: "POST",
+        headers: getAdminAuthHeaders({ "Content-Type": "application/json" }),
+        body: JSON.stringify({ 
+          sessionId,
+          reason: "Recruiter cancelled session from dashboard"
+        })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setActionSuccess(`Session ${sessionId} successfully cancelled.`);
+        fetchSessionsAndLogs();
+      } else {
+        if (res.status === 401) {
+          setIsAuthError(true);
+          setError("Unauthorized (401): Valid AZIZ_API_KEY is required to cancel sessions as recruiter.");
+        } else {
+          setError(data.error || "Failed to cancel session.");
+        }
+      }
+    } catch (err: any) {
+      setError(`Cancellation failed: ${err.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCandidateCancelBooking = async () => {
+    if (!portalSessionId.trim() || !portalToken.trim()) {
+      setPortalError("Provide both Session ID and Candidate Token.");
+      return;
+    }
+    setPortalLoading(true);
+    setPortalError(null);
+    setPortalSuccess(null);
+    try {
+      const res = await fetch("/api/scheduling/cancel", {
+        method: "POST",
+        headers: { 
+          "Content-Type": "application/json",
+          "X-Session-Token": portalToken
+        },
+        body: JSON.stringify({
+          sessionId: portalSessionId,
+          reason: "Candidate cancelled booking via self-service portal"
+        })
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        setPortalSuccess("Booking / slot reservation has been cancelled.");
+        handleFetchCandidateSlots();
+        fetchSessionsAndLogs();
+      } else {
+        setPortalError(data.error || "Failed to cancel booking.");
+      }
+    } catch (err: any) {
+      setPortalError(`Error cancelling booking: ${err.message}`);
+    } finally {
+      setPortalLoading(false);
     }
   };
 
@@ -241,6 +369,28 @@ export default function SchedulingDashboard() {
 
         <div className="flex items-center gap-3">
           <button
+            onClick={() => setShowKeyConfig(!showKeyConfig)}
+            id="toggle-api-key-config-btn"
+            className={`px-3 py-2 text-xs font-medium rounded-lg border transition-colors flex items-center gap-1.5 ${
+              apiKeyInput
+                ? "bg-slate-800 hover:bg-slate-700 text-emerald-400 border-slate-700"
+                : "bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border-amber-500/30"
+            }`}
+            title="Configure Admin API Key (AZIZ_API_KEY)"
+          >
+            {apiKeyInput ? (
+              <>
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                <span>API Key Set</span>
+              </>
+            ) : (
+              <>
+                <Key className="w-3.5 h-3.5 text-amber-400" />
+                <span>Set API Key</span>
+              </>
+            )}
+          </button>
+          <button
             onClick={() => setShowInviteModal(true)}
             id="create-invite-btn"
             className="px-4 py-2 text-sm font-medium rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white transition-colors flex items-center gap-2 shadow-sm"
@@ -257,6 +407,73 @@ export default function SchedulingDashboard() {
           </button>
         </div>
       </div>
+
+      {/* API Key Configuration Drawer / Auth Banner */}
+      {(showKeyConfig || isAuthError) && (
+        <div className="bg-slate-900/90 border border-indigo-500/30 rounded-xl p-5 shadow-lg backdrop-blur-sm" id="api-key-config-panel">
+          <div className="flex items-start justify-between gap-4 mb-3">
+            <div className="flex items-center gap-2.5">
+              <div className="p-2 rounded-lg bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+                <Lock className="w-4 h-4" />
+              </div>
+              <div>
+                <h3 className="text-sm font-semibold text-white">Admin Authentication (AZIZ_API_KEY)</h3>
+                <p className="text-xs text-slate-400 mt-0.5">
+                  The backend requires <code className="text-indigo-300 font-mono">X-API-Key</code> on all administrative recruiter endpoints (<code className="text-slate-300 font-mono">/sessions</code>, <code className="text-slate-300 font-mono">/invite</code>, <code className="text-slate-300 font-mono">/confirm</code>, <code className="text-slate-300 font-mono">/audit-logs</code>).
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={() => setShowKeyConfig(false)}
+              className="text-slate-500 hover:text-slate-300 text-xs px-2 py-1 rounded border border-slate-800 hover:bg-slate-800"
+            >
+              Close
+            </button>
+          </div>
+
+          <form onSubmit={handleSaveApiKey} className="flex items-center gap-3 mt-3 flex-wrap">
+            <div className="relative flex-1 min-w-[280px]">
+              <input
+                type={showKeySecret ? "text" : "password"}
+                value={apiKeyInput}
+                onChange={(e) => setApiKeyInput(e.target.value)}
+                placeholder="Enter AZIZ_API_KEY..."
+                className="w-full pl-3 pr-10 py-2 text-sm bg-slate-950 border border-slate-700 rounded-lg text-white font-mono placeholder-slate-500 focus:outline-none focus:border-indigo-500"
+                id="aziz-api-key-input"
+              />
+              <button
+                type="button"
+                onClick={() => setShowKeySecret(!showKeySecret)}
+                className="absolute right-3 top-2.5 text-slate-500 hover:text-slate-300"
+                tabIndex={-1}
+              >
+                {showKeySecret ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </button>
+            </div>
+            <button
+              type="submit"
+              id="save-api-key-btn"
+              className="px-4 py-2 text-sm font-medium rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white transition-colors flex items-center gap-1.5"
+            >
+              <Check className="w-4 h-4" />
+              Save & Authenticate
+            </button>
+            {apiKeyInput && (
+              <button
+                type="button"
+                onClick={() => {
+                  setApiKeyInput("");
+                  setAdminApiKey("");
+                  setIsAuthError(false);
+                }}
+                className="px-3 py-2 text-sm font-medium rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors"
+              >
+                Clear Key
+              </button>
+            )}
+          </form>
+        </div>
+      )}
 
       {/* Tabs */}
       <div className="flex border-b border-slate-800 space-x-6" id="scheduling-tabs">
@@ -385,6 +602,15 @@ export default function SchedulingDashboard() {
                             Override & Confirm
                           </button>
                         )}
+                        {s.status !== "cancelled" && s.status !== "hold_expired" && (
+                          <button
+                            onClick={() => handleRecruiterCancelBooking(s.id)}
+                            id={`recruiter-cancel-btn-${s.id}`}
+                            className="px-3 py-1.5 text-xs font-medium rounded-md bg-rose-600/20 hover:bg-rose-600/30 text-rose-300 border border-rose-500/30 transition-colors"
+                          >
+                            Cancel Session
+                          </button>
+                        )}
                         <button
                           onClick={() => {
                             setPortalSessionId(s.id);
@@ -444,15 +670,27 @@ export default function SchedulingDashboard() {
               </div>
             </div>
 
-            <button
-              onClick={handleFetchCandidateSlots}
-              id="fetch-slots-btn"
-              disabled={portalLoading}
-              className="px-4 py-2 text-sm font-medium rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white transition-colors flex items-center gap-2 disabled:opacity-50"
-            >
-              <RefreshCw className={`w-4 h-4 ${portalLoading ? "animate-spin" : ""}`} />
-              Query Available Interview Slots
-            </button>
+            <div className="flex items-center gap-3 flex-wrap">
+              <button
+                onClick={handleFetchCandidateSlots}
+                id="fetch-slots-btn"
+                disabled={portalLoading}
+                className="px-4 py-2 text-sm font-medium rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white transition-colors flex items-center gap-2 disabled:opacity-50"
+              >
+                <RefreshCw className={`w-4 h-4 ${portalLoading ? "animate-spin" : ""}`} />
+                Query Available Interview Slots
+              </button>
+
+              <button
+                onClick={handleCandidateCancelBooking}
+                id="candidate-cancel-btn"
+                disabled={portalLoading || !portalSessionId.trim() || !portalToken.trim()}
+                className="px-4 py-2 text-sm font-medium rounded-lg bg-rose-600/20 hover:bg-rose-600/30 text-rose-300 border border-rose-500/30 transition-colors flex items-center gap-2 disabled:opacity-50"
+              >
+                <AlertTriangle className="w-4 h-4 text-rose-400" />
+                Cancel My Booking / Reservation
+              </button>
+            </div>
           </div>
 
           {portalError && (

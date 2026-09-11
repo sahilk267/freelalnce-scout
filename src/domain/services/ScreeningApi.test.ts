@@ -8,12 +8,61 @@ import request from "supertest";
 import { app } from "../../../server";
 import { DIContainer, ICandidateRepository, IScreeningRepository } from "../index";
 import { createScreeningSession } from "../models/ScreeningSession";
+import { ScreeningServiceAgent } from "./ScreeningServiceAgent";
+import { IAIClientProvider } from "../providers/IAIClientProvider";
+
+class MockAIClientProvider implements IAIClientProvider {
+  getClient(): any {
+    return {
+      models: {
+        generateContent: async (params: any) => {
+          const contentsStr = typeof params.contents === "string" ? params.contents : JSON.stringify(params.contents || "");
+          if (contentsStr.includes("You are an expert, professional technical recruiter")) {
+            return {
+              text: "Could you tell me more about your hands-on experience building Node.js microservices?"
+            };
+          }
+          if (contentsStr.includes("senior hiring auditor")) {
+            return {
+              text: JSON.stringify({
+                overallScore: 85,
+                recommendation: "STRONG_HIRE",
+                criteriaEvaluations: [
+                  {
+                    requirement: "3+ years Node.js experience",
+                    score: 90,
+                    reasoning: "Candidate demonstrated 4 years of Node.js experience.",
+                    candidateEvidence: "I have built production services in Node.js for 4 years."
+                  }
+                ],
+                strengths: ["Strong backend architecture background."],
+                concerns: [],
+                auditNotes: "Candidate meets all core technical requirements."
+              })
+            };
+          }
+          if (contentsStr.includes("Compliance & Fact-Verification Auditor")) {
+            return {
+              text: JSON.stringify({
+                status: "PASSED",
+                auditNotes: "All claims verified against transcript.",
+                flags: []
+              })
+            };
+          }
+          return { text: "Mock AI Response" };
+        }
+      }
+    };
+  }
+}
 
 describe("Screening Agent API Integration Tests", () => {
   const apiKey = process.env.AZIZ_API_KEY || "test-key-12345";
 
   beforeEach(async () => {
     process.env.AZIZ_API_KEY = apiKey;
+    DIContainer.register("ScreeningServiceAgent", new ScreeningServiceAgent(new MockAIClientProvider()), true);
 
     // Seed a valid candidate
     const candidateRepo = DIContainer.get<ICandidateRepository>("ICandidateRepository");

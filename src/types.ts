@@ -27,7 +27,7 @@ export interface SystemLog {
   id: string;
   timestamp: string;
   level: "info" | "warn" | "error" | "success" | "debug";
-  module: ModuleId | "kernel" | "server" | "api";
+  module: ModuleId | "kernel" | "server" | "api" | "security";
   message: string;
 }
 

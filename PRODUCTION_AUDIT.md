@@ -1,37 +1,6 @@
 # 📋 Enterprise Production Audit & Hardening Report (Sprint 4 & 5 Hardening)
 ---
 
-## 6. Feature 3 Audit: Candidate Screening Agent & Security
-
-### Summary of Hardening & Compliance
-- **Session Auth & Security**: Screening session tokens are issued with a 24-hour TTL and verified via header-only `X-Session-Token` authentication. Token comparison uses timing-safe `crypto.timingSafeEqual` with SHA-256 digest hashing to prevent timing attacks. Query parameter fallbacks are disabled to prevent session tokens from appearing in server proxy access logs.
-- **Two-Pass AI Evaluation & Fallbacks**: Gemini-powered candidate screening evaluates competency, relevance, communication, and experience. Evaluator failures or rate limits automatically trigger deterministic fallback evaluations, preventing candidate disruption.
-- **Double-Evaluation Prevention**: `/api/screening/sessions/:id/evaluate` enforces strict idempotency, returning `409 Conflict` if an evaluation has already been generated.
-- **Human Sign-Off Review**: Supports recruiter `approve`, `reject`, or `override` workflow with reviewer notes and status tracking.
-
----
-
-## 7. Feature 4 Audit: Self-Scheduling Agent & Calendar Sync
-
-### Google Calendar Integration Notice (Production Item)
-> **PRODUCTION DEPLOYMENT NOTICE**: Feature 4's initial release utilizes `InMemoryCalendarProvider` (simulated interviewer slots and lock states). Upgrading to real Google Calendar OAuth in production requires:
-> 1. Secure OAuth token storage with KMS encryption for interviewer refresh tokens.
-> 2. Interviewer calendar authorization scopes (`https://www.googleapis.com/auth/calendar.events`).
-> 3. Interviewer consent configuration & automated candidate/interviewer notification dispatch (email/calendar invite).
-
-### Summary of Hardening & Architectural Compliance
-- **Header-Only Token Authentication**: Candidate scheduling links use 24-hour session tokens validated strictly via the `X-Session-Token` header using timing-safe SHA-256 comparison (`crypto.timingSafeEqual`).
-- **Auto-Booking Config Flag (`autoBookEnabled`)**:
-  - Defaults to `false`. When `false`, candidate selections place slots in a `"pending_confirmation"` state with a **48-hour hold timeout** (`holdExpiresAt`).
-  - If a recruiter does not confirm the slot within 48 hours, `sweepExpiredHolds` automatically releases the slot back to availability and transitions session status to `"hold_expired"`.
-  - When `autoBookEnabled: true`, candidate slot selection immediately creates the calendar event and marks the slot as `"booked"`.
-- **Concurrency Protection & Double-Booking Prevention**:
-  - `atomicLockSlot` enforces atomic lock checks on `(interviewerId, slotStart)`. Concurrent booking attempts on an already locked/booked slot return a `409 Conflict` error.
-- **Compensation Rollback & State Resilience**:
-  - In auto-book or confirmation workflows, if calendar event creation fails after DB locking, the system performs an atomic compensation rollback to release the slot.
-  - If compensation itself fails (e.g. storage layer failure), the session is updated to `"needs_human_review"` status, and a `compensation_failed` `SchedulingAuditLog` entry is logged to surface the issue on admin dashboards rather than silently stranding slots.
-- **Audit Logging**: All scheduling actions (`slot_search`, `slot_locked`, `slot_booked`, `slot_released`, `booking_confirmed`, `booking_cancelled`, `compensation_failed`, `hold_expired`) emit structured `SchedulingAuditLog` entries.
-
 This report details the findings, implementation, and concrete evidence of the engineering hardening measures applied to the **Aziz OS** platform.
 
 ---
@@ -292,6 +261,31 @@ The **Aziz OS** is fully hardened, 100% rate-limited and authenticated, and stru
   - In auto-book or confirmation workflows, if calendar event creation fails after DB locking, the system performs an atomic compensation rollback to release the slot.
   - If compensation itself fails (e.g. storage layer failure), the session is updated to `"needs_human_review"` status, and a `compensation_failed` `SchedulingAuditLog` entry is logged to surface the issue on admin dashboards rather than silently stranding slots.
 - **Audit Logging**: All scheduling actions (`slot_search`, `slot_locked`, `slot_booked`, `slot_released`, `booking_confirmed`, `booking_cancelled`, `compensation_failed`, `hold_expired`) emit structured `SchedulingAuditLog` entries.
+
+---
+
+## 8. Explicit Functional Gaps & Disclosures
+
+The following architectural disclosures and operational boundaries are documented for complete transparency regarding the current release:
+
+1. **Freelance Platform Scrapers (Best-Effort / Simulated Fallback)**:
+   - Direct web scrapers for Upwork, Guru, Fiverr, PeoplePerHour, and Freelancer.com operate in a best-effort capacity. External freelance marketplaces employ strict anti-bot mitigations (such as Cloudflare verification, dynamic bot-detection headers, and IP reputation blocks).
+   - In production environments, when live HTTP requests are blocked or fail, the scrapers gracefully degrade to synthetic seed data. Connecting to live production marketplaces requires enterprise partner API keys or authenticated headless session credentials.
+
+2. **Calendar Provider (`InMemoryCalendarProvider`)**:
+   - The self-scheduling agent currently uses `InMemoryCalendarProvider` to manage interviewer slot availability, hold states, and booking locks.
+   - Upgrading to multi-tenant production Google Calendar requires provisioning Google Workspace OAuth 2.0 with the `calendar.events` scope, KMS-backed token refresh storage, and candidate email invite dispatches.
+
+3. **Payment Processing (Simulated Gateway)**:
+   - Order payments in the Resume Service Agent (Feature 2) are simulated via `POST /api/orders/:id/pay-simulate`.
+   - Real financial transactions require integration with a licensed payment gateway (e.g., Stripe, Razorpay) with HMAC webhook signature validation and idempotent invoice generation.
+
+4. **Elevated Dangerous Action Protection**:
+   - High-risk, irreversible operations (`/api/freelance/clear`, `/api/freelance/candidates/:id` [DELETE], `/api/persistence/config` [POST], `/api/terminal/execute`, `/api/persistence/restore`, `/api/persistence/migrate`) are guarded by `dangerousAuthMiddleware`.
+   - In addition to standard constant-time `X-API-Key` authentication, these routes enforce mandatory explicit user confirmation (`X-Confirm-Dangerous-Action: true` header or `confirmDangerous: true` body parameter), support dedicated elevated keys (`DANGEROUS_ACTION_KEY`), and emit security audit log entries with client IP tracking.
+
+5. **Gemini AI Model Alignment**:
+   - All AI inference and prompt evaluation endpoints are aligned to the official, available Gemini models (`gemini-3.8-flash`, `gemini-3.1-pro-preview`, `gemini-3.1-flash-lite`), retiring deprecated or pre-release aliases.
 
 
 

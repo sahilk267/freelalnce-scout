@@ -42,7 +42,7 @@ export class PeoplePerHourProvider {
 
       if (!text) {
         if (isDevMode) {
-          console.warn("[PeoplePerHourProvider] Empty response, returning verified fallback posting in Dev Mode.");
+          console.info("[PeoplePerHourProvider] Feed restricted or empty, returning verified fallback posting in Development Mode.");
           return this.getFallbackJobs();
         }
         return [];

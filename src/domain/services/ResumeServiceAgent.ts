@@ -161,7 +161,7 @@ Respond strictly with a valid JSON object using the following key schema:
 
     try {
       const response = await aiClient.models.generateContent({
-        model: "gemini-2.0-flash",
+        model: "gemini-3.8-flash",
         contents: prompt,
       });
 
@@ -230,7 +230,7 @@ Respond strictly with a valid JSON object matching this schema:
 
     try {
       const response = await aiClient.models.generateContent({
-        model: "gemini-2.0-flash",
+        model: "gemini-3.8-flash",
         contents: prompt,
       });
 
@@ -290,7 +290,7 @@ ${jobDesc}
 JSON schema: {"score": number}`;
 
       const response = await aiClient.models.generateContent({
-        model: "gemini-2.0-flash",
+        model: "gemini-3.8-flash",
         contents: prompt,
       });
 

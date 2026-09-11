@@ -29,6 +29,7 @@ import {
   Sparkles
 } from "lucide-react";
 import { DiagnosticMetrics, SystemLog } from "../types";
+import { getAdminApiKey, setAdminApiKey } from "../utils/apiAuth";
 
 export interface BackupManifest {
   backupFilename: string;
@@ -131,9 +132,19 @@ export default function Diagnostics() {
   const [restorePreview, setRestorePreview] = useState<RestorePreviewResult | null>(null);
   const [showRestorePreviewModal, setShowRestorePreviewModal] = useState(false);
   const [configSuccessMsg, setConfigSuccessMsg] = useState<string | null>(null);
-  const [apiKey, setApiKey] = useState(() => localStorage.getItem("AZIZ_API_KEY") || "");
+  const [apiKey, setApiKey] = useState(() => getAdminApiKey());
 
   const sseRef = useRef<EventSource | null>(null);
+
+  useEffect(() => {
+    const handleKeyUpdate = () => {
+      setApiKey(getAdminApiKey());
+    };
+    window.addEventListener("aziz-api-key-updated", handleKeyUpdate);
+    return () => {
+      window.removeEventListener("aziz-api-key-updated", handleKeyUpdate);
+    };
+  }, []);
 
   const fetchStats = async () => {
     try {
@@ -239,7 +250,8 @@ export default function Diagnostics() {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",
-          "X-API-Key": apiKey
+          "X-API-Key": apiKey,
+          "X-Confirm-Dangerous-Action": "true"
         },
         body: JSON.stringify(config)
       });
@@ -262,7 +274,8 @@ export default function Diagnostics() {
       const response = await fetch("/api/persistence/backup", { 
         method: "POST",
         headers: { 
-          "X-API-Key": apiKey
+          "X-API-Key": apiKey,
+          "X-Confirm-Dangerous-Action": "true"
         }
       });
       const res = await response.json();
@@ -311,7 +324,8 @@ export default function Diagnostics() {
       const response = await fetch("/api/persistence/restore", { 
         method: "POST",
         headers: { 
-          "X-API-Key": apiKey
+          "X-API-Key": apiKey,
+          "X-Confirm-Dangerous-Action": "true"
         }
       });
       const res = await response.json();
@@ -342,7 +356,8 @@ export default function Diagnostics() {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",
-          "X-API-Key": apiKey
+          "X-API-Key": apiKey,
+          "X-Confirm-Dangerous-Action": "true"
         },
         body: JSON.stringify({ direction: migrationDirection, dryRun: dryRunMigration })
       });
@@ -387,7 +402,8 @@ export default function Diagnostics() {
       const response = await fetch(`/api/persistence/download?file=${encodeURIComponent(filename)}`, {
         method: "GET",
         headers: {
-          "X-API-Key": apiKey
+          "X-API-Key": apiKey,
+          "X-Confirm-Dangerous-Action": "true"
         }
       });
       if (!response.ok) {
@@ -633,7 +649,7 @@ export default function Diagnostics() {
               onChange={(e) => {
                 const val = e.target.value;
                 setApiKey(val);
-                localStorage.setItem("AZIZ_API_KEY", val);
+                setAdminApiKey(val);
               }}
               className="bg-slate-900 border border-slate-800 rounded px-3 py-1.5 text-xs text-white font-mono placeholder-slate-600 focus:outline-none focus:border-emerald-500 w-64"
             />

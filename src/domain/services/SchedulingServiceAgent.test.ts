@@ -212,4 +212,60 @@ describe("SchedulingServiceAgent & Feature 4 Self-Scheduling", () => {
     expect(compFailedLog).toBeDefined();
     expect(compFailedLog?.status).toBe("needs_human_review");
   });
+
+  it("9. Should require valid session token or admin mode when cancelling booking", async () => {
+    const invite = await service.generateCandidateInvite({
+      candidateId: "cand_001",
+      candidateName: "Rohan Verma",
+      candidateEmail: "rohan@example.com",
+      interviewerId: "int_01",
+      interviewerName: "Sarah Connor (Eng Lead)",
+      autoBookEnabled: false
+    });
+
+    const slots = await service.getAvailableSlots(invite.session.id);
+    await service.selectSlot(invite.session.id, invite.token, slots[0].id);
+
+    // 1. Missing token without admin flag
+    const noTokenRes = await service.cancelBooking(invite.session.id, "Candidate cancelled");
+    expect(noTokenRes.success).toBe(false);
+    expect(noTokenRes.statusCode).toBe(401);
+    expect(noTokenRes.error).toContain("Missing session token");
+
+    // 2. Invalid token
+    const invalidTokenRes = await service.cancelBooking(invite.session.id, "Candidate cancelled", "wrong_token");
+    expect(invalidTokenRes.success).toBe(false);
+    expect(invalidTokenRes.statusCode).toBe(401);
+    expect(invalidTokenRes.error).toContain("Unauthorized or expired session token");
+
+    // 3. Valid candidate token
+    const validCancelRes = await service.cancelBooking(invite.session.id, "Candidate had conflict", invite.token);
+    expect(validCancelRes.success).toBe(true);
+    expect(validCancelRes.session?.status).toBe("cancelled");
+
+    // Check slot was released
+    const slotAfterCancel = await repo.findSlotById(slots[0].id);
+    expect(slotAfterCancel?.status).toBe("available");
+
+    // 4. Repeated cancel returns 400
+    const repeatedCancel = await service.cancelBooking(invite.session.id, "Try again", invite.token);
+    expect(repeatedCancel.success).toBe(false);
+    expect(repeatedCancel.statusCode).toBe(400);
+
+    // 5. Admin mode can cancel without token
+    const invite2 = await service.generateCandidateInvite({
+      candidateId: "cand_002",
+      candidateName: "Anya Sharma",
+      candidateEmail: "anya@example.com",
+      interviewerId: "int_01",
+      interviewerName: "Sarah Connor (Eng Lead)",
+      autoBookEnabled: false
+    });
+    const slots2 = await service.getAvailableSlots(invite2.session.id);
+    await service.selectSlot(invite2.session.id, invite2.token, slots2[0].id);
+
+    const adminCancelRes = await service.cancelBooking(invite2.session.id, "Admin cancellation", undefined, true);
+    expect(adminCancelRes.success).toBe(true);
+    expect(adminCancelRes.session?.status).toBe("cancelled");
+  });
 });

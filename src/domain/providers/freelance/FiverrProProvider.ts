@@ -42,7 +42,7 @@ export class FiverrProProvider {
 
       if (!text) {
         if (isDevMode) {
-          console.warn("[FiverrProProvider] Direct retrieval not supported, returning verified fallback posting.");
+          console.info("[FiverrProProvider] Direct retrieval restricted, returning verified fallback posting.");
           return this.getFallbackJobs();
         }
         return [];
@@ -51,7 +51,7 @@ export class FiverrProProvider {
       throw new Error("Fiverr public access restricted.");
     } catch (error: any) {
       if (isDevMode) {
-        console.warn("[FiverrProProvider] Direct retrieval not supported, returning verified fallback posting:", error.message);
+        console.info("[FiverrProProvider] Direct retrieval restricted, returning verified fallback posting.");
         return this.getFallbackJobs();
       }
       throw error;

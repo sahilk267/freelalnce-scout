@@ -481,7 +481,7 @@ export class SQLiteFreelancerRepository {
     } catch (e) {}
 
     const proposalTemplate = this.getMetric("config.proposal_template") || "";
-    const aiModel = this.getMetric("config.ai_model") || "gemini-3.5-flash";
+    const aiModel = this.getMetric("config.ai_model") || "gemini-3.8-flash";
     const databasePath = this.getMetric("config.database_path") || this.dbPath;
     const schedulerInterval = parseInt(this.getMetric("config.scheduler_interval") || "15", 10);
     const cronExpression = this.getMetric("config.cron_expression") || "*/15 * * * *";

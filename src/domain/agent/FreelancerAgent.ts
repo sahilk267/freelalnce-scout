@@ -321,7 +321,7 @@ The proposal must contain these contiguous sections:
 `;
 
     const response = await this.geminiClient.models.generateContent({
-      model: "gemini-3.5-flash",
+      model: "gemini-3.8-flash",
       contents: promptText,
       config: {
         systemInstruction: "You are a professional freelance business development assistant. You generate ready-to-send, highly personalized bids without any placeholders or brackets."

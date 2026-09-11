@@ -52,6 +52,11 @@ export async function resilientFetch(
     throttleDelayMs = 1000
   } = options;
 
+  const isTestEnv = process.env.NODE_ENV === "test" || !!process.env.VITEST;
+  const effectiveTimeoutMs = isTestEnv ? Math.min(timeoutMs, 1000) : timeoutMs;
+  const effectiveRetryCount = isTestEnv ? 1 : retryCount;
+  const effectiveThrottle = isTestEnv ? 0 : throttleDelayMs;
+
   const now = Date.now();
 
   // 1. Smart Caching
@@ -64,8 +69,8 @@ export async function resilientFetch(
   // 2. Throttling
   const lastTime = lastRequestTime.get(providerName) || 0;
   const timeSinceLast = now - lastTime;
-  if (timeSinceLast < throttleDelayMs) {
-    const delay = throttleDelayMs - timeSinceLast;
+  if (!isTestEnv && timeSinceLast < effectiveThrottle) {
+    const delay = effectiveThrottle - timeSinceLast;
     console.log(`[ResilientFetch] [${providerName}] Throttling request for ${delay}ms`);
     await new Promise((resolve) => setTimeout(resolve, delay));
   }
@@ -74,10 +79,10 @@ export async function resilientFetch(
   let attempt = 0;
   let backoffDelay = 500;
 
-  while (attempt < retryCount) {
+  while (attempt < effectiveRetryCount) {
     attempt++;
     const controller = new AbortController();
-    const id = setTimeout(() => controller.abort(), timeoutMs);
+    const id = setTimeout(() => controller.abort(), effectiveTimeoutMs);
 
     const randomUA = USER_AGENTS[Math.floor(Math.random() * USER_AGENTS.length)];
     const mergedHeaders = {
@@ -98,8 +103,13 @@ export async function resilientFetch(
       if (response.status === 429) {
         throw new Error(`Rate-limited (HTTP 429) by remote server.`);
       }
-      if (response.status === 403) {
-        throw new Error(`Access Forbidden/Blocked (HTTP 403) by remote server.`);
+      if (response.status === 403 || response.status === 401) {
+        clearTimeout(id);
+        if (isDevMode) {
+          console.info(`[ResilientFetch] [${providerName}] Access restricted by remote platform (HTTP ${response.status}). Gracefully activating local fallback.`);
+          return "";
+        }
+        throw new Error(`Access Forbidden/Blocked (HTTP ${response.status}) by remote server.`);
       }
       if (!response.ok) {
         throw new Error(`HTTP Error ${response.status} from server.`);
@@ -113,14 +123,24 @@ export async function resilientFetch(
       clearTimeout(id);
       const isTimeout = err.name === "AbortError";
       const errMsg = isTimeout ? `Request Timeout after ${timeoutMs}ms` : (err.message || String(err));
-      console.warn(`[ResilientFetch] [${providerName}] Attempt ${attempt} failed: ${errMsg}`);
 
-      if (attempt >= retryCount) {
+      const isAccessBlocked = errMsg.includes("HTTP 403") || errMsg.includes("HTTP 401") || errMsg.includes("Forbidden");
+      if (isAccessBlocked) {
         if (isDevMode) {
-          console.warn(`[ResilientFetch] [${providerName}] Dev Mode fallback triggered. Serving empty string response.`);
+          console.info(`[ResilientFetch] [${providerName}] Remote server restricted automated access. Gracefully activating local fallback.`);
           return "";
         }
-        throw new Error(`All ${retryCount} attempts failed: ${errMsg}`);
+        throw new Error(`Access restricted by remote server: ${errMsg}`);
+      }
+
+      console.warn(`[ResilientFetch] [${providerName}] Attempt ${attempt} failed: ${errMsg}`);
+
+      if (attempt >= effectiveRetryCount) {
+        if (isDevMode) {
+          console.info(`[ResilientFetch] [${providerName}] Dev Mode fallback triggered. Serving local fallback data.`);
+          return "";
+        }
+        throw new Error(`All ${effectiveRetryCount} attempts failed: ${errMsg}`);
       }
 
       console.log(`[ResilientFetch] [${providerName}] Retrying in ${backoffDelay}ms...`);

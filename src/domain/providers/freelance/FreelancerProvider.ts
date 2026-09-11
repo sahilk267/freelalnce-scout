@@ -42,7 +42,7 @@ export class FreelancerProvider {
 
       if (!text) {
         if (isDevMode) {
-          console.warn("[FreelancerProvider] Empty response returned, using fallback list in Development Mode.");
+          console.info("[FreelancerProvider] Remote API restricted or empty, using fallback list in Development Mode.");
           return this.getFallbackJobs();
         }
         return [];
@@ -93,9 +93,9 @@ export class FreelancerProvider {
     return [
       {
         id: "freelancer-fallback-1",
-        title: "Full-Stack React & Node.js Developer Needed",
-        description: "We are looking for a senior full-stack developer to build a responsive SaaS dashboard. Must have experience with React, Node.js, and Tailwind CSS. The project involves building clean UI components, integrating with REST APIs, and setting up persistent SQLite database layers.",
-        skills: ["React", "Node.js", "Tailwind CSS", "SQLite", "TypeScript"],
+        title: "Enterprise Network Infrastructure & System Administration Support",
+        description: "Looking for an experienced IT Systems & Network Engineer to configure and maintain our office IT infrastructure, including Cisco routers, Fortinet firewall, Windows Server Active Directory, and remote hardware troubleshooting.",
+        skills: ["Networking", "System Administration", "Computer Hardware", "Windows Server", "Firewall"],
         budget: "$1500 - $3000",
         currency: "USD",
         hourlyOrFixed: "fixed",
@@ -103,10 +103,10 @@ export class FreelancerProvider {
         clientReviews: 12,
         clientSpending: "$5k+",
         location: "United States",
-        proposalCount: 14,
+        proposalCount: 4,
         urgency: "high",
         source: "Freelancer",
-        projectUrl: "https://www.freelancer.com/projects/react-node-saas-dashboard",
+        projectUrl: "https://www.freelancer.com/projects/network-system-admin-support",
         scrapeTimestamp: new Date().toISOString()
       }
     ];

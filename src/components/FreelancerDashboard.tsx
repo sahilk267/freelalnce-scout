@@ -333,7 +333,10 @@ export default function FreelancerDashboard() {
     try {
       setSubmittingProposalId(proposalId);
       showToast("Queueing secure platform bid dispatch...", "info");
-      const response = await fetch(`/api/freelance/proposals/${proposalId}/submit`, { method: "POST" });
+      const response = await fetch(`/api/freelance/proposals/${proposalId}/submit`, {
+        method: "POST",
+        headers: { "X-Confirm-Dangerous-Action": "true" }
+      });
       if (response.ok) {
         showToast("Proposal dispatcher successfully executed!", "success");
         if (selectedProposal?.id === proposalId) {
@@ -379,7 +382,10 @@ export default function FreelancerDashboard() {
     }
 
     try {
-      const response = await fetch("/api/freelance/clear", { method: "POST" });
+      const response = await fetch("/api/freelance/clear", {
+        method: "POST",
+        headers: { "X-Confirm-Dangerous-Action": "true" }
+      });
       if (response.ok) {
         showToast("Database successfully purged.", "success");
         setSelectedProposal(null);
@@ -424,7 +430,10 @@ export default function FreelancerDashboard() {
     if (!confirm("Are you sure you want to delete this candidate profile?")) return;
 
     try {
-      const response = await fetch(`/api/freelance/candidates/${id}`, { method: "DELETE" });
+      const response = await fetch(`/api/freelance/candidates/${id}`, {
+        method: "DELETE",
+        headers: { "X-Confirm-Dangerous-Action": "true" }
+      });
       if (response.ok) {
         showToast("Candidate profile deleted.", "info");
         fetchDashboardData();
@@ -1894,9 +1903,9 @@ Looking for high-value Remote contracts to design autonomous agents and scalable
                     onChange={(e) => handleSaveConfig({ aiModel: e.target.value })}
                     className="w-full bg-slate-950 text-xs border border-slate-800 rounded-lg p-2.5 text-slate-200 focus:outline-none focus:border-slate-700 font-sans"
                   >
-                    <option value="gemini-3.5-flash">gemini-3.5-flash (Standard Fast)</option>
-                    <option value="gemini-2.5-pro">gemini-2.5-pro (High Quality)</option>
-                    <option value="gemini-1.5-flash">gemini-1.5-flash (Deprecated)</option>
+                    <option value="gemini-3.8-flash">gemini-3.8-flash (Standard Fast)</option>
+                    <option value="gemini-3.1-pro-preview">gemini-3.1-pro-preview (High Reasoning)</option>
+                    <option value="gemini-3.1-flash-lite">gemini-3.1-flash-lite (Ultra Fast)</option>
                   </select>
                   <span className="text-[9px] text-slate-500 block leading-none">Target LLM model used for tailored bidding</span>
                 </div>

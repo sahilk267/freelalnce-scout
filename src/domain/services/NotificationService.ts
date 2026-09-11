@@ -8,6 +8,7 @@ import path from "path";
 import { SQLiteFreelancerRepository } from "../repositories/SQLiteFreelancerRepository";
 import { FreelancerNotification, NormalizedFreelanceProject, FreelanceProposal } from "../agent/freelancerTypes";
 import { resolveDirectJobUrl } from "../utils/projectUrlHelper";
+import { CompanyProfileService } from "./CompanyProfileService";
 
 export class NotificationService {
   constructor(private freelanceRepo: SQLiteFreelancerRepository) {}
@@ -82,6 +83,28 @@ export class NotificationService {
 
       switch (type) {
         case "MATCH":
+          if (project) {
+            try {
+              const compService = CompanyProfileService.getInstance();
+              const primaryComp = compService.getPrimary() || compService.getAll()[0];
+              if (primaryComp) {
+                const evalMatch = compService.evaluateMatch(primaryComp, {
+                  title: project.title,
+                  description: project.description,
+                  skills: project.skills,
+                  source: project.source,
+                  location: project.location
+                });
+                if (!evalMatch.isMatch || evalMatch.score < 65) {
+                  this.freelanceRepo.addLog("info", `Filtered out Telegram notification for "${project.title}" (Score: ${evalMatch.score}/100) — outside primary profile "${primaryComp.name}".`);
+                  return;
+                }
+              }
+            } catch (err) {
+              // Ignore service load errors
+            }
+          }
+
           const directListingUrl = project ? resolveDirectJobUrl({
             source: project.source,
             title: project.title,

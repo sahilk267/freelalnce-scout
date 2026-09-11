@@ -35,7 +35,7 @@ Resume Text:
 ${resumeText}`;
 
       const response = await this.geminiClient.models.generateContent({
-        model: "gemini-3.5-flash",
+        model: "gemini-3.8-flash",
         contents: prompt
       });
 

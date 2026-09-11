@@ -355,10 +355,29 @@ export class SchedulingServiceAgent {
     }
   }
 
-  async cancelBooking(sessionId: string, reason?: string): Promise<{ success: boolean; session?: SchedulingSession; error?: string }> {
+  async cancelBooking(
+    sessionId: string, 
+    reason?: string,
+    tokenHeader?: string,
+    isAdmin: boolean = false
+  ): Promise<{ success: boolean; session?: SchedulingSession; error?: string; statusCode?: number }> {
+    if (!isAdmin) {
+      if (!tokenHeader || typeof tokenHeader !== "string") {
+        return { success: false, error: "Missing session token. Provide X-Session-Token header.", statusCode: 401 };
+      }
+      const validSession = await this.validateSessionToken(sessionId, tokenHeader);
+      if (!validSession) {
+        return { success: false, error: "Unauthorized or expired session token.", statusCode: 401 };
+      }
+    }
+
     const session = await this.schedulingRepo.findSessionById(sessionId);
     if (!session) {
-      return { success: false, error: "Session not found." };
+      return { success: false, error: "Session not found.", statusCode: 404 };
+    }
+
+    if (session.status === "cancelled") {
+      return { success: false, error: "Booking is already cancelled.", statusCode: 400 };
     }
 
     if (session.selectedSlotId) {
@@ -376,10 +395,13 @@ export class SchedulingServiceAgent {
       interviewerId: session.interviewerId,
       action: "booking_cancelled",
       status: "success",
-      details: { reason: reason || "User or admin cancelled booking" }
+      details: { 
+        reason: reason || (isAdmin ? "Admin cancelled booking" : "Candidate cancelled booking"),
+        cancelledBy: isAdmin ? "admin" : "candidate"
+      }
     });
 
-    return { success: true, session: updatedSession };
+    return { success: true, session: updatedSession, statusCode: 200 };
   }
 
   async listAuditLogs(sessionId?: string): Promise<SchedulingAuditLog[]> {

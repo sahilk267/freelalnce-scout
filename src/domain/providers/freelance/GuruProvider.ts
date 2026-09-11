@@ -42,7 +42,7 @@ export class GuruProvider {
 
       if (!text) {
         if (isDevMode) {
-          console.warn("[GuruProvider] Fetch returned empty string, returning fallbacks in Development Mode.");
+          console.info("[GuruProvider] Fetch returned empty string, returning fallbacks in Development Mode.");
           return this.getFallbackJobs();
         }
         return [];
@@ -52,7 +52,7 @@ export class GuruProvider {
       throw new Error("HTML scraping restricted by cloud node.");
     } catch (error: any) {
       if (isDevMode) {
-        console.warn("[GuruProvider] Direct crawl failed or restricted, returning verified fallback posting:", error.message);
+        console.info("[GuruProvider] Direct crawl restricted, returning verified fallback posting.");
         return this.getFallbackJobs();
       }
       throw error;

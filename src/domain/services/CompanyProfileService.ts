@@ -78,43 +78,89 @@ const DEFAULT_COMPANIES: CompanyProfile[] = [
     id: "aaditechs-primary",
     name: "Aaditech Solution",
     website: "https://aaditechs.in/",
-    description: "IT & Infrastructure, Enterprise Systems, Open-Source Implementation, Web/App Engineering & AI Automation",
+    description: "Enterprise IT & Infrastructure, Computer Hardware, Network Engineering, System Administration & Remote Technical Support",
     isPrimary: true,
     categories: [
-      "Aaditech Solution – IT & Infrastructure",
-      "Tech & Software",
-      "Design & Creative"
+      "Aaditech Solution – IT & Infrastructure"
     ],
     targetKeywords: [
+      "Computer Hardware",
+      "Hardware Troubleshooting",
+      "PC Assembly",
+      "Desktop Support",
+      "Laptop Repair",
+      "Networking",
+      "Network Engineering",
+      "Network Administration",
+      "System Administration",
+      "SysAdmin",
+      "IT Infrastructure",
+      "IT Support",
+      "Windows Server",
+      "Linux Server",
+      "Active Directory",
+      "Domain Controller",
       "Microsoft 365",
       "Exchange Online",
-      "Active Directory",
-      "Windows Server",
-      "System Administration",
-      "Network Engineering",
       "Firewall",
       "VPN",
-      "Cloud Migration",
-      "Remote IT Support",
-      "Cybersecurity",
-      "AI Automation",
-      "Python Automation",
-      "React",
-      "Node.js",
-      "TypeScript",
-      "Next.js",
-      "Python",
-      "Full-Stack",
-      "DevOps",
+      "Cisco",
+      "Fortinet",
+      "MikroTik",
+      "Ubiquiti",
+      "Router & Switch",
+      "LAN",
+      "WAN",
+      "DNS",
+      "DHCP",
       "CCTV",
-      "Networking"
+      "Biometric",
+      "Server Maintenance",
+      "Virtualization",
+      "VMware",
+      "Hyper-V",
+      "Cloud Migration",
+      "Cybersecurity",
+      "Remote IT Support",
+      "Data Backup",
+      "Printer Support"
     ],
     negativeKeywords: [
+      "React",
+      "Next.js",
+      "Vue",
+      "Angular",
+      "Frontend",
+      "Front-End",
+      "Backend Developer",
+      "Full-Stack",
+      "Fullstack",
+      "Full Stack",
+      "Web Developer",
+      "Web Development",
+      "Website Design",
+      "PHP",
+      "WordPress",
+      "Shopify",
+      "Mobile App",
+      "iOS Developer",
+      "Android Developer",
+      "Flutter",
+      "React Native",
+      "Java Developer",
+      "Python Flask",
+      "Flask Web",
+      "Django",
+      "Software Development",
       "Data Entry",
       "Virtual Assistant",
       "Typing",
       "Cold Calling",
-      "Copy Paste"
+      "Copy Paste",
+      "Content Writing",
+      "Graphic Design",
+      "Logo Design",
+      "SEO Blogs"
     ],
     physicalLocations: [
       "Mumbai",
@@ -182,10 +228,30 @@ export class CompanyProfileService {
     return list.find((c) => c.isPrimary && c.status === "active") || list.find((c) => c.status === "active") || list[0];
   }
 
+  private validateNotificationTargets(targets: { hostingerEmail?: string; gmailEmail?: string; telegramChatId?: string }) {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (targets.hostingerEmail && !emailRegex.test(targets.hostingerEmail)) {
+      throw new Error("Invalid Hostinger notification email format.");
+    }
+    if (targets.gmailEmail && !emailRegex.test(targets.gmailEmail)) {
+      throw new Error("Invalid Gmail notification email format.");
+    }
+    if (targets.telegramChatId && !/^-?[0-9a-zA-Z_]+$/.test(targets.telegramChatId)) {
+      throw new Error("Invalid Telegram Chat ID format. Must contain only digits, hyphen, or standard characters.");
+    }
+  }
+
   public create(data: Partial<CompanyProfile>): CompanyProfile {
     const list = this.getAll();
     const id = data.id || `comp-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
     
+    // Validate notification targets
+    this.validateNotificationTargets({
+      hostingerEmail: data.hostingerEmail?.trim(),
+      gmailEmail: data.gmailEmail?.trim(),
+      telegramChatId: data.telegramChatId?.trim()
+    });
+
     // If marked as primary, demote any existing primary
     if (data.isPrimary) {
       list.forEach((c) => (c.isPrimary = false));
@@ -227,6 +293,13 @@ export class CompanyProfileService {
     const list = this.getAll();
     const idx = list.findIndex((c) => c.id === id);
     if (idx === -1) return null;
+
+    // Validate notification targets if provided
+    this.validateNotificationTargets({
+      hostingerEmail: updates.hostingerEmail !== undefined ? updates.hostingerEmail.trim() : undefined,
+      gmailEmail: updates.gmailEmail !== undefined ? updates.gmailEmail.trim() : undefined,
+      telegramChatId: updates.telegramChatId !== undefined ? updates.telegramChatId.trim() : undefined
+    });
 
     if (updates.isPrimary) {
       list.forEach((c) => (c.isPrimary = false));
@@ -358,10 +431,13 @@ export class CompanyProfileService {
       "Video Editing & Media": ["video", "premiere", "after effects", "youtube", "animation", "motion graphics", "audio editing", "video editing"],
       "Tech & Software": ["react", "node", "typescript", "python", "devops", "software", "api", "database", "engineer", "developer", "aws", "docker", "frontend", "backend", "full stack", "full-stack", "ai"],
       "Aaditech Solution – IT & Infrastructure": [
-        "microsoft 365", "m365", "exchange online", "active directory", "ad", "windows server",
-        "networking", "cybersecurity", "remote it support", "it support", "system administration",
-        "network engineering", "firewall", "vpn", "cloud migration", "ai automation", "python automation",
-        "sysadmin", "cisco", "fortinet", "dns", "dhcp", "infrastructure", "lan", "wan"
+        "computer hardware", "hardware", "pc assembly", "desktop support", "laptop repair", "desktop", "laptop",
+        "networking", "network engineering", "network administration", "sysadmin", "system administration",
+        "it infrastructure", "it support", "remote it support", "windows server", "linux server", "active directory",
+        "ad", "domain controller", "microsoft 365", "m365", "exchange online", "firewall", "vpn", "cisco", "fortinet",
+        "mikrotik", "ubiquiti", "router", "switch", "switches", "lan", "wan", "vlan", "dns", "dhcp",
+        "cctv", "biometric", "server maintenance", "virtualization", "vmware", "hyper-v", "proxmox", "cloud migration",
+        "cybersecurity", "data backup", "printer", "helpdesk"
       ]
     };
 

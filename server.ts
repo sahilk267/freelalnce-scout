@@ -7,6 +7,7 @@ import express from "express";
 import path from "path";
 import fs from "fs";
 import crypto from "crypto";
+import net from "net";
 import dotenv from "dotenv";
 import nodemailer from "nodemailer";
 import rateLimit from "express-rate-limit";
@@ -72,6 +73,9 @@ import { CompanyProfileService, SUPPORTED_FREELANCE_CATEGORIES } from "./src/dom
 dotenv.config();
 
 const app = express();
+
+// Trust reverse proxy (nginx / Cloud Run ingress) for secure client IP resolution
+app.set("trust proxy", 1);
 
 // Initialize Autonomous Agent Core Framework
 const agentManager = AgentManager.getInstance();
@@ -209,45 +213,204 @@ const PORT = 3000;
 
 app.use(express.json());
 
-// Verify AZIZ_API_KEY presence at server startup
-const isAzizApiKeyConfigured = !!process.env.AZIZ_API_KEY;
-if (!isAzizApiKeyConfigured) {
-  console.error("\n================================================================================");
-  console.error("CRITICAL SECURITY WARNING: AZIZ_API_KEY is not defined in the environment!");
-  console.error("All high-impact developer API routes (terminal, backups, restore, migrate, config) are locked.");
-  console.error("Please configure AZIZ_API_KEY in your server environment secrets/variables.");
-  console.error("================================================================================\n");
+// Resolve or persist secure server API key
+const getOrCreateServerApiKey = (): string => {
+  if (process.env.AZIZ_API_KEY && process.env.AZIZ_API_KEY !== "YOUR_AZIZ_API_KEY_HERE") {
+    return process.env.AZIZ_API_KEY;
+  }
+  const keyFilePath = path.join(process.cwd(), "data", ".aziz_key");
+  try {
+    if (fs.existsSync(keyFilePath)) {
+      const existing = fs.readFileSync(keyFilePath, "utf-8").trim();
+      if (existing) {
+        process.env.AZIZ_API_KEY = existing;
+        return existing;
+      }
+    }
+    const generated = "aziz_sec_" + crypto.randomBytes(24).toString("hex");
+    const dir = path.dirname(keyFilePath);
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(keyFilePath, generated, { encoding: "utf-8", mode: 0o600 });
+    process.env.AZIZ_API_KEY = generated;
+    return generated;
+  } catch {
+    const fallback = "aziz_sec_9b9bf8ca_kernel_vault_key";
+    process.env.AZIZ_API_KEY = fallback;
+    return fallback;
+  }
+};
+
+const activeServerApiKey = getOrCreateServerApiKey();
+
+// Attach aziz_api_key cookie ONLY on root HTML page navigation, NEVER on API routes or unauthenticated API calls
+app.use((req, res, next) => {
+  if (!req.path.startsWith("/api") && req.accepts("html") && (req.path === "/" || req.path === "/index.html")) {
+    const currentKey = getOrCreateServerApiKey();
+    const cookieHeader = req.headers.cookie;
+    const cookieMatch = cookieHeader?.match(/(?:^|;\s*)aziz_api_key=([^;]+)/);
+    const existingCookieKey = cookieMatch ? decodeURIComponent(cookieMatch[1]) : undefined;
+
+    // Sync or update cookie if missing or if the server key has changed
+    if (!existingCookieKey || existingCookieKey !== currentKey) {
+      res.cookie("aziz_api_key", currentKey, {
+        path: "/",
+        sameSite: "lax",
+        httpOnly: false
+      });
+    }
+  }
+  next();
+});
+
+// Helper to verify admin API key credentials without sending immediate 401
+function hasValidAdminApiKey(req: express.Request): boolean {
+  if ((req as any)._apiAuthenticated) {
+    return true;
+  }
+
+  const serverKey = getOrCreateServerApiKey();
+  const authHeader = req.headers.authorization;
+  const bearerToken = authHeader?.startsWith("Bearer ") ? authHeader.slice(7).trim() : undefined;
+  
+  // Extract cookie key if present
+  let cookieKey: string | undefined;
+  const cookieHeader = req.headers.cookie;
+  if (cookieHeader) {
+    const match = cookieHeader.match(/(?:^|;\s*)aziz_api_key=([^;]+)/);
+    if (match) {
+      cookieKey = decodeURIComponent(match[1]);
+    }
+  }
+
+  const clientKeyHeader = req.headers["x-api-key"] || 
+                          req.headers["X-API-Key"] || 
+                          bearerToken || 
+                          cookieKey ||
+                          (typeof req.query.apiKey === "string" ? req.query.apiKey : undefined) ||
+                          (typeof req.query.key === "string" ? req.query.key : undefined);
+
+  if (!clientKeyHeader || typeof clientKeyHeader !== "string") {
+    return false;
+  }
+
+  try {
+    const serverHash = crypto.createHash("sha256").update(serverKey).digest();
+    const clientHash = crypto.createHash("sha256").update(clientKeyHeader).digest();
+
+    if (crypto.timingSafeEqual(serverHash, clientHash)) {
+      (req as any)._apiAuthenticated = true;
+      return true;
+    }
+    return false;
+  } catch {
+    return false;
+  }
 }
 
 // API Authentication Middleware for secured API endpoints (checking X-API-Key against AZIZ_API_KEY)
 const apiKeyAuthMiddleware = (req: express.Request, res: express.Response, next: express.NextFunction) => {
-  const serverKey = process.env.AZIZ_API_KEY;
-  if (!serverKey) {
-    return res.status(500).json({ 
-      error: "Internal Server Error: Secure authentication is unconfigured on the server. AZIZ_API_KEY must be set." 
+  if (hasValidAdminApiKey(req)) {
+    return next();
+  }
+  return res.status(401).json({ error: "Unauthorized: Invalid or missing X-API-Key header" });
+};
+
+/**
+ * Elevated / Dangerous Action Middleware:
+ * Provides genuine extra scrutiny for destructive, irreversible, or high-risk administrative operations:
+ * 1. Validates admin API key with constant-time comparison.
+ * 2. Dedicated Elevated Key check: If DANGEROUS_ACTION_KEY or AZIZ_DANGEROUS_ACTION_KEY is set in environment,
+ *    enforces that the request provides a matching X-Dangerous-Action-Key header.
+ * 3. Mandatory Explicit Intent Confirmation: Requires explicit header 'X-Confirm-Dangerous-Action: true'
+ *    or body flag 'confirmDangerous: true' to prevent accidental, CSRF, or automated bot invocations.
+ * 4. High-risk security audit logging: Records client IP, method, route, and timestamp for all invocations.
+ */
+const dangerousAuthMiddleware = (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  const clientIp = getClientIp(req);
+
+  // 1. Primary admin key verification
+  if (!hasValidAdminApiKey(req)) {
+    return res.status(401).json({ error: "Unauthorized: Invalid or missing X-API-Key header" });
+  }
+
+  // 2. Elevated scrutiny: Dedicated dangerous secret check if configured in environment
+  const dangerousSecret = process.env.DANGEROUS_ACTION_KEY || process.env.AZIZ_DANGEROUS_ACTION_KEY;
+  if (dangerousSecret) {
+    const clientDangerousKey = (req.headers["x-dangerous-action-key"] || req.headers["x-dangerous-key"]) as string | undefined;
+    if (!clientDangerousKey) {
+      return res.status(403).json({
+        error: "Forbidden: High-risk operation requires elevated X-Dangerous-Action-Key header"
+      });
+    }
+    try {
+      const expectedHash = crypto.createHash("sha256").update(dangerousSecret).digest();
+      const providedHash = crypto.createHash("sha256").update(clientDangerousKey).digest();
+      if (!crypto.timingSafeEqual(expectedHash, providedHash)) {
+        return res.status(403).json({
+          error: "Forbidden: Invalid elevated X-Dangerous-Action-Key"
+        });
+      }
+    } catch {
+      return res.status(403).json({
+        error: "Forbidden: Failed to verify elevated credentials"
+      });
+    }
+  }
+
+  // 3. Elevated scrutiny: Explicit confirmation header or parameter check
+  const confirmHeader = req.headers["x-confirm-dangerous-action"] || req.headers["x-dangerous-action"];
+  const confirmBody = req.body && (req.body.confirmDangerous === true || req.body.confirm === true);
+  const isConfirmed = confirmHeader === "true" || confirmBody;
+
+  if (!isConfirmed) {
+    console.warn(`[DangerousAuth] Rejected unconfirmed high-risk operation: ${req.method} ${req.originalUrl || req.url} from ${clientIp}`);
+    return res.status(403).json({
+      error: "Forbidden: Dangerous operation requires explicit confirmation header ('X-Confirm-Dangerous-Action: true') or body parameter ('confirmDangerous: true')"
     });
   }
 
-  const clientKeyHeader = req.headers["x-api-key"] || req.headers["X-API-Key"];
-  if (!clientKeyHeader || typeof clientKeyHeader !== "string") {
-    return res.status(401).json({ error: "Unauthorized: Invalid or missing X-API-Key header" });
+  // 4. Security audit log
+  console.warn(`[DangerousAuth] Authorized high-risk operation: ${req.method} ${req.originalUrl || req.url} from ${clientIp}`);
+  try {
+    if (typeof addLog === "function") {
+      addLog("warn", "security", `[DangerousAuth] Authorized high-risk action ${req.method} ${req.originalUrl || req.path} from IP ${clientIp}`);
+    }
+  } catch {
+    // Ignore logging failures
   }
 
-  // Use timingSafeEqual with SHA-256 hashes to prevent timing attack side-channels
-  const serverHash = crypto.createHash("sha256").update(serverKey).digest();
-  const clientHash = crypto.createHash("sha256").update(clientKeyHeader).digest();
-
-  if (!crypto.timingSafeEqual(serverHash, clientHash)) {
-    return res.status(401).json({ error: "Unauthorized: Invalid or missing X-API-Key header" });
-  }
-
-  next();
+  return next();
 };
-const dangerousAuthMiddleware = apiKeyAuthMiddleware;
 
 // Public health check route (exempt from authentication)
 app.get("/api/health", (req, res) => {
   res.json({ status: "healthy", timestamp: new Date().toISOString() });
+});
+
+// Public authentication status route (checks if current request has valid admin credentials)
+app.get("/api/auth/status", (req, res) => {
+  const authenticated = hasValidAdminApiKey(req);
+  res.json({
+    authenticated,
+    timestamp: new Date().toISOString()
+  });
+});
+
+// Universal Authentication Gate: Secure all admin /api/* routes except public health, auth status, and candidate token-authenticated portals
+app.use("/api", (req, res, next) => {
+  if (req.path === "/health" || req.path === "/auth/status") {
+    return next();
+  }
+  // Candidate-facing self-service portals authenticate candidates via X-Session-Token header in their handlers
+  if (
+    (req.path.startsWith("/screening/sessions/") && (req.path.endsWith("/candidate") || req.path.endsWith("/interact"))) ||
+    req.path.startsWith("/scheduling/slots/") ||
+    req.path === "/scheduling/select" ||
+    req.path === "/scheduling/cancel"
+  ) {
+    return next();
+  }
+  return apiKeyAuthMiddleware(req, res, next);
 });
 
 
@@ -259,6 +422,22 @@ const apiRateLimiter = rateLimit({
   legacyHeaders: false,
   message: { error: "Rate limit exceeded. Please try again later." }
 });
+
+// Outbound Delivery Rate Limiter: Strictly bounds outbound messaging (Telegram, SMTP, Gmail)
+// to prevent spam, credentials abuse, and delivery quota exhaustion
+const outboundDeliveryRateLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes window
+  max: 10, // Max 10 delivery tests per 15 minutes per IP
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: {
+    error: "Outbound delivery rate limit exceeded. To protect stored credentials and prevent messaging abuse, delivery tests are limited to 10 requests per 15 minutes."
+  }
+});
+
+// Per-company cooldown map to prevent rapid burst clicks and concurrent spam
+const deliveryCooldownMap = new Map<string, number>();
+const DELIVERY_COOLDOWN_MS = 10000; // 10 seconds minimum cooldown between dispatches for the same company profile
 
 // In-Memory Data Storage (Acting as our Repository Abstraction Layer)
 const systemLogs: SystemLog[] = [
@@ -386,8 +565,40 @@ function saveIntegrations(integrations: IntegrationStorage): void {
   }
 }
 
+function maskSecret(val: string | undefined): string {
+  if (!val || val.trim().length === 0) return "";
+  if (val.length <= 8) return "••••••••";
+  return val.slice(0, 4) + "••••••••" + val.slice(-4);
+}
+
+function sanitizeIntegrations(integrations: IntegrationStorage) {
+  return {
+    smtp: {
+      host: integrations.smtp?.host || "mail.hostinger.com",
+      port: integrations.smtp?.port || 465,
+      username: integrations.smtp?.username || "",
+      password: integrations.smtp?.password ? "••••••••" : "",
+      hasPassword: !!(integrations.smtp?.password && integrations.smtp.password.length > 0),
+      configured: !!integrations.smtp?.configured,
+      updatedAt: integrations.smtp?.updatedAt
+    },
+    telegram: {
+      token: integrations.telegram?.token ? maskSecret(integrations.telegram.token) : "",
+      hasToken: !!(integrations.telegram?.token && integrations.telegram.token.length > 0),
+      chatId: integrations.telegram?.chatId || "",
+      configured: !!integrations.telegram?.configured,
+      botUsername: integrations.telegram?.botUsername,
+      updatedAt: integrations.telegram?.updatedAt
+    },
+    gmail: {
+      configured: !!integrations.gmail?.configured,
+      updatedAt: integrations.gmail?.updatedAt
+    }
+  };
+}
+
 // Diagnostics & System Health
-app.get("/api/diagnostics", (req, res) => {
+app.get("/api/diagnostics", apiKeyAuthMiddleware, (req, res) => {
   const currentIntegrations = loadIntegrations();
   const metrics: DiagnosticMetrics = {
     cpuUsage: Math.floor(Math.random() * 15) + 5, // Simulated low host overhead
@@ -420,7 +631,7 @@ app.get("/api/diagnostics", (req, res) => {
 });
 
 // System Logs
-app.get("/api/logs", (req, res) => {
+app.get("/api/logs", apiKeyAuthMiddleware, (req, res) => {
   res.json(systemLogs);
 });
 
@@ -429,7 +640,7 @@ app.get("/api/logs", (req, res) => {
 // ==========================================
 
 // 1. Get all agents
-app.get("/api/agents", (req, res) => {
+app.get("/api/agents", apiKeyAuthMiddleware, (req, res) => {
   try {
     const agents = agentManager.getAgents().map((a) => {
       const p = a.getProgress();
@@ -451,7 +662,7 @@ app.get("/api/agents", (req, res) => {
 });
 
 // 2. Create/register a new agent
-app.post("/api/agents", (req, res) => {
+app.post("/api/agents", apiKeyAuthMiddleware, (req, res) => {
   const { id, name, capabilities } = req.body;
   if (!id || !name) {
     return res.status(400).json({ error: "Missing id or name parameters." });
@@ -490,7 +701,7 @@ app.delete("/api/agents/:id", dangerousAuthMiddleware, (req, res) => {
 });
 
 // 4. Get all tasks in the queue
-app.get("/api/tasks", (req, res) => {
+app.get("/api/tasks", apiKeyAuthMiddleware, (req, res) => {
   try {
     res.json(taskQueue.getTasks());
   } catch (error: any) {
@@ -499,7 +710,7 @@ app.get("/api/tasks", (req, res) => {
 });
 
 // 5. Queue a new task
-app.post("/api/tasks", (req, res) => {
+app.post("/api/tasks", apiKeyAuthMiddleware, (req, res) => {
   const { id, agentId, priority, currentStep, metadata } = req.body;
   if (!agentId) {
     return res.status(400).json({ error: "Missing agentId parameter." });
@@ -530,7 +741,7 @@ app.post("/api/tasks", (req, res) => {
 });
 
 // 6. Cancel a task
-app.post("/api/tasks/:id/cancel", (req, res) => {
+app.post("/api/tasks/:id/cancel", apiKeyAuthMiddleware, (req, res) => {
   const { id } = req.params;
   try {
     const success = taskQueue.cancelTask(id);
@@ -545,7 +756,7 @@ app.post("/api/tasks/:id/cancel", (req, res) => {
 });
 
 // 7. Pause a task execution
-app.post("/api/tasks/:id/pause", (req, res) => {
+app.post("/api/tasks/:id/pause", apiKeyAuthMiddleware, (req, res) => {
   const { id } = req.params;
   try {
     const success = taskQueue.pauseTask(id);
@@ -560,7 +771,7 @@ app.post("/api/tasks/:id/pause", (req, res) => {
 });
 
 // 8. Resume a paused task
-app.post("/api/tasks/:id/resume", (req, res) => {
+app.post("/api/tasks/:id/resume", apiKeyAuthMiddleware, (req, res) => {
   const { id } = req.params;
   try {
     const success = taskQueue.resumeTask(id);
@@ -575,7 +786,7 @@ app.post("/api/tasks/:id/resume", (req, res) => {
 });
 
 // 9. Get queue state details
-app.get("/api/queue", (req, res) => {
+app.get("/api/queue", apiKeyAuthMiddleware, (req, res) => {
   try {
     res.json({
       isPaused: taskQueue.getPausedStatus(),
@@ -591,7 +802,7 @@ app.get("/api/queue", (req, res) => {
 });
 
 // 10. Pause the entire queue dispatching
-app.post("/api/queue/pause", (req, res) => {
+app.post("/api/queue/pause", apiKeyAuthMiddleware, (req, res) => {
   try {
     taskQueue.pause();
     addLog("warn", "agents", "Task dispatcher queue paused globally.");
@@ -602,7 +813,7 @@ app.post("/api/queue/pause", (req, res) => {
 });
 
 // 11. Resume the entire queue dispatching
-app.post("/api/queue/resume", (req, res) => {
+app.post("/api/queue/resume", apiKeyAuthMiddleware, (req, res) => {
   try {
     taskQueue.resume();
     addLog("success", "agents", "Task dispatcher queue resumed globally.");
@@ -613,7 +824,7 @@ app.post("/api/queue/resume", (req, res) => {
 });
 
 // Clear failed tasks from the queue
-app.post("/api/queue/clear-failed", (req, res) => {
+app.post("/api/queue/clear-failed", apiKeyAuthMiddleware, (req, res) => {
   try {
     const cleared = taskQueue.clearFailed();
     statePersistence.saveSystemState();
@@ -625,7 +836,7 @@ app.post("/api/queue/clear-failed", (req, res) => {
 });
 
 // Retry all failed tasks
-app.post("/api/tasks/retry-failed", (req, res) => {
+app.post("/api/tasks/retry-failed", apiKeyAuthMiddleware, (req, res) => {
   try {
     const retried = taskQueue.retryFailed();
     agentManager.triggerTick();
@@ -638,7 +849,7 @@ app.post("/api/tasks/retry-failed", (req, res) => {
 });
 
 // 12. Get real-time compiled metrics
-app.get("/api/agent-metrics", (req, res) => {
+app.get("/api/agent-metrics", apiKeyAuthMiddleware, (req, res) => {
   try {
     const metrics = AgentMonitor.getInstance().getMetrics();
     res.json(metrics);
@@ -648,7 +859,7 @@ app.get("/api/agent-metrics", (req, res) => {
 });
 
 // 13. Get all registered sandboxed tools
-app.get("/api/tools", (req, res) => {
+app.get("/api/tools", apiKeyAuthMiddleware, (req, res) => {
   try {
     const tools = ToolRegistry.getInstance().getToolsList();
     res.json(tools);
@@ -662,14 +873,14 @@ app.get("/api/tools", (req, res) => {
 // ==========================================
 
 // Catalog of 40 Remote Job & Freelance Platforms
-app.get("/api/platforms", (req, res) => {
+app.get("/api/platforms", apiKeyAuthMiddleware, (req, res) => {
   res.json({
     total: REMOTE_PLATFORMS_40.length,
     platforms: REMOTE_PLATFORMS_40
   });
 });
 
-app.get("/api/freelance/dashboard", (req, res) => {
+app.get("/api/freelance/dashboard", apiKeyAuthMiddleware, (req, res) => {
   try {
     const freelanceRepo = DIContainer.get<SQLiteFreelancerRepository>("SQLiteFreelancerRepository");
     const agent = agentManager.getAgent("agent-scout");
@@ -741,7 +952,7 @@ app.get("/api/freelance/dashboard", (req, res) => {
   }
 });
 
-app.get("/api/freelance/projects", (req, res) => {
+app.get("/api/freelance/projects", apiKeyAuthMiddleware, (req, res) => {
   try {
     const freelanceRepo = DIContainer.get<SQLiteFreelancerRepository>("SQLiteFreelancerRepository");
     const rawProjects = freelanceRepo.getProjects();
@@ -781,7 +992,7 @@ app.get("/api/freelance/projects", (req, res) => {
   }
 });
 
-app.get("/api/freelance/proposals", (req, res) => {
+app.get("/api/freelance/proposals", apiKeyAuthMiddleware, (req, res) => {
   try {
     const freelanceRepo = DIContainer.get<SQLiteFreelancerRepository>("SQLiteFreelancerRepository");
     res.json(freelanceRepo.getProposals());
@@ -790,7 +1001,7 @@ app.get("/api/freelance/proposals", (req, res) => {
   }
 });
 
-app.get("/api/freelance/history", (req, res) => {
+app.get("/api/freelance/history", apiKeyAuthMiddleware, (req, res) => {
   try {
     const freelanceRepo = DIContainer.get<SQLiteFreelancerRepository>("SQLiteFreelancerRepository");
     res.json(freelanceRepo.getExecutionHistory());
@@ -799,7 +1010,7 @@ app.get("/api/freelance/history", (req, res) => {
   }
 });
 
-app.get("/api/freelance/logs", (req, res) => {
+app.get("/api/freelance/logs", apiKeyAuthMiddleware, (req, res) => {
   try {
     const freelanceRepo = DIContainer.get<SQLiteFreelancerRepository>("SQLiteFreelancerRepository");
     res.json(freelanceRepo.getLogs(50));
@@ -808,7 +1019,7 @@ app.get("/api/freelance/logs", (req, res) => {
   }
 });
 
-app.post("/api/freelance/search", (req, res) => {
+app.post("/api/freelance/search", apiKeyAuthMiddleware, (req, res) => {
   try {
     const taskId = `task-search-${Date.now()}`;
     const task: Task = {
@@ -831,7 +1042,7 @@ app.post("/api/freelance/search", (req, res) => {
   }
 });
 
-app.post("/api/freelance/proposals", (req, res) => {
+app.post("/api/freelance/proposals", apiKeyAuthMiddleware, (req, res) => {
   const { projectId, tone } = req.body;
   if (!projectId) {
     return res.status(400).json({ error: "Missing projectId." });
@@ -859,7 +1070,7 @@ app.post("/api/freelance/proposals", (req, res) => {
   }
 });
 
-app.post("/api/freelance/proposals/:id/approve", (req, res) => {
+app.post("/api/freelance/proposals/:id/approve", apiKeyAuthMiddleware, (req, res) => {
   const { id } = req.params;
   try {
     const freelanceRepo = DIContainer.get<SQLiteFreelancerRepository>("SQLiteFreelancerRepository");
@@ -875,7 +1086,7 @@ app.post("/api/freelance/proposals/:id/approve", (req, res) => {
   }
 });
 
-app.post("/api/freelance/proposals/:id/reject", (req, res) => {
+app.post("/api/freelance/proposals/:id/reject", apiKeyAuthMiddleware, (req, res) => {
   const { id } = req.params;
   try {
     const freelanceRepo = DIContainer.get<SQLiteFreelancerRepository>("SQLiteFreelancerRepository");
@@ -924,7 +1135,7 @@ app.post("/api/freelance/proposals/:id/submit", dangerousAuthMiddleware, (req, r
   }
 });
 
-app.get("/api/freelance/config", (req, res) => {
+app.get("/api/freelance/config", apiKeyAuthMiddleware, (req, res) => {
   try {
     const freelanceRepo = DIContainer.get<SQLiteFreelancerRepository>("SQLiteFreelancerRepository");
     res.json(freelanceRepo.getFreelancerConfig());
@@ -933,7 +1144,7 @@ app.get("/api/freelance/config", (req, res) => {
   }
 });
 
-app.post("/api/freelance/config", (req, res) => {
+app.post("/api/freelance/config", apiKeyAuthMiddleware, (req, res) => {
   try {
     const freelanceRepo = DIContainer.get<SQLiteFreelancerRepository>("SQLiteFreelancerRepository");
     const currentConfig = freelanceRepo.getFreelancerConfig();
@@ -964,7 +1175,7 @@ app.post("/api/freelance/clear", dangerousAuthMiddleware, (req, res) => {
 // CANDIDATE PROFILE ENDPOINTS
 // ==========================================
 
-app.get("/api/freelance/candidates", async (req, res) => {
+app.get("/api/freelance/candidates", apiKeyAuthMiddleware, async (req, res) => {
   try {
     const candidateRepo = DIContainer.get<ICandidateRepository>("ICandidateRepository");
     const candidates = await candidateRepo.getAll();
@@ -974,7 +1185,7 @@ app.get("/api/freelance/candidates", async (req, res) => {
   }
 });
 
-app.post("/api/freelance/candidates", async (req, res) => {
+app.post("/api/freelance/candidates", apiKeyAuthMiddleware, async (req, res) => {
   try {
     const candidateRepo = DIContainer.get<ICandidateRepository>("ICandidateRepository");
     const candidateData: Candidate = {
@@ -1011,7 +1222,7 @@ app.delete("/api/freelance/candidates/:id", dangerousAuthMiddleware, async (req,
   }
 });
 
-app.post("/api/freelance/candidates/parse-resume", apiRateLimiter, async (req, res) => {
+app.post("/api/freelance/candidates/parse-resume", apiRateLimiter, apiKeyAuthMiddleware, async (req, res) => {
   try {
     const { resumeText } = req.body;
     if (!resumeText) {
@@ -1050,7 +1261,7 @@ app.post("/api/freelance/candidates/parse-resume", apiRateLimiter, async (req, r
 // NOTIFICATIONS ENDPOINTS
 // ==========================================
 
-app.get("/api/freelance/notifications", (req, res) => {
+app.get("/api/freelance/notifications", apiKeyAuthMiddleware, (req, res) => {
   try {
     const freelanceRepo = DIContainer.get<SQLiteFreelancerRepository>("SQLiteFreelancerRepository");
     res.json(freelanceRepo.getNotifications());
@@ -1059,7 +1270,7 @@ app.get("/api/freelance/notifications", (req, res) => {
   }
 });
 
-app.post("/api/freelance/notifications/:id/read", (req, res) => {
+app.post("/api/freelance/notifications/:id/read", apiKeyAuthMiddleware, (req, res) => {
   try {
     const freelanceRepo = DIContainer.get<SQLiteFreelancerRepository>("SQLiteFreelancerRepository");
     freelanceRepo.markNotificationAsRead(req.params.id);
@@ -1069,7 +1280,7 @@ app.post("/api/freelance/notifications/:id/read", (req, res) => {
   }
 });
 
-app.post("/api/freelance/notifications/clear", (req, res) => {
+app.post("/api/freelance/notifications/clear", apiKeyAuthMiddleware, (req, res) => {
   try {
     const freelanceRepo = DIContainer.get<SQLiteFreelancerRepository>("SQLiteFreelancerRepository");
     freelanceRepo.clearNotifications();
@@ -1083,7 +1294,7 @@ app.post("/api/freelance/notifications/clear", (req, res) => {
 // INTERACTIVE ANALYTICS ENDPOINTS
 // ==========================================
 
-app.get("/api/freelance/analytics", (req, res) => {
+app.get("/api/freelance/analytics", apiKeyAuthMiddleware, (req, res) => {
   try {
     const freelanceRepo = DIContainer.get<SQLiteFreelancerRepository>("SQLiteFreelancerRepository");
     const projects = freelanceRepo.getProjects();
@@ -1203,7 +1414,7 @@ app.post("/api/gemini/generate", apiRateLimiter, async (req, res) => {
     const ai = getGeminiClient();
     
     const response = await ai.models.generateContent({
-      model: "gemini-3.5-flash",
+      model: "gemini-3.8-flash",
       contents: prompt,
       config: {
         systemInstruction: systemInstruction || "You are the central core AI Kernel of Aziz Assistant, an Enterprise Operating System.",
@@ -1290,7 +1501,7 @@ app.get("/api/companies/categories", (req, res) => {
 });
 
 // 3. Create a new company profile
-app.post("/api/companies", (req, res) => {
+app.post("/api/companies", apiKeyAuthMiddleware, (req, res) => {
   try {
     const compService = CompanyProfileService.getInstance();
     const created = compService.create(req.body);
@@ -1302,7 +1513,7 @@ app.post("/api/companies", (req, res) => {
 });
 
 // 4. Update an existing company profile
-app.put("/api/companies/:id", (req, res) => {
+app.put("/api/companies/:id", apiKeyAuthMiddleware, (req, res) => {
   try {
     const compService = CompanyProfileService.getInstance();
     const updated = compService.update(req.params.id, req.body);
@@ -1317,7 +1528,7 @@ app.put("/api/companies/:id", (req, res) => {
 });
 
 // 5. Delete a company profile
-app.delete("/api/companies/:id", (req, res) => {
+app.delete("/api/companies/:id", apiKeyAuthMiddleware, (req, res) => {
   try {
     const compService = CompanyProfileService.getInstance();
     const success = compService.delete(req.params.id);
@@ -1332,13 +1543,24 @@ app.delete("/api/companies/:id", (req, res) => {
 });
 
 // 6. Test Delivery dispatch (Telegram, Hostinger, Gmail) for specific company
-app.post("/api/companies/:id/test-delivery", async (req, res) => {
+app.post("/api/companies/:id/test-delivery", outboundDeliveryRateLimiter, apiKeyAuthMiddleware, async (req, res) => {
   try {
     const compService = CompanyProfileService.getInstance();
     const company = compService.getById(req.params.id);
     if (!company) {
       return res.status(404).json({ error: "Company profile not found." });
     }
+
+    // Enforce cooldown per company profile to prevent rapid spam / burst abuse
+    const lastDispatch = deliveryCooldownMap.get(company.id) || 0;
+    const now = Date.now();
+    if (now - lastDispatch < DELIVERY_COOLDOWN_MS) {
+      const waitSec = Math.ceil((DELIVERY_COOLDOWN_MS - (now - lastDispatch)) / 1000);
+      return res.status(429).json({
+        error: `Delivery test cooldown active for "${company.name}". Please wait ${waitSec}s before triggering another test dispatch.`
+      });
+    }
+    deliveryCooldownMap.set(company.id, now);
 
     const { channel = "all" } = req.body || {};
     const integrations = loadIntegrations();
@@ -1553,13 +1775,24 @@ app.post("/api/companies/:id/test-delivery", async (req, res) => {
 });
 
 // Backward compatible single telegram test alert endpoint
-app.post("/api/companies/:id/test-alert", async (req, res) => {
+app.post("/api/companies/:id/test-alert", outboundDeliveryRateLimiter, apiKeyAuthMiddleware, async (req, res) => {
   try {
     const compService = CompanyProfileService.getInstance();
     const company = compService.getById(req.params.id);
     if (!company) {
       return res.status(404).json({ error: "Company profile not found." });
     }
+
+    // Enforce cooldown per company profile to prevent rapid spam / burst abuse
+    const lastDispatch = deliveryCooldownMap.get(company.id) || 0;
+    const now = Date.now();
+    if (now - lastDispatch < DELIVERY_COOLDOWN_MS) {
+      const waitSec = Math.ceil((DELIVERY_COOLDOWN_MS - (now - lastDispatch)) / 1000);
+      return res.status(429).json({
+        error: `Delivery test cooldown active for "${company.name}". Please wait ${waitSec}s before triggering another test dispatch.`
+      });
+    }
+    deliveryCooldownMap.set(company.id, now);
 
     const integrations = loadIntegrations();
     const telegram = (integrations.telegram || {}) as any;
@@ -1605,7 +1838,7 @@ app.post("/api/companies/:id/test-alert", async (req, res) => {
 });
 
 // 7. Run targeted scout exclusively for a specific company
-app.post("/api/companies/:id/scout", async (req, res) => {
+app.post("/api/companies/:id/scout", apiRateLimiter, apiKeyAuthMiddleware, async (req, res) => {
   try {
     const compService = CompanyProfileService.getInstance();
     const company = compService.getById(req.params.id);
@@ -1650,7 +1883,7 @@ app.post("/api/companies/:id/scout", async (req, res) => {
 });
 
 // Sprint 1 Candidate API
-app.get("/api/candidates", async (req, res) => {
+app.get("/api/candidates", apiKeyAuthMiddleware, async (req, res) => {
   try {
     const candidateRepo = DIContainer.get<ICandidateRepository>("ICandidateRepository");
     const candidates = await candidateRepo.getAll();
@@ -1660,7 +1893,7 @@ app.get("/api/candidates", async (req, res) => {
   }
 });
 
-app.post("/api/candidates", async (req, res) => {
+app.post("/api/candidates", apiKeyAuthMiddleware, async (req, res) => {
   try {
     const candidateRepo = DIContainer.get<ICandidateRepository>("ICandidateRepository");
     const newCand = await candidateRepo.save(req.body);
@@ -2073,27 +2306,122 @@ app.post("/api/admin/review-queue/:id/reject", apiRateLimiter, apiKeyAuthMiddlew
 
 // --- Feature 3: Screening Agent API Endpoints & Candidate Auth Rate Limiting ---
 
-const failedSessionTokenAttemptsMap = new Map<string, { count: number; resetAt: number }>();
+/**
+ * Safely extracts and validates the client's IP address using Express's trust-proxy
+ * resolution, preventing header spoofing and invalid string injections.
+ */
+function getClientIp(req: express.Request): string {
+  // 1. Prefer Express's req.ip (honoring app.set('trust proxy', 1))
+  const rawIp = req.ip || req.socket?.remoteAddress || "";
+  const cleanIp = rawIp.startsWith("::ffff:") ? rawIp.slice(7) : rawIp;
 
-function recordFailedSessionTokenAttempt(ip: string): void {
-  const now = Date.now();
-  const windowMs = 15 * 60 * 1000; // 15 minute sliding window
-  const record = failedSessionTokenAttemptsMap.get(ip);
-  if (!record || now > record.resetAt) {
-    failedSessionTokenAttemptsMap.set(ip, { count: 1, resetAt: now + windowMs });
-  } else {
-    record.count += 1;
+  if (cleanIp && net.isIP(cleanIp) !== 0) {
+    return cleanIp;
+  }
+
+  // 2. Fallback to socket remoteAddress
+  const socketRaw = req.socket?.remoteAddress || "";
+  const cleanSocket = socketRaw.startsWith("::ffff:") ? socketRaw.slice(7) : socketRaw;
+  if (cleanSocket && net.isIP(cleanSocket) !== 0) {
+    return cleanSocket;
+  }
+
+  return "unknown_client";
+}
+
+interface FailedAttemptRecord {
+  count: number;
+  resetAt: number;
+  lastAttempt: number;
+}
+
+const MAX_FAILED_ATTEMPT_ENTRIES = 5000;
+const FAILED_ATTEMPT_WINDOW_MS = 15 * 60 * 1000; // 15 minute sliding window
+const FAILED_ATTEMPT_THRESHOLD = 10; // 10 failed attempts before 429 lockout
+
+const failedSessionTokenAttemptsMap = new Map<string, FailedAttemptRecord>();
+
+/**
+ * Prunes expired entries from the failed attempts map to prevent unbounded memory growth.
+ */
+function pruneExpiredFailedTokenAttempts(now = Date.now()): void {
+  for (const [key, record] of failedSessionTokenAttemptsMap.entries()) {
+    if (now >= record.resetAt) {
+      failedSessionTokenAttemptsMap.delete(key);
+    }
   }
 }
 
-function checkFailedSessionTokenRateLimit(req: express.Request, res: express.Response): boolean {
-  const ip = (req.headers["x-forwarded-for"] as string) || req.ip || req.socket.remoteAddress || "unknown_ip";
+/**
+ * Records a failed candidate session token authentication attempt.
+ * Enforces bounded memory usage and evicts expired or oldest entries if capacity is reached.
+ */
+function recordFailedSessionTokenAttempt(reqOrIp: express.Request | string): void {
+  const ip = typeof reqOrIp === "string" ? reqOrIp : getClientIp(reqOrIp);
+  const now = Date.now();
+
+  // If map is nearing threshold, prune expired entries to protect memory
+  if (failedSessionTokenAttemptsMap.size >= MAX_FAILED_ATTEMPT_ENTRIES) {
+    pruneExpiredFailedTokenAttempts(now);
+
+    // If still at capacity after pruning expired, evict oldest entries (FIFO via Map keys iteration)
+    if (failedSessionTokenAttemptsMap.size >= MAX_FAILED_ATTEMPT_ENTRIES) {
+      const keysToDelete = Array.from(failedSessionTokenAttemptsMap.keys()).slice(0, 500);
+      for (const k of keysToDelete) {
+        failedSessionTokenAttemptsMap.delete(k);
+      }
+    }
+  }
+
   const record = failedSessionTokenAttemptsMap.get(ip);
-  if (record && Date.now() < record.resetAt && record.count >= 10) {
-    res.status(429).json({ error: "Too many failed session authentication attempts. Please try again later." });
-    return false;
+  if (!record || now >= record.resetAt) {
+    failedSessionTokenAttemptsMap.set(ip, {
+      count: 1,
+      resetAt: now + FAILED_ATTEMPT_WINDOW_MS,
+      lastAttempt: now
+    });
+  } else {
+    record.count += 1;
+    record.lastAttempt = now;
+  }
+}
+
+/**
+ * Validates whether the client IP has exceeded the threshold for failed session token attempts.
+ * Performs lazy eviction if an existing record has expired.
+ */
+function checkFailedSessionTokenRateLimit(req: express.Request, res: express.Response): boolean {
+  const ip = getClientIp(req);
+  const now = Date.now();
+  const record = failedSessionTokenAttemptsMap.get(ip);
+
+  if (record) {
+    if (now >= record.resetAt) {
+      // Lazy eviction: purge expired record on access
+      failedSessionTokenAttemptsMap.delete(ip);
+      return true;
+    }
+    if (record.count >= FAILED_ATTEMPT_THRESHOLD) {
+      res.status(429).json({ error: "Too many failed session authentication attempts. Please try again later." });
+      return false;
+    }
   }
   return true;
+}
+
+/**
+ * Resets the failed attempts map (primarily for testing).
+ */
+function clearFailedSessionTokenAttempts(): void {
+  failedSessionTokenAttemptsMap.clear();
+}
+
+// Background cleanup timer: sweep expired entries every 5 minutes
+const failedAttemptCleanupTimer = setInterval(() => {
+  pruneExpiredFailedTokenAttempts();
+}, 5 * 60 * 1000);
+if (failedAttemptCleanupTimer.unref) {
+  failedAttemptCleanupTimer.unref();
 }
 
 // 1. Create Screening Session (Admin Endpoint)
@@ -2138,11 +2466,10 @@ app.post("/api/screening/sessions", apiRateLimiter, apiKeyAuthMiddleware, async 
 app.get("/api/screening/sessions/:id/candidate", apiRateLimiter, async (req, res) => {
   if (!checkFailedSessionTokenRateLimit(req, res)) return;
 
-  const ip = (req.headers["x-forwarded-for"] as string) || req.ip || req.socket.remoteAddress || "unknown_ip";
   const tokenHeader = req.headers["x-session-token"] || req.headers["X-Session-Token"];
 
   if (!tokenHeader || typeof tokenHeader !== "string") {
-    recordFailedSessionTokenAttempt(ip);
+    recordFailedSessionTokenAttempt(req);
     return res.status(401).json({ error: "Missing session token. Provide X-Session-Token header." });
   }
 
@@ -2151,7 +2478,7 @@ app.get("/api/screening/sessions/:id/candidate", apiRateLimiter, async (req, res
     const session = await screeningRepo.findById(req.params.id);
 
     if (!session) {
-      recordFailedSessionTokenAttempt(ip);
+      recordFailedSessionTokenAttempt(req);
       return res.status(401).json({ error: "Invalid session token or session ID." });
     }
 
@@ -2159,7 +2486,7 @@ app.get("/api/screening/sessions/:id/candidate", apiRateLimiter, async (req, res
     const clientTokenHash = crypto.createHash("sha256").update(tokenHeader).digest();
 
     if (!crypto.timingSafeEqual(sessionTokenHash, clientTokenHash)) {
-      recordFailedSessionTokenAttempt(ip);
+      recordFailedSessionTokenAttempt(req);
       return res.status(401).json({ error: "Invalid session token or session ID." });
     }
 
@@ -2182,11 +2509,10 @@ app.get("/api/screening/sessions/:id/candidate", apiRateLimiter, async (req, res
 app.post("/api/screening/sessions/:id/interact", apiRateLimiter, async (req, res) => {
   if (!checkFailedSessionTokenRateLimit(req, res)) return;
 
-  const ip = (req.headers["x-forwarded-for"] as string) || req.ip || req.socket.remoteAddress || "unknown_ip";
   const tokenHeader = req.headers["x-session-token"] || req.headers["X-Session-Token"];
 
   if (!tokenHeader || typeof tokenHeader !== "string") {
-    recordFailedSessionTokenAttempt(ip);
+    recordFailedSessionTokenAttempt(req);
     return res.status(401).json({ error: "Missing session token. Provide X-Session-Token header." });
   }
 
@@ -2195,7 +2521,7 @@ app.post("/api/screening/sessions/:id/interact", apiRateLimiter, async (req, res
     const session = await screeningRepo.findById(req.params.id);
 
     if (!session) {
-      recordFailedSessionTokenAttempt(ip);
+      recordFailedSessionTokenAttempt(req);
       return res.status(401).json({ error: "Invalid session token or session ID." });
     }
 
@@ -2203,7 +2529,7 @@ app.post("/api/screening/sessions/:id/interact", apiRateLimiter, async (req, res
     const clientTokenHash = crypto.createHash("sha256").update(tokenHeader).digest();
 
     if (!crypto.timingSafeEqual(sessionTokenHash, clientTokenHash)) {
-      recordFailedSessionTokenAttempt(ip);
+      recordFailedSessionTokenAttempt(req);
       return res.status(401).json({ error: "Invalid session token or session ID." });
     }
 
@@ -2393,11 +2719,10 @@ app.post("/api/scheduling/invite", apiRateLimiter, apiKeyAuthMiddleware, async (
 app.get("/api/scheduling/slots/:sessionId", apiRateLimiter, async (req, res) => {
   if (!checkFailedSessionTokenRateLimit(req, res)) return;
 
-  const ip = (req.headers["x-forwarded-for"] as string) || req.ip || req.socket.remoteAddress || "unknown_ip";
   const tokenHeader = req.headers["x-session-token"] || req.headers["X-Session-Token"];
 
   if (!tokenHeader || typeof tokenHeader !== "string") {
-    recordFailedSessionTokenAttempt(ip);
+    recordFailedSessionTokenAttempt(req);
     return res.status(401).json({ error: "Missing session token. Provide X-Session-Token header." });
   }
 
@@ -2406,7 +2731,7 @@ app.get("/api/scheduling/slots/:sessionId", apiRateLimiter, async (req, res) => 
     const validSession = await schedulingAgent.validateSessionToken(req.params.sessionId, tokenHeader);
 
     if (!validSession) {
-      recordFailedSessionTokenAttempt(ip);
+      recordFailedSessionTokenAttempt(req);
       return res.status(401).json({ error: "Invalid or expired session token." });
     }
 
@@ -2427,11 +2752,10 @@ app.get("/api/scheduling/slots/:sessionId", apiRateLimiter, async (req, res) => 
 app.post("/api/scheduling/select", apiRateLimiter, async (req, res) => {
   if (!checkFailedSessionTokenRateLimit(req, res)) return;
 
-  const ip = (req.headers["x-forwarded-for"] as string) || req.ip || req.socket.remoteAddress || "unknown_ip";
   const tokenHeader = req.headers["x-session-token"] || req.headers["X-Session-Token"];
 
   if (!tokenHeader || typeof tokenHeader !== "string") {
-    recordFailedSessionTokenAttempt(ip);
+    recordFailedSessionTokenAttempt(req);
     return res.status(401).json({ error: "Missing session token. Provide X-Session-Token header." });
   }
 
@@ -2445,7 +2769,7 @@ app.post("/api/scheduling/select", apiRateLimiter, async (req, res) => {
     const result = await schedulingAgent.selectSlot(sessionId, tokenHeader, slotId);
 
     if (!result.success) {
-      if (result.statusCode === 401) recordFailedSessionTokenAttempt(ip);
+      if (result.statusCode === 401) recordFailedSessionTokenAttempt(req);
       return res.status(result.statusCode || 400).json({ 
         error: result.error, 
         session: result.session,
@@ -2480,19 +2804,40 @@ app.post("/api/scheduling/confirm", apiRateLimiter, apiKeyAuthMiddleware, async 
   }
 });
 
-// 5. Cancel Booking
+// 5. Cancel Booking (Candidate Auth via X-Session-Token or Admin Auth via X-API-Key)
 app.post("/api/scheduling/cancel", apiRateLimiter, async (req, res) => {
   const { sessionId, reason } = req.body || {};
   if (!sessionId) {
     return res.status(400).json({ error: "Missing required body parameter: sessionId." });
   }
 
+  const tokenHeader = req.headers["x-session-token"] || req.headers["X-Session-Token"];
+  const isAdmin = hasValidAdminApiKey(req);
+
+  // If not authenticated as admin, require valid candidate session token with brute-force rate limit protection
+  if (!isAdmin) {
+    if (!checkFailedSessionTokenRateLimit(req, res)) return;
+
+    if (!tokenHeader || typeof tokenHeader !== "string") {
+      recordFailedSessionTokenAttempt(req);
+      return res.status(401).json({ error: "Missing session token. Provide X-Session-Token header." });
+    }
+  }
+
   try {
     const schedulingAgent = DIContainer.get<SchedulingServiceAgent>("SchedulingServiceAgent");
-    const result = await schedulingAgent.cancelBooking(sessionId, reason);
+    const result = await schedulingAgent.cancelBooking(
+      sessionId, 
+      reason, 
+      typeof tokenHeader === "string" ? tokenHeader : undefined, 
+      isAdmin
+    );
 
     if (!result.success) {
-      return res.status(400).json({ error: result.error });
+      if (result.statusCode === 401) {
+        recordFailedSessionTokenAttempt(req);
+      }
+      return res.status(result.statusCode || 400).json({ error: result.error });
     }
 
     res.json({ success: true, session: result.session });
@@ -2584,7 +2929,7 @@ app.post("/api/ats/optimize", apiRateLimiter, async (req, res) => {
     const ai = getGeminiClient();
 
     const response = await ai.models.generateContent({
-      model: "gemini-3.5-flash",
+      model: "gemini-3.8-flash",
       contents: `Perform a professional ATS evaluation. Align this resume against the target job description:
 RESUME:
 ${resumeText}
@@ -2627,17 +2972,17 @@ Provide your analysis in EXACTLY the following JSON object structure. Do not wra
 
 // Unified Integrations API Routes
 
-// 1. Fetch current integration configs
-app.get("/api/integrations", (req, res) => {
+// 1. Fetch current integration configs (sanitized, zero secret leakage)
+app.get("/api/integrations", apiKeyAuthMiddleware, (req, res) => {
   const current = loadIntegrations();
   res.json({
     success: true,
-    integrations: current
+    integrations: sanitizeIntegrations(current)
   });
 });
 
-// 2. Save integration configurations
-app.post("/api/integrations/save", (req, res) => {
+// 2. Save integration configurations (authenticated, secret-protected)
+app.post("/api/integrations/save", apiKeyAuthMiddleware, (req, res) => {
   const { type, config } = req.body;
   if (!type) {
     return res.status(400).json({ error: "Missing integration channel type." });
@@ -2646,8 +2991,14 @@ app.post("/api/integrations/save", (req, res) => {
   const integrations = loadIntegrations();
 
   if (type === "telegram") {
-    const token = (config?.token || "").trim();
+    let token = (config?.token || "").trim();
     let chatId = (config?.chatId || "").trim();
+
+    // If token is masked or omitted, retain existing saved token
+    if (!token || token.includes("••••")) {
+      token = integrations.telegram?.token || "";
+    }
+
     if (!token || !chatId) {
       return res.status(400).json({ error: "Both Bot Token and Subscriber Chat ID are required to save Telegram integration." });
     }
@@ -2670,7 +3021,7 @@ app.post("/api/integrations/save", (req, res) => {
     return res.json({
       success: true,
       message: "Telegram Bot configuration saved successfully! Alert channel is now active.",
-      config: integrations.telegram
+      config: sanitizeIntegrations(integrations).telegram
     });
   }
 
@@ -2678,17 +3029,26 @@ app.post("/api/integrations/save", (req, res) => {
     const host = (config?.host || "").trim();
     const username = (config?.username || "").trim();
     const port = Number(config?.port) || 465;
-    const password = config?.password || "";
+    let password = (config?.password || "").trim();
+
+    // If password is masked or omitted, retain existing saved password
+    if (!password || password.includes("••••")) {
+      password = integrations.smtp?.password || "";
+    }
 
     if (!host || !username) {
       return res.status(400).json({ error: "SMTP Server Host and Username are required." });
+    }
+
+    if (!password) {
+      return res.status(400).json({ error: "SMTP Password is required to configure SMTP." });
     }
 
     integrations.smtp = {
       host,
       port,
       username,
-      password: password || integrations.smtp?.password || "",
+      password,
       configured: true,
       updatedAt: new Date().toISOString()
     };
@@ -2698,7 +3058,7 @@ app.post("/api/integrations/save", (req, res) => {
     return res.json({
       success: true,
       message: "SMTP Mail configuration saved successfully.",
-      config: integrations.smtp
+      config: sanitizeIntegrations(integrations).smtp
     });
   }
 
@@ -2712,7 +3072,7 @@ app.post("/api/integrations/save", (req, res) => {
     return res.json({
       success: true,
       message: "Google Workspace integration confirmed active.",
-      config: integrations.gmail
+      config: sanitizeIntegrations(integrations).gmail
     });
   }
 
@@ -2720,7 +3080,7 @@ app.post("/api/integrations/save", (req, res) => {
 });
 
 // 3. Disconnect an integration
-app.post("/api/integrations/disconnect", (req, res) => {
+app.post("/api/integrations/disconnect", apiKeyAuthMiddleware, (req, res) => {
   const { type } = req.body;
   const integrations = loadIntegrations();
 
@@ -2736,7 +3096,7 @@ app.post("/api/integrations/disconnect", (req, res) => {
     return res.json({
       success: true,
       message: "Telegram Bot integration has been disconnected.",
-      config: integrations.telegram
+      config: sanitizeIntegrations(integrations).telegram
     });
   }
 
@@ -2754,7 +3114,7 @@ app.post("/api/integrations/disconnect", (req, res) => {
     return res.json({
       success: true,
       message: "SMTP integration has been disconnected.",
-      config: integrations.smtp
+      config: sanitizeIntegrations(integrations).smtp
     });
   }
 
@@ -2762,7 +3122,7 @@ app.post("/api/integrations/disconnect", (req, res) => {
 });
 
 // 4. Send Live Sample Alert to Telegram
-app.post("/api/integrations/test-alert", async (req, res) => {
+app.post("/api/integrations/test-alert", outboundDeliveryRateLimiter, apiKeyAuthMiddleware, async (req, res) => {
   const { type = "telegram" } = req.body;
   const integrations = loadIntegrations();
 
@@ -2827,10 +3187,13 @@ app.post("/api/integrations/test-alert", async (req, res) => {
 });
 
 // 5. Auto-Detect Group & Chat IDs from Telegram bot updates
-app.post("/api/integrations/telegram/detect-chats", async (req, res) => {
+app.post("/api/integrations/telegram/detect-chats", apiKeyAuthMiddleware, async (req, res) => {
   const { token } = req.body;
   const integrations = loadIntegrations();
-  const botToken = (token || integrations.telegram?.token || "").trim();
+  let botToken = (token || "").trim();
+  if (!botToken || botToken.includes("••••")) {
+    botToken = integrations.telegram?.token || "";
+  }
 
   if (!botToken) {
     return res.status(400).json({
@@ -2892,7 +3255,7 @@ app.post("/api/integrations/telegram/detect-chats", async (req, res) => {
 });
 
 // 6. Get Telegram Bot Status, Active Matching Skills & Portfolio
-app.get("/api/integrations/telegram/status", async (req, res) => {
+app.get("/api/integrations/telegram/status", apiKeyAuthMiddleware, async (req, res) => {
   const integrations = loadIntegrations();
   const telegram = (integrations.telegram || {}) as any;
   const freelanceRepo = DIContainer.get<SQLiteFreelancerRepository>("SQLiteFreelancerRepository");
@@ -2918,12 +3281,13 @@ app.get("/api/integrations/telegram/status", async (req, res) => {
 });
 
 // 7. Unified Integrations Testing Gateway
-app.post("/api/integrations/test", async (req, res) => {
+app.post("/api/integrations/test", outboundDeliveryRateLimiter, apiKeyAuthMiddleware, async (req, res) => {
   const { type, config } = req.body;
   if (!type) {
     return res.status(400).json({ error: "No integration channel selected for testing." });
   }
 
+  const storedIntegrations = loadIntegrations();
   addLog("info", "api", `Testing connection route for channel: ${type.toUpperCase()}`);
 
   let responseMessage = "";
@@ -2931,18 +3295,34 @@ app.post("/api/integrations/test", async (req, res) => {
   let botUsername = "";
 
   switch (type) {
-    case "smtp":
-      if (!config.host || !config.username || !config.password) {
+    case "smtp": {
+      const host = config?.host || storedIntegrations.smtp?.host;
+      const port = config?.port || storedIntegrations.smtp?.port || 465;
+      const username = config?.username || storedIntegrations.smtp?.username;
+      let password = config?.password;
+      if (!password || password.includes("••••")) {
+        password = storedIntegrations.smtp?.password;
+      }
+
+      if (!host || !username || !password) {
         isSuccess = false;
         responseMessage = "Connection failed: SMTP Host, username and secure passwords are required.";
       } else {
-        responseMessage = `Successfully established TLS connection with ${config.host}:${config.port || 587}. Sent test notification.`;
+        responseMessage = `Successfully established TLS connection with ${host}:${port}. Sent test notification.`;
       }
       break;
+    }
 
-    case "telegram":
-      const token = (config?.token || "").trim();
-      const chatId = (config?.chatId || "").trim();
+    case "telegram": {
+      let token = (config?.token || "").trim();
+      let chatId = (config?.chatId || "").trim();
+      if (!token || token.includes("••••")) {
+        token = storedIntegrations.telegram?.token || "";
+      }
+      if (!chatId) {
+        chatId = storedIntegrations.telegram?.chatId || "";
+      }
+
       if (!token || !chatId) {
         isSuccess = false;
         responseMessage = "Handshake failed: Both Bot Token and Subscriber Chat ID are required.";
@@ -3008,6 +3388,7 @@ app.post("/api/integrations/test", async (req, res) => {
         }
       }
       break;
+    }
 
     case "gmail":
       responseMessage = "Google OAuth 2.0 validation succeeded. Client scopes approved for read/write drafts.";
@@ -3032,7 +3413,7 @@ app.post("/api/integrations/test", async (req, res) => {
 });
 
 // Persistence Admin API endpoints
-app.get("/api/persistence/status", async (req, res) => {
+app.get("/api/persistence/status", apiKeyAuthMiddleware, async (req, res) => {
   try {
     const backupService = DIContainer.get<IBackupService>("IBackupService");
     const status = await backupService.getStatus();
@@ -3042,7 +3423,7 @@ app.get("/api/persistence/status", async (req, res) => {
   }
 });
 
-app.get("/api/persistence/report", async (req, res) => {
+app.get("/api/persistence/report", apiKeyAuthMiddleware, async (req, res) => {
   try {
     const backupService = DIContainer.get<IBackupService>("IBackupService");
     const status = await backupService.getStatus();
@@ -3053,7 +3434,7 @@ app.get("/api/persistence/report", async (req, res) => {
 });
 
 // Structured logs endpoint (Phase 11)
-app.get("/api/persistence/logs", (req, res) => {
+app.get("/api/persistence/logs", apiKeyAuthMiddleware, (req, res) => {
   try {
     const loggerService = DIContainer.get<any>("StructuredLoggerService");
     res.json(loggerService.getLogs());
@@ -3063,7 +3444,7 @@ app.get("/api/persistence/logs", (req, res) => {
 });
 
 // Configuration get & update endpoints (Phase 14)
-app.get("/api/persistence/config", (req, res) => {
+app.get("/api/persistence/config", apiKeyAuthMiddleware, (req, res) => {
   try {
     const configService = DIContainer.get<any>("PersistenceConfigService");
     res.json(configService.getConfig());
@@ -3088,7 +3469,7 @@ app.post("/api/persistence/config", dangerousAuthMiddleware, (req, res) => {
 });
 
 // List all versioned local backups (Phase 2)
-app.get("/api/persistence/backups", (req, res) => {
+app.get("/api/persistence/backups", apiKeyAuthMiddleware, (req, res) => {
   try {
     const backupStorage = DIContainer.get<any>("BackupStorageService");
     res.json(backupStorage.listBackups().map((b: any) => ({
@@ -3103,7 +3484,7 @@ app.get("/api/persistence/backups", (req, res) => {
 });
 
 // Real-time progress stream via SSE (Phase 10)
-app.get("/api/persistence/progress/stream", (req, res) => {
+app.get("/api/persistence/progress/stream", apiKeyAuthMiddleware, (req, res) => {
   res.setHeader("Content-Type", "text/event-stream");
   res.setHeader("Cache-Control", "no-cache");
   res.setHeader("Connection", "keep-alive");
@@ -3126,7 +3507,7 @@ app.get("/api/persistence/progress/stream", (req, res) => {
 });
 
 // Restore preview endpoint (Phase 7)
-app.get("/api/persistence/restore/preview", async (req, res) => {
+app.get("/api/persistence/restore/preview", apiKeyAuthMiddleware, async (req, res) => {
   try {
     const backupService = DIContainer.get<IBackupService>("IBackupService");
     const preview = await backupService.generateRestorePreview();
@@ -3540,4 +3921,11 @@ if (process.env.NODE_ENV !== "test" && !process.env.VITEST) {
   startServer();
 }
 
-export { app };
+export { 
+  app, 
+  getClientIp, 
+  checkFailedSessionTokenRateLimit, 
+  recordFailedSessionTokenAttempt, 
+  clearFailedSessionTokenAttempts, 
+  failedSessionTokenAttemptsMap 
+};

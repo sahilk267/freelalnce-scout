@@ -135,7 +135,7 @@ export default function Studio() {
             <div className="flex justify-between items-center">
               <div className="flex items-center gap-1.5 text-xs text-slate-500 font-mono">
                 <span>Model:</span>
-                <span className="text-blue-400">gemini-3.5-flash</span>
+                <span className="text-blue-400">gemini-3.8-flash</span>
               </div>
               <button
                 type="submit"

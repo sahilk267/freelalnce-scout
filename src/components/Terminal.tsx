@@ -6,6 +6,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Terminal as TerminalIcon, ShieldAlert, Sparkles, Send, Trash2 } from "lucide-react";
 import { TerminalLine } from "../types";
+import { setAdminApiKey, getAdminAuthHeaders, getDangerousActionHeaders } from "../utils/apiAuth";
 
 export default function Terminal() {
   const [lines, setLines] = useState<TerminalLine[]>([
@@ -62,7 +63,7 @@ export default function Terminal() {
         ]);
         return;
       }
-      localStorage.setItem("AZIZ_API_KEY", providedKey);
+      setAdminApiKey(providedKey);
       setLines((prev) => [
         ...prev,
         {
@@ -78,14 +79,12 @@ export default function Terminal() {
     setLoading(true);
 
     try {
-      const localKey = localStorage.getItem("AZIZ_API_KEY") || "";
       const response = await fetch("/api/terminal/execute", {
         method: "POST",
-        headers: { 
-          "Content-Type": "application/json",
-          "X-API-Key": localKey
-        },
-        body: JSON.stringify({ command: cmd })
+        headers: getDangerousActionHeaders({ 
+          "Content-Type": "application/json"
+        }),
+        body: JSON.stringify({ command: cmd, confirmDangerous: true })
       });
       
       if (response.status === 401) {

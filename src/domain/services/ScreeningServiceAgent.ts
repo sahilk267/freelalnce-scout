@@ -75,7 +75,7 @@ ASSISTANT RESPONSE:`;
 
     try {
       const response = await aiClient.models.generateContent({
-        model: "gemini-2.0-flash",
+        model: "gemini-3.8-flash",
         contents: prompt
       });
       assistantReply = response.text || "Thank you for sharing that information. Could you elaborate on your experience with the primary technical requirements listed for this role?";
@@ -163,7 +163,7 @@ STRICT GROUNDING & EVALUATION RULES:
 
     try {
       const p1Res = await aiClient.models.generateContent({
-        model: "gemini-2.0-flash",
+        model: "gemini-3.8-flash",
         contents: pass1Prompt,
         config: { responseMimeType: "application/json" }
       });
@@ -223,7 +223,7 @@ AUDIT AUDITING INSTRUCTIONS:
 
     try {
       const p2Res = await aiClient.models.generateContent({
-        model: "gemini-2.0-flash",
+        model: "gemini-3.8-flash",
         contents: pass2Prompt,
         config: { responseMimeType: "application/json" }
       });

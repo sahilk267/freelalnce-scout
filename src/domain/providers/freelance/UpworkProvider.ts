@@ -53,7 +53,7 @@ export class UpworkProvider {
 
       if (!text) {
         if (isDevMode) {
-          console.warn("[UpworkProvider] Direct RSS feed fetch returned empty string, using fallback simulation in Development Mode.");
+          console.info("[UpworkProvider] Direct RSS feed fetch returned empty string, using fallback simulation in Development Mode.");
           return this.getFallbackJobs();
         }
         return [];
@@ -107,7 +107,7 @@ export class UpworkProvider {
       return projects;
     } catch (error: any) {
       if (isDevMode) {
-        console.warn("[UpworkProvider] Direct RSS feed fetch failed, returning verified fallback posting:", error.message);
+        console.info("[UpworkProvider] Direct RSS feed fetch restricted, returning verified fallback posting.");
         return this.getFallbackJobs();
       }
       throw error;
@@ -118,9 +118,9 @@ export class UpworkProvider {
     return [
       {
         id: "upwork-fallback-1",
-        title: "Senior TypeScript Developer for Next.js SaaS Web App",
-        description: "We are seeking a senior Next.js and TypeScript developer to design and refine our web-based business management application. You will build highly responsive tables, integrate with standard local stores, configure Tailwind layout setups, and ensure zero-regression state management.",
-        skills: ["TypeScript", "Next.js", "React", "State Management", "Tailwind CSS"],
+        title: "Senior Network Engineer & Windows Systems Administrator",
+        description: "We are seeking a senior Network and System Administration expert to architect and maintain our hybrid IT infrastructure. Requirements include hands-on experience with Microsoft 365, Hyper-V, active directory domain controller, VPN tunnels, and Cisco / Fortinet firewall configuration.",
+        skills: ["Networking", "System Administration", "Active Directory", "Microsoft 365", "Firewall"],
         budget: "$45 - $75 / hr",
         currency: "USD",
         hourlyOrFixed: "hourly",
@@ -128,10 +128,10 @@ export class UpworkProvider {
         clientReviews: 45,
         clientSpending: "$100k+",
         location: "Canada",
-        proposalCount: 8,
+        proposalCount: 5,
         urgency: "medium",
         source: "Upwork",
-        projectUrl: "https://www.upwork.com/jobs/senior-typescript-nextjs-developer",
+        projectUrl: "https://www.upwork.com/jobs/senior-network-system-administrator",
         scrapeTimestamp: new Date().toISOString()
       }
     ];

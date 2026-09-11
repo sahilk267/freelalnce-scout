@@ -30,9 +30,9 @@ export class GeminiModelProvider implements IModelProvider {
       const client = this.getClient();
       const systemInstruction = request.systemInstruction || "You are an AI Agent inside Aziz OS.";
 
-      // Call the modern Google GenAI SDK (gemini-2.5-flash standard)
+      // Call the modern Google GenAI SDK (gemini-3.8-flash standard)
       const response = await client.models.generateContent({
-        model: "gemini-2.5-flash",
+        model: "gemini-3.8-flash",
         contents: request.prompt,
         config: {
           systemInstruction,

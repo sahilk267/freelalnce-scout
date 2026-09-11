@@ -7,12 +7,14 @@ coverage/
 .env*
 !.env.example
 
-# Local SQLite Databases
-*.sqlitedb
-*.sqlitedb-shm
-*.sqlitedb-wal
+# Local SQLite Databases & Backups
+*.sqlitedb*
 *.db-shm
 *.db-wal
+backups/*.gz
+backups/*.sqlitedb*
+backups/
+test_backups/
 
 # Firebase Credentials Config
 firebase-applet-config.json
