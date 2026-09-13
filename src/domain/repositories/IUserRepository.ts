@@ -11,6 +11,7 @@ export interface CreateUserData {
   passwordHash: string;
   role: UserRole;
   active?: boolean;
+  isBootstrapAdmin?: boolean;
 }
 
 export interface UpdateUserData {
@@ -95,6 +96,11 @@ export interface IUserRepository {
    * Revoke all active sessions for a user by timestamp.
    */
   revokeAllUserSessions(userId: string): Promise<void>;
+
+  /**
+   * Clear all entries from the token denylist table.
+   */
+  clearTokenDenylist?(): Promise<number>;
 
   /**
    * Optional cleanup/close handle.

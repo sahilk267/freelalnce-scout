@@ -90,14 +90,15 @@ export class AuthService {
     const totalUsers = await this.userRepo.countUsers();
     let assignedRole: UserRole = "recruiter";
     let consumedInvite: UserInvite | null = null;
+    const isBootstrapAdmin = totalUsers === 0;
 
-    if (totalUsers === 0) {
+    if (isBootstrapAdmin) {
       // First-user bootstrap: Automatically elevate to admin
       assignedRole = "admin";
     } else {
       // System already has users: Require valid single-use invite
       if (!params.inviteToken || !params.inviteToken.trim()) {
-        throw new Error("Registration is invite-only. A valid invite token is required.");
+        throw new Error("Registration is invite-only. A valid invite token is required. Please ask an existing admin for an invite.");
       }
 
       const inviteToken = params.inviteToken.trim();
@@ -137,7 +138,8 @@ export class AuthService {
       email,
       passwordHash,
       role: assignedRole,
-      active: true
+      active: true,
+      isBootstrapAdmin
     });
 
     const token = this.generateToken(user);
@@ -415,5 +417,18 @@ export class AuthService {
   async isBootstrapAvailable(): Promise<boolean> {
     const count = await this.userRepo.countUsers();
     return count === 0;
+  }
+
+  /**
+   * Incident remediation / Security rotation:
+   * Invalidates all active sessions across all users by bumping their sessionsRevokedAt to current time,
+   * reusing the repository revokeAllUserSessions mechanism.
+   */
+  async invalidateAllExistingSessions(): Promise<number> {
+    const allUsers = await this.userRepo.listUsers();
+    for (const user of allUsers) {
+      await this.userRepo.revokeAllUserSessions(user.id);
+    }
+    return allUsers.length;
   }
 }

@@ -1,0 +1,7 @@
+{
+  "migration": "security_secret_rotation_2026_09",
+  "appliedAt": "2026-09-13T12:52:54.526Z",
+  "usersRevoked": 1,
+  "denylistCleared": 1,
+  "description": "One-time security migration clearing token denylist and invalidating pre-rotation user sessions."
+}

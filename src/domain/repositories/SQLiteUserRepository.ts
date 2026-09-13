@@ -64,7 +64,8 @@ export class SQLiteUserRepository implements IUserRepository {
         active INTEGER NOT NULL DEFAULT 1,
         created_at TEXT NOT NULL,
         last_login_at TEXT,
-        sessions_revoked_at TEXT
+        sessions_revoked_at TEXT,
+        is_bootstrap_admin INTEGER NOT NULL DEFAULT 0
       );
 
       CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
@@ -92,6 +93,23 @@ export class SQLiteUserRepository implements IUserRepository {
 
       CREATE INDEX IF NOT EXISTS idx_token_denylist_exp ON token_denylist(expires_at);
     `);
+
+    // Ensure is_bootstrap_admin column exists on preexisting database files before index creation
+    const columns = this.db.prepare("PRAGMA table_info(users)").all() as Array<{ name: string }>;
+    const hasBootstrapAdminCol = columns.some(c => c.name === "is_bootstrap_admin");
+    if (!hasBootstrapAdminCol) {
+      try {
+        this.db.exec("ALTER TABLE users ADD COLUMN is_bootstrap_admin INTEGER NOT NULL DEFAULT 0");
+      } catch (err: any) {
+        console.warn("[SQLiteUserRepository] Could not add is_bootstrap_admin column:", err.message);
+      }
+    }
+
+    try {
+      this.db.exec("CREATE UNIQUE INDEX IF NOT EXISTS idx_users_bootstrap_admin ON users(is_bootstrap_admin) WHERE is_bootstrap_admin = 1");
+    } catch (err: any) {
+      console.warn("[SQLiteUserRepository] Could not create idx_users_bootstrap_admin:", err.message);
+    }
   }
 
   private mapRowToUser(row: any): User {
@@ -145,12 +163,37 @@ export class SQLiteUserRepository implements IUserRepository {
     const createdAt = new Date().toISOString();
     const active = data.active !== undefined ? (data.active ? 1 : 0) : 1;
 
+    const isBootstrap = data.isBootstrapAdmin ? 1 : 0;
+
     const stmt = this.db.prepare(`
-      INSERT INTO users (id, email, password_hash, role, active, created_at)
-      VALUES (?, ?, ?, ?, ?, ?)
+      INSERT INTO users (id, email, password_hash, role, active, created_at, is_bootstrap_admin)
+      VALUES (?, ?, ?, ?, ?, ?, ?)
     `);
 
-    stmt.run(id, normalized, data.passwordHash, data.role, active, createdAt);
+    if (data.isBootstrapAdmin) {
+      // Atomic check-and-insert transaction:
+      // Verifies no users exist AND attempts insert with is_bootstrap_admin = 1.
+      // If any user exists, or if another bootstrap insert committed concurrently,
+      // the transaction or unique index aborts the insert.
+      const atomicBootstrap = this.db.transaction(() => {
+        const countRow = this.db.prepare("SELECT COUNT(*) as count FROM users").get() as { count: number };
+        if (countRow.count > 0) {
+          throw new Error("First admin has already been registered. Registration is now invite-only. A valid invite token is required. Please ask an existing admin for an invite.");
+        }
+        stmt.run(id, normalized, data.passwordHash, data.role, active, createdAt, 1);
+      });
+
+      try {
+        atomicBootstrap();
+      } catch (err: any) {
+        if (err.message && (err.message.includes("UNIQUE constraint failed") || err.message.includes("First admin"))) {
+          throw new Error("First admin has already been registered. Registration is now invite-only. A valid invite token is required. Please ask an existing admin for an invite.");
+        }
+        throw err;
+      }
+    } else {
+      stmt.run(id, normalized, data.passwordHash, data.role, active, createdAt, 0);
+    }
 
     return {
       id,
@@ -296,6 +339,36 @@ export class SQLiteUserRepository implements IUserRepository {
     const nowIso = new Date().toISOString();
     const stmt = this.db.prepare("UPDATE users SET sessions_revoked_at = ? WHERE id = ?");
     stmt.run(nowIso, userId);
+  }
+
+  async clearTokenDenylist(): Promise<number> {
+    const stmt = this.db.prepare("DELETE FROM token_denylist");
+    const result = stmt.run();
+    return result.changes;
+  }
+
+  isMigrationApplied(name: string): boolean {
+    this.db.exec(`
+      CREATE TABLE IF NOT EXISTS system_migrations (
+        name TEXT PRIMARY KEY,
+        applied_at TEXT NOT NULL
+      );
+    `);
+    const row = this.db.prepare("SELECT name FROM system_migrations WHERE name = ? LIMIT 1").get(name);
+    return Boolean(row);
+  }
+
+  markMigrationApplied(name: string): void {
+    this.db.exec(`
+      CREATE TABLE IF NOT EXISTS system_migrations (
+        name TEXT PRIMARY KEY,
+        applied_at TEXT NOT NULL
+      );
+    `);
+    this.db.prepare("INSERT OR REPLACE INTO system_migrations (name, applied_at) VALUES (?, ?)").run(
+      name,
+      new Date().toISOString()
+    );
   }
 
   close(): void {

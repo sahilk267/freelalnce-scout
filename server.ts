@@ -12,6 +12,7 @@ import dotenv from "dotenv";
 import nodemailer from "nodemailer";
 import { google } from "googleapis";
 import rateLimit from "express-rate-limit";
+import Razorpay from "razorpay";
 import { createServer as createViteServer } from "vite";
 import { ModelRouter } from "./src/domain/agent/ModelRouter";
 import { IAIClientProvider } from "./src/domain/providers/IAIClientProvider";
@@ -84,9 +85,28 @@ import { NotificationService } from "./src/domain/services/NotificationService";
 import { TelegramBotService } from "./src/domain/services/TelegramBotService";
 import { CompanyProfileService, SUPPORTED_FREELANCE_CATEGORIES } from "./src/domain/services/CompanyProfileService";
 import { FreelanceHealthMonitor } from "./src/domain/providers/freelance/FreelanceHealthMonitor";
+import { runSecuritySecretRotationMigration } from "./src/domain/services/SecurityRotationMigration";
 
 // Load environment variables
 dotenv.config();
+
+/**
+ * Strict fail-closed validation for JWT_SECRET (Zero-Trust Security Enforcement).
+ * Refuses boot if missing or shorter than 32 characters. Never falls back or auto-generates.
+ */
+export function validateJwtSecret(secret: string | undefined): string {
+  if (!secret || secret.trim().length < 32) {
+    console.error("[FATAL] JWT_SECRET is missing or too short (must be >= 32 chars). Refusing to boot.");
+    process.exit(1);
+  }
+  return secret.trim();
+}
+
+if (!process.env.JWT_SECRET || process.env.JWT_SECRET.trim().length < 32) {
+  console.error("[FATAL] JWT_SECRET is missing or too short (must be >= 32 chars). Refusing to boot.");
+  process.exit(1);
+}
+const activeJwtSecret = process.env.JWT_SECRET.trim();
 
 const app = express();
 
@@ -235,7 +255,27 @@ if (statePersistenceTimer && typeof statePersistenceTimer.unref === "function") 
 }
 const PORT = 3000;
 
-app.use(express.json());
+// Helper to instantiate Razorpay client lazily from env credentials
+export function getRazorpayClient(): Razorpay | null {
+  const keyId = process.env.RAZORPAY_KEY_ID;
+  const keySecret = process.env.RAZORPAY_KEY_SECRET;
+  if (!keyId || !keySecret) {
+    return null;
+  }
+  return new Razorpay({
+    key_id: keyId,
+    key_secret: keySecret
+  });
+}
+
+// Razorpay webhook requires raw body for HMAC-SHA256 signature verification
+app.use("/api/payments/webhook", express.raw({ type: "*/*" }));
+app.use((req, res, next) => {
+  if (req.originalUrl.startsWith("/api/payments/webhook")) {
+    return next();
+  }
+  return express.json()(req, res, next);
+});
 
 // Session & CSRF Cookie Constants and Helpers
 export const SESSION_COOKIE_NAME = "aziz_session";
@@ -400,42 +440,14 @@ function hasValidAdminApiKey(req: express.Request): boolean {
   }
 }
 
-// Resolve or persist secure JWT secret (Zero-Trust Fail-Closed Boot Policy)
-const getOrCreateJwtSecret = (): string => {
-  if (process.env.JWT_SECRET && process.env.JWT_SECRET !== "YOUR_JWT_SECRET_HERE" && process.env.JWT_SECRET.trim().length > 0) {
-    return process.env.JWT_SECRET.trim();
-  }
-  const secretFilePath = path.join(process.cwd(), "data", ".jwt_secret");
-  try {
-    if (fs.existsSync(secretFilePath)) {
-      const existing = fs.readFileSync(secretFilePath, "utf-8").trim();
-      if (existing) {
-        process.env.JWT_SECRET = existing;
-        return existing;
-      }
-    }
-    const generated = "jwt_sec_" + crypto.randomBytes(32).toString("hex");
-    const dir = path.dirname(secretFilePath);
-    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-    fs.writeFileSync(secretFilePath, generated, { encoding: "utf-8", mode: 0o600 });
-    process.env.JWT_SECRET = generated;
-    return generated;
-  } catch (err: any) {
-    const fallback = "jwt_sec_9b9bf8ca_fail_closed_vault_secret";
-    process.env.JWT_SECRET = fallback;
-    return fallback;
-  }
-};
-
-const activeJwtSecret = getOrCreateJwtSecret();
-if (!activeJwtSecret || activeJwtSecret.trim().length === 0) {
-  console.error("[CRITICAL] Server boot refused: Missing JWT_SECRET (Zero-Trust fail-closed constraint violated).");
-  process.exit(1);
-}
-
 // User Repository & RBAC Auth Service instance
 const userRepo = DIContainer.get<IUserRepository>("IUserRepository");
 export const authService = new AuthService(userRepo, activeJwtSecret);
+
+// One-time startup security migration: neutralizes legacy/compromised sessions
+runSecuritySecretRotationMigration(authService, userRepo).catch((err: any) => {
+  console.error("[SECURITY_MIGRATION] Warning: Startup rotation migration encountered error:", err?.message || err);
+});
 
 // Brute force protection for /api/auth/login (5 failed attempts per 15 minutes per IP+email combo)
 interface FailedLoginAttempt {
@@ -975,8 +987,9 @@ export interface RouteExemptionRule {
    * Authentication mechanism enforced at the handler level:
    * - "public": Open route (health probes, auth status, login, registration)
    * - "session-token": Candidate self-service portal route; strictly authenticates via X-Session-Token header
+   * - "webhook-signature": Third-party webhook callback strictly authenticated via cryptographic HMAC signature
    */
-  authMethod: "public" | "session-token";
+  authMethod: "public" | "session-token" | "webhook-signature";
   /** Path and method matcher function (path is relative to /api, e.g. "/health" or "/scheduling/select") */
   matches: (path: string, method?: string) => boolean;
 }
@@ -1044,6 +1057,16 @@ export const EXEMPTED_API_ROUTES: RouteExemptionRule[] = [
     description: "Public Pricing Tiers (for candidate order checkout)",
     authMethod: "public",
     matches: (path, method) => (path === "/pricing" || path.startsWith("/pricing/")) && path !== "/pricing/audit" && method === "GET"
+  },
+  {
+    description: "Google Calendar OAuth Callback (Browser redirect from Google authorization)",
+    authMethod: "public",
+    matches: (path) => path === "/calendar/oauth/callback"
+  },
+  {
+    description: "Razorpay Payment Webhook (Automated signature verified callback)",
+    authMethod: "webhook-signature",
+    matches: (path) => path === "/payments/webhook"
   }
 ];
 
@@ -2818,10 +2841,120 @@ app.get("/api/orders/:id", apiRateLimiter, apiKeyAuthMiddleware, async (req, res
   }
 });
 
-// 4. Payment Intent Creation (Dynamic pricing integration)
+// 4. Razorpay Payment Intent Creation (Consolidated dynamic pricing integration)
+app.post("/api/orders/:id/create-payment-intent", apiRateLimiter, apiKeyAuthMiddleware, async (req, res) => {
+  try {
+    const keyId = process.env.RAZORPAY_KEY_ID;
+    const keySecret = process.env.RAZORPAY_KEY_SECRET;
+    if (!keyId || !keySecret) {
+      return res.status(501).json({
+        error: "Payment gateway not configured. RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET must be configured."
+      });
+    }
+
+    const orderId = req.params.id === "create-payment-intent" ? req.body?.orderId : req.params.id;
+    if (!orderId) {
+      return res.status(400).json({ error: "Missing required field: orderId is required." });
+    }
+
+    const orderRepo = DIContainer.get<IOrderRepository>("IOrderRepository");
+    const pricingService = DIContainer.get<PricingService>("PricingService");
+    const order = await orderRepo.getById(orderId);
+    if (!order) {
+      return res.status(404).json({ error: "Resume order not found." });
+    }
+
+    if (order.paymentStatus === "paid") {
+      return res.status(400).json({ error: "Order is already paid." });
+    }
+
+    // Preserve locked price snapshot on existing order; only query PricingService if no snapshot exists
+    let amountMinorUnits: number;
+    let currency: string;
+
+    if (order.priceMinorUnits && order.priceMinorUnits > 0) {
+      amountMinorUnits = order.priceMinorUnits;
+      currency = order.currency || "INR";
+    } else if (order.priceAtOrderTime && order.priceAtOrderTime > 0) {
+      amountMinorUnits = Math.round(order.priceAtOrderTime * 100);
+      currency = order.currency || "INR";
+      order.priceMinorUnits = amountMinorUnits;
+    } else {
+      const tierConfig = await pricingService.getTier(order.tier);
+      if (!tierConfig) {
+        return res.status(400).json({ error: `Invalid tier specified: '${order.tier}'.` });
+      }
+      if (!tierConfig.isActive) {
+        return res.status(400).json({ error: `Tier '${order.tier}' is currently deactivated and not purchasable.` });
+      }
+      amountMinorUnits = tierConfig.priceMinorUnits;
+      currency = tierConfig.currency || "INR";
+      order.priceMinorUnits = amountMinorUnits;
+      order.priceAtOrderTime = Math.round(amountMinorUnits / 100);
+      order.priceINR = Math.round(amountMinorUnits / 100);
+      order.currency = currency;
+    }
+
+    const razorpay = getRazorpayClient()!;
+
+    // Re-entrancy check: reuse existing unpaid Razorpay order if still valid
+    if (order.razorpayOrderId) {
+      try {
+        const existingRzpOrder = await razorpay.orders.fetch(order.razorpayOrderId);
+        if (existingRzpOrder && (existingRzpOrder.status === "created" || existingRzpOrder.status === "attempted")) {
+          if (existingRzpOrder.amount === amountMinorUnits) {
+            await orderRepo.save(order);
+            return res.json({
+              razorpayOrderId: existingRzpOrder.id,
+              amountMinorUnits,
+              currency,
+              keyId,
+              amount: amountMinorUnits / 100,
+              orderId: order.id,
+              paymentStatus: order.paymentStatus
+            });
+          }
+        }
+      } catch (fetchErr) {
+        console.warn(`[Razorpay] Could not fetch existing order ${order.razorpayOrderId}, creating new order:`, fetchErr);
+      }
+    }
+
+    // Create real Razorpay order via SDK
+    const rzpOrder = await razorpay.orders.create({
+      amount: amountMinorUnits,
+      currency,
+      receipt: `order_${order.id}`.slice(0, 40),
+      notes: {
+        orderId: order.id,
+        candidateId: order.candidateId,
+        tier: order.tier
+      }
+    });
+
+    order.razorpayOrderId = rzpOrder.id;
+    order.updatedAt = new Date().toISOString();
+    await orderRepo.save(order);
+
+    return res.json({
+      razorpayOrderId: rzpOrder.id,
+      amountMinorUnits,
+      currency,
+      keyId,
+      amount: amountMinorUnits / 100,
+      orderId: order.id,
+      paymentStatus: order.paymentStatus
+    });
+  } catch (error: any) {
+    console.error("[Razorpay create-payment-intent error]:", error);
+    res.status(500).json({ error: error?.message || String(error) });
+  }
+});
+
+// Backward-compatible payment intent route (supporting pricing verification & tier preview)
 app.post("/api/orders/create-payment-intent", apiRateLimiter, apiKeyAuthMiddleware, async (req, res) => {
   try {
-    const { tier, orderId } = req.body;
+    const { orderId, tier } = req.body || {};
     const pricingService = DIContainer.get<PricingService>("PricingService");
     const orderRepo = DIContainer.get<IOrderRepository>("IOrderRepository");
 
@@ -2830,98 +2963,57 @@ app.post("/api/orders/create-payment-intent", apiRateLimiter, apiKeyAuthMiddlewa
       if (!order) {
         return res.status(404).json({ error: "Resume order not found." });
       }
-      const amountMinorUnits = order.priceMinorUnits ?? ((order.priceAtOrderTime ?? order.priceINR) * 100);
+      const amount = order.priceAtOrderTime ?? (order.priceMinorUnits ? Math.round(order.priceMinorUnits / 100) : 800);
+      const amountMinorUnits = order.priceMinorUnits || amount * 100;
+      const currency = order.currency || "INR";
+
       return res.json({
-        clientSecret: `pi_${order.id}_secret_${Date.now()}`,
-        paymentIntentId: `pi_${order.id}`,
-        amount: order.priceAtOrderTime ?? order.priceINR,
+        clientSecret: `pi_sim_${order.id}_secret`,
+        paymentIntentId: `pi_sim_${order.id}`,
+        amount,
         amountMinorUnits,
-        currency: order.currency || "INR",
+        currency,
         tier: order.tier,
-        orderId: order.id,
-        paymentStatus: order.paymentStatus
+        orderId: order.id
       });
     }
 
-    if (!tier) {
-      return res.status(400).json({ error: "Missing required field: 'tier' or 'orderId' is required." });
+    if (tier) {
+      const tierConfig = await pricingService.getTier(tier);
+      if (!tierConfig) {
+        return res.status(400).json({ error: `Invalid tier: ${tier}` });
+      }
+      return res.json({
+        clientSecret: `pi_sim_preview_secret`,
+        paymentIntentId: `pi_sim_preview`,
+        amount: Math.round(tierConfig.priceMinorUnits / 100),
+        amountMinorUnits: tierConfig.priceMinorUnits,
+        currency: tierConfig.currency || "INR",
+        tier: tierConfig.tierId
+      });
     }
 
-    const tierConfig = await pricingService.getTier(tier);
-    if (!tierConfig) {
-      return res.status(400).json({ error: `Invalid tier specified: '${tier}'.` });
-    }
-    if (!tierConfig.isActive) {
-      return res.status(400).json({ error: `Tier '${tier}' is currently deactivated and not purchasable.` });
-    }
-
-    const amountMinorUnits = tierConfig.priceMinorUnits;
-    const amount = amountMinorUnits / 100;
-    const currency = tierConfig.currency;
-
-    res.json({
-      clientSecret: `pi_${tierConfig.tierId}_secret_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`,
-      paymentIntentId: `pi_${tierConfig.tierId}_${Date.now()}`,
-      amount,
-      amountMinorUnits,
-      currency,
-      tier: tierConfig.tierId
-    });
+    return res.status(400).json({ error: "Either orderId or tier must be provided in request body." });
   } catch (error: any) {
     res.status(500).json({ error: error?.message || String(error) });
   }
 });
 
-app.post("/api/orders/:id/create-payment-intent", apiRateLimiter, apiKeyAuthMiddleware, async (req, res) => {
-  try {
-    const orderRepo = DIContainer.get<IOrderRepository>("IOrderRepository");
-    const order = await orderRepo.getById(req.params.id);
-    if (!order) {
-      return res.status(404).json({ error: "Resume order not found." });
-    }
-
-    const amountMinorUnits = order.priceMinorUnits ?? ((order.priceAtOrderTime ?? order.priceINR) * 100);
-    res.json({
-      clientSecret: `pi_${order.id}_secret_${Date.now()}`,
-      paymentIntentId: `pi_${order.id}`,
-      amount: order.priceAtOrderTime ?? order.priceINR,
-      amountMinorUnits,
-      currency: order.currency || "INR",
-      tier: order.tier,
-      orderId: order.id,
-      paymentStatus: order.paymentStatus
-    });
-  } catch (error: any) {
-    res.status(500).json({ error: error?.message || String(error) });
-  }
-});
-
-app.post("/api/orders/:id/payment-intent", apiRateLimiter, apiKeyAuthMiddleware, async (req, res) => {
-  try {
-    const orderRepo = DIContainer.get<IOrderRepository>("IOrderRepository");
-    const order = await orderRepo.getById(req.params.id);
-    if (!order) {
-      return res.status(404).json({ error: "Resume order not found." });
-    }
-
-    const amountMinorUnits = order.priceMinorUnits ?? ((order.priceAtOrderTime ?? order.priceINR) * 100);
-    res.json({
-      clientSecret: `pi_${order.id}_secret_${Date.now()}`,
-      paymentIntentId: `pi_${order.id}`,
-      amount: order.priceAtOrderTime ?? order.priceINR,
-      amountMinorUnits,
-      currency: order.currency || "INR",
-      tier: order.tier,
-      orderId: order.id,
-      paymentStatus: order.paymentStatus
-    });
-  } catch (error: any) {
-    res.status(500).json({ error: error?.message || String(error) });
-  }
-});
-
-// 5. Payment Simulation Endpoint (Flips paymentStatus to "paid" or "failed" if simulateFailure is true)
+// 5. Payment Simulation Endpoint (Strictly guarded: forbidden in production or when ALLOW_PAYMENT_SIMULATION != "true")
 app.post("/api/orders/:id/pay-simulate", apiRateLimiter, apiKeyAuthMiddleware, async (req, res) => {
+  if (process.env.NODE_ENV === "production") {
+    return res.status(403).json({
+      error: "Payment simulation is strictly forbidden in production environments. Use Razorpay payment gateway."
+    });
+  }
+  if (process.env.ALLOW_PAYMENT_SIMULATION !== "true") {
+    return res.status(403).json({
+      error: "Payment simulation is disabled. Set ALLOW_PAYMENT_SIMULATION=true in non-production environments to enable."
+    });
+  }
+
+  console.warn(`[SECURITY WARNING] Payment simulation invoked for order [${req.params.id}] by IP [${req.ip}]. This bypasses real payment processing and must only be used in local development testing.`);
+
   try {
     const orderRepo = DIContainer.get<IOrderRepository>("IOrderRepository");
     const order = await orderRepo.getById(req.params.id);
@@ -2953,6 +3045,174 @@ app.post("/api/orders/:id/pay-simulate", apiRateLimiter, apiKeyAuthMiddleware, a
       order: updated
     });
   } catch (error: any) {
+    res.status(500).json({ error: error?.message || String(error) });
+  }
+});
+
+// 6. Razorpay Webhook Endpoint (HMAC-SHA256 signature verification)
+app.post("/api/payments/webhook", async (req, res) => {
+  const webhookSecret = process.env.RAZORPAY_WEBHOOK_SECRET;
+  if (!webhookSecret) {
+    return res.status(501).json({
+      error: "Payment gateway not configured. RAZORPAY_WEBHOOK_SECRET must be configured."
+    });
+  }
+
+  const rawBody = Buffer.isBuffer(req.body)
+    ? req.body
+    : Buffer.from(typeof req.body === "string" ? req.body : JSON.stringify(req.body || {}));
+
+  const signatureHeader = req.headers["x-razorpay-signature"] as string | undefined;
+  if (!signatureHeader) {
+    return res.status(400).json({ error: "Missing X-Razorpay-Signature header." });
+  }
+
+  // Reject with 400 immediately on signature mismatch, BEFORE parsing JSON or touching state
+  try {
+    const expectedSig = crypto.createHmac("sha256", webhookSecret).update(rawBody).digest("hex");
+    const expectedHash = crypto.createHash("sha256").update(expectedSig).digest();
+    const providedHash = crypto.createHash("sha256").update(signatureHeader).digest();
+
+    if (!crypto.timingSafeEqual(expectedHash, providedHash)) {
+      console.warn(`[RazorpayWebhook] Signature mismatch.`);
+      return res.status(400).json({ error: "Invalid webhook signature." });
+    }
+  } catch (sigErr) {
+    console.warn(`[RazorpayWebhook] Signature verification error:`, sigErr);
+    return res.status(400).json({ error: "Invalid webhook signature." });
+  }
+
+  let eventPayload: any;
+  try {
+    eventPayload = JSON.parse(rawBody.toString("utf8"));
+  } catch (err) {
+    return res.status(400).json({ error: "Invalid JSON payload." });
+  }
+
+  const eventId = eventPayload.id || eventPayload.event_id || (eventPayload.payload?.payment?.entity?.id ? `${eventPayload.event}_${eventPayload.payload.payment.entity.id}` : undefined);
+  const orderRepo = DIContainer.get<IOrderRepository>("IOrderRepository");
+
+  // Idempotency: skip re-processing any event id already seen
+  if (eventId && (await orderRepo.hasProcessedEvent(eventId))) {
+    console.log(`[RazorpayWebhook] Duplicate webhook event [${eventId}] already processed, skipping.`);
+    return res.status(200).json({ status: "already_processed", eventId });
+  }
+
+  const eventType = eventPayload.event;
+  const paymentEntity = eventPayload.payload?.payment?.entity;
+
+  if (eventType === "payment.captured") {
+    const razorpayOrderId = paymentEntity?.order_id;
+    const razorpayPaymentId = paymentEntity?.id;
+    const capturedAmount = paymentEntity?.amount; // in paise
+
+    if (!razorpayOrderId) {
+      return res.status(400).json({ error: "Missing order_id in payment.captured payload." });
+    }
+
+    const order = await orderRepo.getByRazorpayOrderId(razorpayOrderId);
+    if (!order) {
+      console.warn(`[RazorpayWebhook] No matching order found for razorpayOrderId: ${razorpayOrderId}`);
+      return res.status(404).json({ error: `Order not found for razorpayOrderId: ${razorpayOrderId}` });
+    }
+
+    // Idempotency: if already paid, log "duplicate webhook, ignoring" and return 200 without re-processing
+    if (order.paymentStatus === "paid") {
+      console.log(`[RazorpayWebhook] duplicate webhook, ignoring for order [${order.id}] (already paid).`);
+      if (eventId) await orderRepo.recordProcessedEvent(eventId, eventType);
+      return res.status(200).json({ status: "duplicate_webhook_ignored", orderId: order.id });
+    }
+
+    const expectedAmountMinorUnits = order.priceMinorUnits ?? ((order.priceAtOrderTime ?? order.priceINR) * 100);
+
+    if (capturedAmount !== expectedAmountMinorUnits) {
+      console.error(
+        `[RazorpayWebhook] DISCREPANCY DETECTED for order [${order.id}]: captured=${capturedAmount} paise, expected=${expectedAmountMinorUnits} paise.`
+      );
+      order.paymentStatus = "needs_human_review";
+      order.razorpayPaymentId = razorpayPaymentId;
+      order.paymentDiscrepancy = `Captured ${capturedAmount} paise != Expected ${expectedAmountMinorUnits} paise`;
+      order.updatedAt = new Date().toISOString();
+      await orderRepo.save(order);
+      if (eventId) await orderRepo.recordProcessedEvent(eventId, eventType);
+      return res.status(200).json({ status: "needs_human_review", discrepancy: order.paymentDiscrepancy });
+    }
+
+    order.paymentStatus = "paid";
+    order.razorpayPaymentId = razorpayPaymentId;
+    order.updatedAt = new Date().toISOString();
+    await orderRepo.save(order);
+    if (eventId) await orderRepo.recordProcessedEvent(eventId, eventType);
+    return res.status(200).json({ status: "paid", orderId: order.id });
+  }
+
+  if (eventType === "payment.failed") {
+    const razorpayOrderId = paymentEntity?.order_id;
+    const failureReason = paymentEntity?.error_description || paymentEntity?.error_reason || "Payment failed";
+
+    if (razorpayOrderId) {
+      const order = await orderRepo.getByRazorpayOrderId(razorpayOrderId);
+      if (order && order.paymentStatus !== "paid") {
+        order.paymentStatus = "failed";
+        order.paymentFailureReason = failureReason;
+        order.razorpayPaymentId = paymentEntity?.id;
+        order.updatedAt = new Date().toISOString();
+        await orderRepo.save(order);
+      }
+    }
+    if (eventId) await orderRepo.recordProcessedEvent(eventId, eventType);
+    return res.status(200).json({ status: "failed_recorded" });
+  }
+
+  if (eventId) {
+    await orderRepo.recordProcessedEvent(eventId, eventType || "unknown");
+  }
+  return res.status(200).json({ status: "ok" });
+});
+
+// 7. Admin Refund Endpoint (Gated strictly by requireAdmin)
+app.post("/api/orders/:id/refund", apiRateLimiter, requireAdmin, async (req, res) => {
+  try {
+    const orderRepo = DIContainer.get<IOrderRepository>("IOrderRepository");
+    const order = await orderRepo.getById(req.params.id);
+    if (!order) {
+      return res.status(404).json({ error: "Resume order not found." });
+    }
+
+    if (order.paymentStatus !== "paid") {
+      return res.status(400).json({ error: `Cannot refund order with payment status '${order.paymentStatus}'. Order must be 'paid'.` });
+    }
+
+    if (!order.razorpayPaymentId) {
+      return res.status(400).json({ error: "Cannot refund order: no Razorpay payment ID recorded." });
+    }
+
+    const razorpay = getRazorpayClient();
+    if (!razorpay) {
+      return res.status(501).json({
+        error: "Payment gateway not configured. RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET must be configured."
+      });
+    }
+
+    const refund = await razorpay.payments.refund(order.razorpayPaymentId, {
+      notes: {
+        orderId: order.id,
+        reason: req.body?.reason || "Admin requested refund"
+      }
+    });
+
+    order.paymentStatus = "refunded";
+    order.refundId = refund.id;
+    order.updatedAt = new Date().toISOString();
+    const updated = await orderRepo.save(order);
+
+    res.json({
+      message: "Refund processed successfully.",
+      refundId: refund.id,
+      order: updated
+    });
+  } catch (error: any) {
+    console.error("[Razorpay refund error]:", error);
     res.status(500).json({ error: error?.message || String(error) });
   }
 });
@@ -3954,6 +4214,17 @@ app.get("/api/calendar/oauth/callback", async (req, res) => {
 
     return res.send(renderResult(true, `Successfully authorized Google Calendar for interviewer [${interviewerId}].`, interviewerId));
   } catch (err: any) {
+    if (err.message && err.message.includes("CALENDAR_TOKEN_ENCRYPTION_KEY")) {
+      console.error(
+        "[CalendarOAuthCallback] [SECURITY CONFIG ERROR] CALENDAR_TOKEN_ENCRYPTION_KEY is unset or too short (must be >= 32 chars). Operator must configure this environment variable before Google Calendar accounts can be connected."
+      );
+      return res.status(500).send(
+        renderResult(
+          false,
+          "Calendar configuration error: CALENDAR_TOKEN_ENCRYPTION_KEY is unset or too short (>= 32 chars required). Please configure this secret in the server environment."
+        )
+      );
+    }
     console.error("[CalendarOAuthCallback] Token exchange error:", err);
     return res.status(500).send(renderResult(false, `Token exchange failed: ${err.message}`));
   }

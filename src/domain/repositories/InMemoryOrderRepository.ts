@@ -8,6 +8,7 @@ import { IOrderRepository } from "./IOrderRepository";
 
 export class InMemoryOrderRepository implements IOrderRepository {
   private orders: Map<string, ResumeOrder> = new Map();
+  private processedEvents: Set<string> = new Set();
 
   async getAll(): Promise<ResumeOrder[]> {
     return Array.from(this.orders.values());
@@ -15,6 +16,15 @@ export class InMemoryOrderRepository implements IOrderRepository {
 
   async getById(id: string): Promise<ResumeOrder | null> {
     return this.orders.get(id) || null;
+  }
+
+  async getByRazorpayOrderId(razorpayOrderId: string): Promise<ResumeOrder | null> {
+    for (const order of this.orders.values()) {
+      if (order.razorpayOrderId === razorpayOrderId) {
+        return order;
+      }
+    }
+    return null;
   }
 
   async getByCandidateId(candidateId: string): Promise<ResumeOrder[]> {
@@ -35,5 +45,13 @@ export class InMemoryOrderRepository implements IOrderRepository {
 
   async delete(id: string): Promise<void> {
     this.orders.delete(id);
+  }
+
+  async hasProcessedEvent(eventId: string): Promise<boolean> {
+    return this.processedEvents.has(eventId);
+  }
+
+  async recordProcessedEvent(eventId: string, _eventType: string): Promise<void> {
+    this.processedEvents.add(eventId);
   }
 }

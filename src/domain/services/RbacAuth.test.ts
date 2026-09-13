@@ -8,7 +8,13 @@ import request from "supertest";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import { app, authService } from "../../../server";
-import { DIContainer, IUserRepository } from "../index";
+import { 
+  DIContainer, 
+  IUserRepository, 
+  SQLiteUserRepository, 
+  InMemoryUserRepository, 
+  AuthService 
+} from "../index";
 
 describe("Role-Based Access Control (RBAC) System Tests", () => {
   let userRepo: IUserRepository;
@@ -56,6 +62,42 @@ describe("Role-Based Access Control (RBAC) System Tests", () => {
         expect(regFail.status).toBe(400);
         expect(regFail.body.error).toMatch(/invite token is required/i);
       }
+    });
+
+    it("handles concurrent first-admin registration race condition: exactly one becomes admin and the other receives an invite error", async () => {
+      // Create a fresh isolated SQLite user repository with totalUsers = 0
+      const isolatedRepo = new SQLiteUserRepository(":memory:");
+      const testAuthService = new AuthService(isolatedRepo, "test-secret-at-least-32-chars-long-bootstrap-race");
+
+      const initialCount = await isolatedRepo.countUsers();
+      expect(initialCount).toBe(0);
+
+      // Fire two concurrent registration requests at the exact same instant
+      const [resA, resB] = await Promise.allSettled([
+        testAuthService.register({ email: "racer_alpha@kernel.local", password: testPassword }),
+        testAuthService.register({ email: "racer_beta@kernel.local", password: testPassword })
+      ]);
+
+      const fulfilled = [resA, resB].filter(r => r.status === "fulfilled") as PromiseFulfilledResult<any>[];
+      const rejected = [resA, resB].filter(r => r.status === "rejected") as PromiseRejectedResult[];
+
+      // Exactly one succeeds as admin
+      expect(fulfilled).toHaveLength(1);
+      expect(rejected).toHaveLength(1);
+
+      expect(fulfilled[0].value.user.role).toBe("admin");
+      expect(["racer_alpha@kernel.local", "racer_beta@kernel.local"]).toContain(fulfilled[0].value.user.email);
+
+      // The losing request receives a clear error directing them to ask an existing admin for an invite
+      expect(rejected[0].reason.message).toMatch(/invite/i);
+      expect(rejected[0].reason.message).toMatch(/admin/i);
+
+      // Database state reflects strictly 1 user who is an admin
+      const allUsers = await isolatedRepo.listUsers();
+      expect(allUsers).toHaveLength(1);
+      expect(allUsers[0].role).toBe("admin");
+
+      isolatedRepo.close();
     });
 
     it("issues single-use invite tokens and rejects reuse", async () => {
@@ -127,7 +169,7 @@ describe("Role-Based Access Control (RBAC) System Tests", () => {
     });
 
     it("returns 401 for expired token", async () => {
-      const secret = process.env.JWT_SECRET || "jwt_sec_9b9bf8ca_fail_closed_vault_secret";
+      const secret = process.env.JWT_SECRET!;
       // Construct expired token (-1 hour)
       const expiredToken = jwt.sign(
         {

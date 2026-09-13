@@ -14,7 +14,24 @@ import { InMemorySchedulingRepository } from "../repositories/InMemoryScheduling
 import { SchedulingServiceAgent } from "../services/SchedulingServiceAgent";
 
 describe("Google Calendar Integration & Provider Suite", () => {
+  const TEST_VALID_KEY = "test_secure_calendar_encryption_key_32_bytes_minimum_length";
+
+  beforeEach(() => {
+    process.env.CALENDAR_TOKEN_ENCRYPTION_KEY = TEST_VALID_KEY;
+  });
+
   describe("Token Encryption & Decryption", () => {
+    it("fails closed when CALENDAR_TOKEN_ENCRYPTION_KEY is unset or too short", () => {
+      delete process.env.CALENDAR_TOKEN_ENCRYPTION_KEY;
+      expect(() => encryptRefreshToken("some_token")).toThrow(/CALENDAR_TOKEN_ENCRYPTION_KEY.*missing or too short/);
+
+      process.env.CALENDAR_TOKEN_ENCRYPTION_KEY = "short_key_under_32";
+      expect(() => encryptRefreshToken("some_token")).toThrow(/CALENDAR_TOKEN_ENCRYPTION_KEY.*missing or too short/);
+
+      // Restore
+      process.env.CALENDAR_TOKEN_ENCRYPTION_KEY = TEST_VALID_KEY;
+    });
+
     it("successfully encrypts and decrypts a refresh token using AES-256-GCM", () => {
       const originalToken = "1//04test_google_oauth_refresh_token_xyz_123456789";
       const encrypted = encryptRefreshToken(originalToken);

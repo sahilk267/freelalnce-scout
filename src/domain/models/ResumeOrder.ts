@@ -3,9 +3,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { DEFAULT_PRICING_TIERS } from "./PricingTier";
+
 export type ServiceTier = "basic" | "standard" | "premium";
 
-export type PaymentStatus = "unpaid" | "paid" | "failed" | "refunded";
+export type PaymentStatus = "unpaid" | "paid" | "failed" | "refunded" | "needs_human_review";
 
 export type DeliveryStatus = 
   | "draft" 
@@ -46,6 +48,11 @@ export interface ResumeOrder {
   priceAtOrderTime?: number; // Snapshot of price at the time order was created
   priceMinorUnits?: number; // Snapshot of price in minor units (paise/cents)
   currency?: string; // Currency snapshot (e.g. "INR")
+  razorpayOrderId?: string; // Razorpay Order ID created for checkout
+  razorpayPaymentId?: string; // Razorpay Payment ID captured via webhook
+  paymentFailureReason?: string; // Stored reason when payment.failed event received
+  paymentDiscrepancy?: string; // Recorded amount mismatch details when needs_human_review triggered
+  refundId?: string; // Razorpay refund ID if order is refunded
   maxRevisions: number;
   revisionsUsed: number;
   paymentStatus: PaymentStatus;
@@ -66,17 +73,14 @@ export interface ResumeOrder {
   updatedAt: string;
 }
 
-export function getTierPricing(tier: ServiceTier): { priceINR: number; maxRevisions: number } {
-  switch (tier) {
-    case "basic":
-      return { priceINR: 300, maxRevisions: 1 };
-    case "standard":
-      return { priceINR: 800, maxRevisions: 2 };
-    case "premium":
-      return { priceINR: 1500, maxRevisions: 3 };
-    default:
-      return { priceINR: 300, maxRevisions: 1 };
-  }
+export function getTierPricing(tier: ServiceTier): { priceINR: number; maxRevisions: number; priceMinorUnits: number; currency: string } {
+  const match = DEFAULT_PRICING_TIERS.find((t) => t.tierId === tier) || DEFAULT_PRICING_TIERS[0];
+  return {
+    priceINR: Math.round(match.priceMinorUnits / 100),
+    maxRevisions: match.revisionLimit,
+    priceMinorUnits: match.priceMinorUnits,
+    currency: match.currency
+  };
 }
 
 export function createResumeOrder(data: {

@@ -24,11 +24,11 @@ This document defines the system architecture, component contracts, tool depende
 ### 2. Resume Service Agent & Orders (Feature 2)
 - **Purpose**: Provides AI-driven two-pass grounded resume rewrites with ATS score optimization, strict zero-hallucination verification, and tiered order revision lifecycle management.
 - **PII Sensitivity & Storage**: `originalResumeText` and `rewrittenResumeText` contain sensitive Candidate PII at the same classification level as `Contact` records. SQLite/InMemory tables and API endpoints enforce strict token authentication and rate limiting for all PII access.
-- **Order Lifecycle & Tier Pricing**:
-  - `basic`: ₹300 INR, 1 revision limit.
-  - `standard`: ₹800 INR, 2 revision limit.
-  - `premium`: ₹1500 INR, 3 revision limit.
-  - **Known Simplification**: The Premium tier pricing is intentionally set to a flat ₹1500 INR (within the ₹1500–3000 INR spec range) for simplified single-currency transactional consistency during this stage.
+- **Order Lifecycle & Dynamic Tier Pricing**:
+  - Tiers are managed dynamically in SQLite via `PricingService` with audit logs and in-memory caching.
+  - Baseline default seeded tiers: `basic` (₹300 / 30000 paise, 1 revision), `standard` (₹800 / 80000 paise, 2 revisions), and `premium` (₹1500 / 150000 paise, 3 revisions).
+  - Configurable in the Admin UI under **Dynamic Pricing** without requiring code deployments.
+  - Price snapshots (`priceAtOrderTime`, `priceMinorUnits`, `currency`) are permanently captured at order creation time, preventing retroactive price changes from affecting existing customer orders.
 - **Payment Gate**: Rewrites and revisions require `paymentStatus === "paid"`. Payment simulation is provided via `POST /api/orders/:id/pay-simulate`.
 - **Two-Pass Pipeline & Verification**:
   - Pass 1: Strict fact-grounded rewrite + traceability log mapping rewritten bullets back to original text.
@@ -90,6 +90,30 @@ This document defines the system architecture, component contracts, tool depende
   - State-changing HTTP methods (`POST`, `PUT`, `DELETE`, `PATCH`) validate the client-provided `X-CSRF-Token` against the `csrf_token` cookie, rejecting mismatched/missing tokens with `403 Forbidden`. Safe `GET` requests and Bearer-authenticated service account calls are exempt.
 - **Logout & Token Revocation**:
   - `/api/auth/logout` revokes the token's JTI in the server-side denylist and clears both `aziz_session` and `csrf_token` cookies with `Max-Age=0`.
+
+---
+
+### 7. Dynamic, Configurable Pricing System & Order Snapshotting (Feature 7)
+- **Purpose**: Eliminates hardcoded service tier costs and revision quotas, replacing static literals with a database-backed, administrator-configurable source of truth supporting currency extensibility, instant promotions, and complete audit tracking.
+- **Domain Models & Tables**:
+  - `pricing_tiers`: Stores `tierId` (`basic`, `standard`, `premium`), `displayName`, `priceMinorUnits` (stored in paise to eliminate floating-point rounding bugs), `currency`, `revisionLimit`, `isActive`, `updatedAt`, and `updatedBy`.
+  - `pricing_audit_logs`: Append-only historical ledger capturing `tierId`, `oldValues`, `newValues`, `changedBy`, `changedAt`, and human-entered `reason`.
+- **First-Boot Automatic Seeding**:
+  - Initializes with baseline operational tiers on first boot:
+    - Basic: ₹300 (30,000 paise), 1 revision
+    - Standard: ₹800 (80,000 paise), 2 revisions
+    - Premium: ₹1500 (150,000 paise), 3 revisions
+- **Caching & Validation Architecture**:
+  - `PricingService`: Features an in-memory cache with write-through updates and immediate cache invalidation on edits to guarantee sub-millisecond public tier queries while remaining strictly synchronized with SQLite persistence.
+  - Enforces positive integer prices (`priceMinorUnits > 0`), non-negative revision quotas (`revisionLimit >= 0`), and ISO 3-character uppercase currency codes (`currency.length === 3`).
+- **Immutable Order Snapshotting**:
+  - Order creation endpoints (`POST /api/orders` and payment intents) permanently snapshot `priceAtOrderTime`, `priceINR`, `priceMinorUnits`, and `currency` directly onto each customer `ResumeOrder`.
+  - Existing customer orders are immune to subsequent admin price changes, preventing unauthorized billing drift or retroactively invalidated payment intents.
+  - Deactivated tiers are excluded from public catalog endpoints (`GET /api/pricing`) and barred from new order creation, while existing orders under deactivated tiers remain valid and serviceable.
+- **Administrative & User Experience**:
+  - `PricingManager.tsx`: Dedicated admin panel for modifying prices, revising limits, switching currencies, toggling tier activation, and auditing historical adjustments.
+  - `ResumeOrderPlacement.tsx`: Real-time order placement interface in the ATS Hub dynamically querying active tiers, calculating prices, and provisioning checkout intents.
+
 
 
 

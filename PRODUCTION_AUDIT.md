@@ -344,6 +344,34 @@ The following architectural disclosures and operational boundaries are documente
 - **Automated Test Verification**:
   - `src/domain/services/RbacAuth.test.ts`: Comprehensive test suite verifying cookie issuance, service account grant flow, cookie-based GET execution, CSRF header validation on POST, 403 rejection on missing/mismatched CSRF headers, Bearer exemption, and cookie clearing with token revocation on logout. 21/21 test cases passing.
 
+---
+
+## 11. Feature 7 Audit: Dynamic, Configurable Pricing System & Order Snapshotting
+
+### Summary of Implementation & Architectural Compliance
+- **Data Modeling & SQLite Tables (`PricingTier.ts`, `IPricingRepository.ts`, `SQLitePricingRepository.ts`)**:
+  - Implemented `PricingTier` model and `pricing_tiers` SQLite table storing `tierId` (`"basic"` | `"standard"` | `"premium"`), `displayName`, `priceMinorUnits` (paise to prevent floating-point inaccuracies), `currency`, `revisionLimit`, `isActive`, `updatedAt`, and `updatedBy`.
+  - Implemented `PricingAuditLog` model and `pricing_audit_logs` table recording all pricing mutations with `oldValues`, `newValues`, editor identity (`changedBy`), timestamp (`changedAt`), and change justification (`reason`).
+- **First-Boot Automatic Seeding**:
+  - Table automatically seeds on initial startup with baseline production values (Basic: ₹300 / 1 revision; Standard: ₹800 / 2 revisions; Premium: ₹1500 / 3 revisions), ensuring zero downtime or breaking behavior during migration.
+- **Service Layer & Caching (`PricingService.ts`)**:
+  - Implemented write-through in-memory caching with immediate cache invalidation upon updates.
+  - Strict input validation: prices must be positive integers (`priceMinorUnits > 0`), revision limits non-negative (`revisionLimit >= 0`), and currencies valid 3-letter codes.
+- **Order Snapshotting & Historical Integrity (`ResumeOrder.ts`, `server.ts`)**:
+  - Orders permanently snapshot `priceAtOrderTime`, `priceINR`, `priceMinorUnits`, and `currency` upon creation.
+  - Subsequent admin tier price modifications do not alter existing orders or their payment intents.
+  - Deactivated tiers are hidden from public listings and rejected for new order placement while remaining fully valid for previously created orders.
+- **REST API Endpoints**:
+  - `GET /api/pricing`: Public endpoint returning active pricing tiers with both major units (`price`) and minor units (`priceMinorUnits`).
+  - `PUT /api/pricing/:tierId`: Admin-only endpoint (`requireRole("admin")`) for modifying tier properties, audited with mandatory reason.
+  - `GET /api/pricing/audit`: Admin-only endpoint returning chronologically ordered audit logs.
+- **User Interface Modules**:
+  - `PricingManager.tsx`: Dedicated admin UI for editing prices, revision quotas, currencies, activation toggles, and inspecting audit history.
+  - `ResumeOrderPlacement.tsx`: Candidate order portal fetching dynamic tiers from `/api/pricing`, calculating totals, and generating checkout intents.
+- **Automated Test Coverage**:
+  - `src/domain/services/PricingService.test.ts`: 13 automated test cases covering boot seeding, cache invalidation, input validation, audit logging, order price snapshotting, payment intent immutability, and tier deactivation guards.
+
+
 
 
 

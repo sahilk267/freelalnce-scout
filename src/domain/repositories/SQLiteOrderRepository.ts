@@ -100,6 +100,44 @@ export class SQLiteOrderRepository implements IOrderRepository {
     } catch (e) {
       // Column exists
     }
+
+    try {
+      this.db.exec(`ALTER TABLE resume_orders ADD COLUMN razorpay_order_id TEXT;`);
+    } catch (e) {
+      // Column exists
+    }
+
+    try {
+      this.db.exec(`ALTER TABLE resume_orders ADD COLUMN razorpay_payment_id TEXT;`);
+    } catch (e) {
+      // Column exists
+    }
+
+    try {
+      this.db.exec(`ALTER TABLE resume_orders ADD COLUMN payment_failure_reason TEXT;`);
+    } catch (e) {
+      // Column exists
+    }
+
+    try {
+      this.db.exec(`ALTER TABLE resume_orders ADD COLUMN payment_discrepancy TEXT;`);
+    } catch (e) {
+      // Column exists
+    }
+
+    try {
+      this.db.exec(`ALTER TABLE resume_orders ADD COLUMN refund_id TEXT;`);
+    } catch (e) {
+      // Column exists
+    }
+
+    this.db.exec(`
+      CREATE TABLE IF NOT EXISTS processed_payment_events (
+        event_id TEXT PRIMARY KEY,
+        event_type TEXT NOT NULL,
+        processed_at TEXT NOT NULL
+      );
+    `);
   }
 
   public close(): void {
@@ -148,6 +186,11 @@ export class SQLiteOrderRepository implements IOrderRepository {
       revisionInstructions,
       approvedBy: row.approved_by || undefined,
       approvedAt: row.approved_at || undefined,
+      razorpayOrderId: row.razorpay_order_id || undefined,
+      razorpayPaymentId: row.razorpay_payment_id || undefined,
+      paymentFailureReason: row.payment_failure_reason || undefined,
+      paymentDiscrepancy: row.payment_discrepancy || undefined,
+      refundId: row.refund_id || undefined,
       createdAt: row.created_at,
       updatedAt: row.updated_at,
     };
@@ -160,6 +203,12 @@ export class SQLiteOrderRepository implements IOrderRepository {
 
   async getById(id: string): Promise<ResumeOrder | null> {
     const row = this.db.prepare(`SELECT * FROM resume_orders WHERE id = ?`).get(id);
+    if (!row) return null;
+    return this.mapRowToOrder(row);
+  }
+
+  async getByRazorpayOrderId(razorpayOrderId: string): Promise<ResumeOrder | null> {
+    const row = this.db.prepare(`SELECT * FROM resume_orders WHERE razorpay_order_id = ?`).get(razorpayOrderId);
     if (!row) return null;
     return this.mapRowToOrder(row);
   }
@@ -183,8 +232,9 @@ export class SQLiteOrderRepository implements IOrderRepository {
         original_resume_text, target_job_description, rewritten_resume_text,
         fact_traceability_log, before_ats_score, after_ats_score,
         verification_audit, verification_attempts, revision_instructions, approved_by, approved_at,
+        razorpay_order_id, razorpay_payment_id, payment_failure_reason, payment_discrepancy, refund_id,
         created_at, updated_at
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
 
     stmt.run(
@@ -211,6 +261,11 @@ export class SQLiteOrderRepository implements IOrderRepository {
       order.revisionInstructions ? JSON.stringify(order.revisionInstructions) : null,
       order.approvedBy || null,
       order.approvedAt || null,
+      order.razorpayOrderId || null,
+      order.razorpayPaymentId || null,
+      order.paymentFailureReason || null,
+      order.paymentDiscrepancy || null,
+      order.refundId || null,
       order.createdAt,
       order.updatedAt
     );
@@ -220,5 +275,18 @@ export class SQLiteOrderRepository implements IOrderRepository {
 
   async delete(id: string): Promise<void> {
     this.db.prepare(`DELETE FROM resume_orders WHERE id = ?`).run(id);
+  }
+
+  async hasProcessedEvent(eventId: string): Promise<boolean> {
+    const row = this.db.prepare(`SELECT event_id FROM processed_payment_events WHERE event_id = ?`).get(eventId);
+    return Boolean(row);
+  }
+
+  async recordProcessedEvent(eventId: string, eventType: string): Promise<void> {
+    const stmt = this.db.prepare(`
+      INSERT OR REPLACE INTO processed_payment_events (event_id, event_type, processed_at)
+      VALUES (?, ?, ?)
+    `);
+    stmt.run(eventId, eventType, new Date().toISOString());
   }
 }

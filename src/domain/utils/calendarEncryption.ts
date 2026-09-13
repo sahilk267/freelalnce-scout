@@ -5,13 +5,17 @@
 
 import crypto from "crypto";
 
-const DEFAULT_DEV_FALLBACK_KEY = "aziz_os_calendar_default_encryption_key_2026";
-
 /**
  * Derives a deterministic 32-byte binary key from the configured environment secret.
+ * Strict fail-closed policy: throws immediately if CALENDAR_TOKEN_ENCRYPTION_KEY is missing or < 32 characters.
  */
-function getEncryptionKey(): Buffer {
-  const secret = process.env.CALENDAR_TOKEN_ENCRYPTION_KEY || DEFAULT_DEV_FALLBACK_KEY;
+export function getEncryptionKey(): Buffer {
+  const secret = process.env.CALENDAR_TOKEN_ENCRYPTION_KEY?.trim();
+  if (!secret || secret.length < 32) {
+    throw new Error(
+      "CALENDAR_TOKEN_ENCRYPTION_KEY environment variable is missing or too short (must be >= 32 chars). Set this secret before connecting or encrypting Google Calendar tokens."
+    );
+  }
   return crypto.createHash("sha256").update(secret).digest();
 }
 

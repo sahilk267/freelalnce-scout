@@ -35,6 +35,21 @@ interface CreatedOrder {
   createdAt: string;
 }
 
+// Dynamically load Razorpay checkout script
+function loadRazorpayCheckoutScript(): Promise<boolean> {
+  return new Promise((resolve) => {
+    if ((window as any).Razorpay) {
+      return resolve(true);
+    }
+    const script = document.createElement("script");
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.async = true;
+    script.onload = () => resolve(true);
+    script.onerror = () => resolve(false);
+    document.body.appendChild(script);
+  });
+}
+
 export default function ResumeOrderPlacement() {
   const [tiers, setTiers] = useState<PricingTier[]>([]);
   const [loadingTiers, setLoadingTiers] = useState<boolean>(true);
@@ -48,6 +63,9 @@ export default function ResumeOrderPlacement() {
   const [orderError, setOrderError] = useState<string | null>(null);
   const [createdOrder, setCreatedOrder] = useState<CreatedOrder | null>(null);
   const [paymentResult, setPaymentResult] = useState<any | null>(null);
+  const [gatewayNotConfigured, setGatewayNotConfigured] = useState<boolean>(false);
+  const [isOpeningCheckout, setIsOpeningCheckout] = useState<boolean>(false);
+  const [isConfirmingPayment, setIsConfirmingPayment] = useState<boolean>(false);
 
   useEffect(() => {
     fetchPublicPricing();
@@ -75,6 +93,106 @@ export default function ResumeOrderPlacement() {
     }
   };
 
+  const pollOrderStatus = (orderId: string) => {
+    setIsConfirmingPayment(true);
+    let attempts = 0;
+    const maxAttempts = 20;
+    const interval = setInterval(async () => {
+      attempts++;
+      try {
+        const res = await apiFetch(`/api/orders/${orderId}`);
+        if (res.ok) {
+          const order = await res.json();
+          if (
+            order.paymentStatus === "paid" || 
+            order.paymentStatus === "needs_human_review" || 
+            order.paymentStatus === "failed"
+          ) {
+            clearInterval(interval);
+            setCreatedOrder(order);
+            setIsConfirmingPayment(false);
+            return;
+          }
+        }
+      } catch (e) {
+        console.error("Error polling order status:", e);
+      }
+      if (attempts >= maxAttempts) {
+        clearInterval(interval);
+        setIsConfirmingPayment(false);
+      }
+    }, 1500);
+  };
+
+  const handleInitiateRazorpayPayment = async (orderId: string) => {
+    setIsOpeningCheckout(true);
+    setOrderError(null);
+    try {
+      const piRes = await apiFetch(`/api/orders/${orderId}/create-payment-intent`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" }
+      });
+
+      if (piRes.status === 501) {
+        setGatewayNotConfigured(true);
+        const data = await piRes.json();
+        setOrderError(data.error || "Payment gateway not configured.");
+        return;
+      }
+
+      if (!piRes.ok) {
+        const data = await piRes.json();
+        throw new Error(data.error || "Failed to create payment intent.");
+      }
+
+      const piData = await piRes.json();
+      setPaymentResult(piData);
+      setGatewayNotConfigured(false);
+
+      const scriptLoaded = await loadRazorpayCheckoutScript();
+      if (!scriptLoaded) {
+        throw new Error("Unable to load Razorpay Checkout script. Check network connection.");
+      }
+
+      const options = {
+        key: piData.keyId,
+        amount: piData.amountMinorUnits,
+        currency: piData.currency || "INR",
+        name: "Aziz System",
+        description: `Resume Rewrite - ${createdOrder?.tier?.toUpperCase() || selectedTier.toUpperCase()} Tier`,
+        order_id: piData.razorpayOrderId,
+        prefill: {
+          email: candidateEmail
+        },
+        handler: function (_response: any) {
+          // Client success callback: do NOT mark as paid locally! Webhook is authority.
+          setIsOpeningCheckout(false);
+          setIsConfirmingPayment(true);
+          pollOrderStatus(orderId);
+        },
+        modal: {
+          ondismiss: function () {
+            setIsOpeningCheckout(false);
+          }
+        },
+        theme: {
+          color: "#4f46e5"
+        }
+      };
+
+      const rzp = new (window as any).Razorpay(options);
+      rzp.on("payment.failed", function (response: any) {
+        setOrderError(response.error?.description || "Payment failed at checkout");
+        setIsOpeningCheckout(false);
+      });
+      rzp.open();
+    } catch (err: any) {
+      setOrderError(err.message || "Failed to initiate payment");
+    } finally {
+      setIsOpeningCheckout(false);
+    }
+  };
+
   const handleOrderSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!originalResumeText.trim()) {
@@ -86,6 +204,7 @@ export default function ResumeOrderPlacement() {
     setOrderError(null);
     setCreatedOrder(null);
     setPaymentResult(null);
+    setGatewayNotConfigured(false);
 
     try {
       // 1. Ensure or get a candidate ID
@@ -122,20 +241,8 @@ export default function ResumeOrderPlacement() {
 
       setCreatedOrder(orderData);
 
-      // 3. Automatically initiate payment intent with dynamic pricing
-      const piRes = await apiFetch("/api/orders/create-payment-intent", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          orderId: orderData.id,
-          tier: selectedTier
-        })
-      });
-
-      if (piRes.ok) {
-        const piData = await piRes.json();
-        setPaymentResult(piData);
-      }
+      // 3. Automatically launch Razorpay payment intent
+      await handleInitiateRazorpayPayment(orderData.id);
     } catch (err: any) {
       setOrderError(err.message || "Failed to place order");
     } finally {
@@ -155,6 +262,8 @@ export default function ResumeOrderPlacement() {
       const data = await res.json();
       if (res.ok && data.order) {
         setCreatedOrder(data.order);
+      } else {
+        throw new Error(data.error || "Payment simulation rejected.");
       }
     } catch (err: any) {
       setOrderError(err.message || "Failed to simulate payment");
@@ -437,27 +546,84 @@ export default function ResumeOrderPlacement() {
             </div>
           </div>
 
-          {paymentResult && createdOrder.paymentStatus !== "paid" && (
-            <div className="p-4 rounded-xl bg-indigo-950/30 border border-indigo-800/60 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-              <div>
-                <span className="text-xs font-mono text-indigo-300 block font-semibold">
-                  Payment Intent Ready: {paymentResult.paymentIntentId}
-                </span>
-                <span className="text-[11px] text-slate-400 font-mono">
-                  Amount: {paymentResult.currency} {paymentResult.amount} ({paymentResult.amountMinorUnits} minor units)
-                </span>
-              </div>
+          {/* Payment Handling Action State */}
+          {createdOrder.paymentStatus !== "paid" && (
+            <div className="space-y-3">
+              {isConfirmingPayment ? (
+                <div className="p-4 rounded-xl bg-indigo-950/40 border border-indigo-500/40 text-indigo-300 text-xs font-mono flex items-center gap-3 animate-pulse" id="payment-confirming-indicator">
+                  <RefreshCw className="w-4 h-4 animate-spin text-indigo-400" />
+                  <span>Razorpay checkout completed. Waiting for webhook signature verification and capture confirmation...</span>
+                </div>
+              ) : (
+                <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                  <div>
+                    <span className="text-xs font-mono text-white block font-semibold">
+                      Payment Gateway: Razorpay Checkout
+                    </span>
+                    <span className="text-[11px] text-slate-400 font-mono">
+                      Pay {createdOrder.currency || "INR"} {createdOrder.priceAtOrderTime ?? createdOrder.priceINR} via UPI, Credit/Debit Card, or Netbanking
+                    </span>
+                  </div>
 
-              <button
-                type="button"
-                onClick={handleSimulatePayment}
-                disabled={submitting}
-                className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-mono font-semibold flex items-center gap-2 transition-colors"
-                id="btn-simulate-payment"
-              >
-                <Check className="w-3.5 h-3.5" />
-                <span>Simulate Successful Payment</span>
-              </button>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => handleInitiateRazorpayPayment(createdOrder.id)}
+                      disabled={isOpeningCheckout || submitting}
+                      className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-mono font-semibold flex items-center gap-2 transition-colors disabled:opacity-50"
+                      id="btn-pay-razorpay"
+                    >
+                      {isOpeningCheckout ? (
+                        <>
+                          <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                          <span>Opening Checkout...</span>
+                        </>
+                      ) : (
+                        <>
+                          <CreditCard className="w-3.5 h-3.5" />
+                          <span>Pay with Razorpay</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {gatewayNotConfigured && (
+                <div className="p-4 rounded-xl bg-amber-950/40 border border-amber-800/60 text-amber-300 text-xs font-mono space-y-3">
+                  <div className="flex items-start gap-2.5">
+                    <AlertCircle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+                    <div>
+                      <span className="font-bold block">NON-PRODUCTION DEV MODE: Gateway Unconfigured</span>
+                      <span className="text-[11px] text-amber-300/80">
+                        RAZORPAY_KEY_ID / SECRET are not set in the environment. You can use the local simulation button below for local testing of downstream resume rewriting and revision limits.
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="pt-1 flex justify-end">
+                    <button
+                      type="button"
+                      onClick={handleSimulatePayment}
+                      disabled={submitting}
+                      className="px-4 py-2 bg-amber-600 hover:bg-amber-500 text-white rounded-xl text-xs font-mono font-semibold flex items-center gap-2 transition-colors"
+                      id="btn-simulate-payment"
+                    >
+                      <Check className="w-3.5 h-3.5" />
+                      <span>DEV ONLY: Simulate Payment</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {createdOrder.paymentStatus === "needs_human_review" && (
+            <div className="p-4 rounded-xl bg-rose-950/40 border border-rose-800 text-rose-300 text-xs font-mono flex items-center gap-3">
+              <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
+              <span>
+                Payment Captured with Discrepancy. Flagged for human administrator review before pipeline execution.
+              </span>
             </div>
           )}
 
@@ -465,7 +631,7 @@ export default function ResumeOrderPlacement() {
             <div className="p-4 rounded-xl bg-emerald-950/40 border border-emerald-800 text-emerald-300 text-xs font-mono flex items-center gap-3">
               <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
               <span>
-                Payment verified. The resume order is now in the pipeline and protected by its original pricing snapshot!
+                Payment verified by Razorpay webhook! The resume rewrite order is active in the pipeline with locked pricing snapshot.
               </span>
             </div>
           )}

@@ -39,6 +39,12 @@ export class InMemoryUserRepository implements IUserRepository {
       }
     }
 
+    if (data.isBootstrapAdmin) {
+      if (this.users.size > 0 || Array.from(this.users.values()).some((u: any) => u.isBootstrapAdmin)) {
+        throw new Error("First admin has already been registered. Registration is now invite-only. A valid invite token is required. Please ask an existing admin for an invite.");
+      }
+    }
+
     const id = data.id || `usr_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`;
     const newUser: User = {
       id,
@@ -48,6 +54,7 @@ export class InMemoryUserRepository implements IUserRepository {
       active: data.active !== undefined ? data.active : true,
       createdAt: new Date().toISOString()
     };
+    (newUser as any).isBootstrapAdmin = Boolean(data.isBootstrapAdmin);
 
     this.users.set(id, newUser);
     return { ...newUser };
@@ -159,9 +166,26 @@ export class InMemoryUserRepository implements IUserRepository {
     }
   }
 
+  async clearTokenDenylist(): Promise<number> {
+    const count = this.denylist.size;
+    this.denylist.clear();
+    return count;
+  }
+
+  private appliedMigrations: Set<string> = new Set();
+
+  isMigrationApplied(name: string): boolean {
+    return this.appliedMigrations.has(name);
+  }
+
+  markMigrationApplied(name: string): void {
+    this.appliedMigrations.add(name);
+  }
+
   clear(): void {
     this.users.clear();
     this.invites.clear();
     this.denylist.clear();
+    this.appliedMigrations.clear();
   }
 }
