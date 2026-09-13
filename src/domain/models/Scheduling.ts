@@ -78,10 +78,13 @@ export interface ICalendarProvider {
     interviewerId: string;
     candidateId: string;
     candidateName: string;
+    candidateEmail?: string;
     slotStart: string;
     slotEnd: string;
-  }): Promise<{ calendarEventId: string }>;
-  cancelEvent(eventId: string): Promise<boolean>;
+    summary?: string;
+    description?: string;
+  }): Promise<{ calendarEventId: string; eventId?: string; meetUrl?: string }>;
+  cancelEvent(eventId: string, interviewerId?: string): Promise<boolean>;
 }
 
 export function hashToken(token: string): string {

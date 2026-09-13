@@ -25,6 +25,14 @@ export { GeminiClientProvider } from "./providers/GeminiClientProvider";
 export { REMOTE_PLATFORMS_40 } from "./providers/RemotePlatformsCatalog";
 export { getInitialSeedProjectsForAll40Platforms } from "./providers/InitialPlatformSeed";
 
+// Export Pricing Tiers & Dynamic Pricing
+export type { PricingTier, PricingAuditLog, UpdatePricingTierInput } from "./models/PricingTier";
+export { DEFAULT_PRICING_TIERS, isValidISO4217, RECOGNIZED_ISO_4217_CURRENCIES } from "./models/PricingTier";
+export type { IPricingRepository } from "./repositories/IPricingRepository";
+export { SQLitePricingRepository } from "./repositories/SQLitePricingRepository";
+export { InMemoryPricingRepository } from "./repositories/InMemoryPricingRepository";
+export { PricingService, PricingValidationError } from "./services/PricingService";
+
 // Export Repositories
 export type { ICandidateRepository } from "./repositories/ICandidateRepository";
 export type { IContactRepository } from "./repositories/IContactRepository";
@@ -55,9 +63,26 @@ export type { SchedulingSession, InterviewerSlot, SchedulingAuditLog } from "./m
 export { generateSchedulingToken, hashToken } from "./models/Scheduling";
 export type { ISchedulingRepository } from "./repositories/ISchedulingRepository";
 export { InMemorySchedulingRepository } from "./repositories/InMemorySchedulingRepository";
+export type { InterviewerCalendarAccount, CalendarConnectionStatus, WorkingHoursConfig } from "./models/InterviewerCalendarAccount";
+export type { IInterviewerCalendarRepository } from "./repositories/IInterviewerCalendarRepository";
+export { SQLiteInterviewerCalendarRepository } from "./repositories/SQLiteInterviewerCalendarRepository";
+export { InMemoryInterviewerCalendarRepository } from "./repositories/InMemoryInterviewerCalendarRepository";
+export type { ICalendarProvider } from "./models/Scheduling";
+export { InMemoryCalendarProvider } from "./providers/InMemoryCalendarProvider";
+export { GoogleCalendarProvider } from "./providers/GoogleCalendarProvider";
+export { encryptRefreshToken, decryptRefreshToken } from "./utils/calendarEncryption";
 
 // Export Dependency Injection (DI) Container
 export { DIContainer } from "./di/DIContainer";
+
+// Export User Authentication & RBAC
+export type { User, UserRole, UserPublicProfile, UserInvite, TokenDenylistEntry, AuthTokenPayload } from "./models/User";
+export { toPublicProfile, isValidEmail } from "./models/User";
+export type { IUserRepository, CreateUserData, UpdateUserData, CreateInviteData } from "./repositories/IUserRepository";
+export { InMemoryUserRepository } from "./repositories/InMemoryUserRepository";
+export { SQLiteUserRepository } from "./repositories/SQLiteUserRepository";
+export { AuthService } from "./services/AuthService";
+export type { RegisterParams, LoginParams, AuthResult } from "./services/AuthService";
 
 // Export Utilities
 export type { ParseResult } from "./utils/jsonHelper";

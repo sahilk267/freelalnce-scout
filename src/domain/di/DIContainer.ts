@@ -15,6 +15,7 @@ import { MatchingService } from "../services/MatchingService";
 import { AggregatedJobProvider } from "../providers/AggregatedJobProvider";
 import { FreelanceScoutProvider } from "../providers/FreelanceScoutProvider";
 import { GeminiClientProvider } from "../providers/GeminiClientProvider";
+import { ModelRouter } from "../agent/ModelRouter";
 import { BackupService } from "../services/BackupService";
 import { MigrationService } from "../services/MigrationService";
 import { ResumeServiceAgent } from "../services/ResumeServiceAgent";
@@ -34,7 +35,15 @@ import { SchedulerService } from "../services/SchedulerService";
 
 import { InMemorySchedulingRepository } from "../repositories/InMemorySchedulingRepository";
 import { InMemoryCalendarProvider } from "../providers/InMemoryCalendarProvider";
+import { GoogleCalendarProvider } from "../providers/GoogleCalendarProvider";
+import { ICalendarProvider } from "../models/Scheduling";
+import { InMemoryInterviewerCalendarRepository } from "../repositories/InMemoryInterviewerCalendarRepository";
+import { SQLiteInterviewerCalendarRepository } from "../repositories/SQLiteInterviewerCalendarRepository";
 import { SchedulingServiceAgent } from "../services/SchedulingServiceAgent";
+import { InMemoryUserRepository } from "../repositories/InMemoryUserRepository";
+import { SQLiteUserRepository } from "../repositories/SQLiteUserRepository";
+import { SQLitePricingRepository } from "../repositories/SQLitePricingRepository";
+import { PricingService } from "../services/PricingService";
 
 export class DIContainer {
   private static services: Map<string, any> = new Map();
@@ -92,7 +101,10 @@ export class DIContainer {
       "ScreeningServiceAgent",
       "ISchedulingRepository",
       "ICalendarProvider",
-      "SchedulingServiceAgent"
+      "SchedulingServiceAgent",
+      "IUserRepository",
+      "IPricingRepository",
+      "PricingService"
     ];
     for (const key of required) {
       if (!this.services.has(key)) {
@@ -121,6 +133,10 @@ if (process.env.NODE_ENV === "test" || process.env.VITEST === "true") {
   DIContainer.register("IScreeningRepository", new SQLiteScreeningRepository(":memory:"));
   DIContainer.register("SQLiteBackupRepository", inMemoryRepo as any);
   DIContainer.register("SQLiteFreelancerRepository", new SQLiteFreelancerRepository(":memory:"));
+  DIContainer.register("IUserRepository", new InMemoryUserRepository());
+  const testPricingRepo = new SQLitePricingRepository(":memory:");
+  DIContainer.register("IPricingRepository", testPricingRepo);
+  DIContainer.register("PricingService", new PricingService(testPricingRepo));
   DIContainer.register("PersistenceConfigService", configService);
   DIContainer.register("StructuredLoggerService", loggerService);
   DIContainer.register("GlobalOperationLockService", lockService);
@@ -131,8 +147,17 @@ if (process.env.NODE_ENV === "test" || process.env.VITEST === "true") {
   DIContainer.register("IMigrationService", migrationService);
   DIContainer.register("SchedulerService", schedulerService);
 
+  const calendarAccountRepo = new InMemoryInterviewerCalendarRepository();
+  DIContainer.register("IInterviewerCalendarRepository", calendarAccountRepo);
+
   const schedRepo = new InMemorySchedulingRepository();
-  const calProvider = new InMemoryCalendarProvider();
+  const calendarProviderType = (process.env.CALENDAR_PROVIDER || "inmemory").toLowerCase();
+  let calProvider: ICalendarProvider;
+  if (calendarProviderType === "google") {
+    calProvider = new GoogleCalendarProvider(calendarAccountRepo, retryService, configService);
+  } else {
+    calProvider = new InMemoryCalendarProvider();
+  }
   DIContainer.register("ISchedulingRepository", schedRepo);
   DIContainer.register("ICalendarProvider", calProvider);
   DIContainer.register("SchedulingServiceAgent", new SchedulingServiceAgent(schedRepo, calProvider));
@@ -155,6 +180,10 @@ if (process.env.NODE_ENV === "test" || process.env.VITEST === "true") {
   DIContainer.register("IScreeningRepository", new SQLiteScreeningRepository());
   DIContainer.register("SQLiteBackupRepository", secondaryRepo);
   DIContainer.register("SQLiteFreelancerRepository", new SQLiteFreelancerRepository());
+  DIContainer.register("IUserRepository", new SQLiteUserRepository());
+  const prodPricingRepo = new SQLitePricingRepository();
+  DIContainer.register("IPricingRepository", prodPricingRepo);
+  DIContainer.register("PricingService", new PricingService(prodPricingRepo));
   DIContainer.register("PersistenceConfigService", configService);
   DIContainer.register("StructuredLoggerService", loggerService);
   DIContainer.register("GlobalOperationLockService", lockService);
@@ -165,8 +194,17 @@ if (process.env.NODE_ENV === "test" || process.env.VITEST === "true") {
   DIContainer.register("IMigrationService", migrationService);
   DIContainer.register("SchedulerService", schedulerService);
 
+  const calendarAccountRepoProd = new SQLiteInterviewerCalendarRepository();
+  DIContainer.register("IInterviewerCalendarRepository", calendarAccountRepoProd);
+
   const schedRepoProd = new InMemorySchedulingRepository();
-  const calProviderProd = new InMemoryCalendarProvider();
+  const calendarProviderTypeProd = (process.env.CALENDAR_PROVIDER || "inmemory").toLowerCase();
+  let calProviderProd: ICalendarProvider;
+  if (calendarProviderTypeProd === "google") {
+    calProviderProd = new GoogleCalendarProvider(calendarAccountRepoProd, retryService, configService);
+  } else {
+    calProviderProd = new InMemoryCalendarProvider();
+  }
   DIContainer.register("ISchedulingRepository", schedRepoProd);
   DIContainer.register("ICalendarProvider", calProviderProd);
   DIContainer.register("SchedulingServiceAgent", new SchedulingServiceAgent(schedRepoProd, calProviderProd));
@@ -178,7 +216,7 @@ if (process.env.NODE_ENV === "test" || process.env.VITEST === "true") {
 DIContainer.register("IMatchingService", new MatchingService());
 DIContainer.register("IJobProvider", new AggregatedJobProvider({ includeSeedData: true }));
 DIContainer.register("IFreelanceProvider", new FreelanceScoutProvider({ includeSeedData: true }));
-const aiClientProvider = new GeminiClientProvider();
+const aiClientProvider = ModelRouter.getInstance();
 DIContainer.register("IAIClientProvider", aiClientProvider);
 DIContainer.register("ResumeServiceAgent", new ResumeServiceAgent(aiClientProvider));
 DIContainer.register("ScreeningServiceAgent", new ScreeningServiceAgent(aiClientProvider));

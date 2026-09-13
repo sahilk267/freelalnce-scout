@@ -11,7 +11,8 @@ export class RetryService {
   public async executeWithRetry<T>(
     fn: () => Promise<T>,
     operationName = "operation",
-    onRetry?: (attempt: number, error: any, delayMs: number) => void
+    onRetry?: (attempt: number, error: any, delayMs: number) => void,
+    isRetryable?: (error: any) => boolean
   ): Promise<T> {
     const config = this.configService.getConfig();
     let attempt = 0;
@@ -24,6 +25,10 @@ export class RetryService {
       } catch (error: any) {
         attempt++;
         const totalElapsed = Date.now() - startTime;
+
+        if (isRetryable && !isRetryable(error)) {
+          throw error;
+        }
 
         if (attempt > config.retryCount || totalElapsed >= config.retryAbortThresholdMs) {
           throw error;

@@ -6,14 +6,34 @@
 import { NormalizedFreelanceProject } from "../../agent/freelancerTypes";
 import { resilientFetch } from "../../utils/resilientFetch";
 import { DIContainer } from "../../di/DIContainer";
+import { FreelanceHealthMonitor } from "./FreelanceHealthMonitor";
+import { FreelanceSourceStatus, FreelanceStatusReason } from "../IFreelanceProvider";
 
 export class FiverrProProvider {
   public name = "Fiverr Pro" as const;
+
+  public async checkHealth(): Promise<{ status: FreelanceSourceStatus; reason?: FreelanceStatusReason }> {
+    try {
+      const text = await resilientFetch("https://pro.fiverr.com/api/v1/jobs/active", {
+        timeoutMs: 3000,
+        retryCount: 1,
+        providerName: this.name,
+        isDevMode: false
+      });
+      if (text && text.length > 200 && !text.includes("restricted") && !text.includes("Access Denied")) {
+        return { status: "live" };
+      }
+      return { status: "mock", reason: "blocked_403" };
+    } catch {
+      return { status: "mock", reason: "blocked_403" };
+    }
+  }
 
   public async fetchJobs(): Promise<NormalizedFreelanceProject[]> {
     let isDevMode = true;
     let timeoutMs = 10000;
     let retryCount = 3;
+    const monitor = FreelanceHealthMonitor.getInstance();
 
     try {
       const freelanceRepo = DIContainer.get<any>("SQLiteFreelancerRepository");
@@ -42,24 +62,33 @@ export class FiverrProProvider {
 
       if (!text) {
         if (isDevMode) {
-          console.info("[FiverrProProvider] Direct retrieval restricted, returning verified fallback posting.");
-          return this.getFallbackJobs();
+          monitor.recordStatus(this.name, "mock", "blocked_403");
+          return this.getFallbackJobs("blocked_403");
         }
-        return [];
+        monitor.recordStatus(this.name, "error", "blocked_403");
+        const emptyRes: any = [];
+        emptyRes.sourceStatus = "error";
+        emptyRes.statusReason = "blocked_403";
+        return emptyRes;
       }
 
       throw new Error("Fiverr public access restricted.");
     } catch (error: any) {
+      const reason: FreelanceStatusReason = error?.message?.toLowerCase().includes("timeout") ? "timeout" : "blocked_403";
       if (isDevMode) {
-        console.info("[FiverrProProvider] Direct retrieval restricted, returning verified fallback posting.");
-        return this.getFallbackJobs();
+        monitor.recordStatus(this.name, "mock", reason);
+        return this.getFallbackJobs(reason);
       }
-      throw error;
+      monitor.recordStatus(this.name, "error", reason);
+      const emptyRes: any = [];
+      emptyRes.sourceStatus = "error";
+      emptyRes.statusReason = reason;
+      return emptyRes;
     }
   }
 
-  private getFallbackJobs(): NormalizedFreelanceProject[] {
-    return [
+  private getFallbackJobs(reason: FreelanceStatusReason = "blocked_403"): NormalizedFreelanceProject[] {
+    const projects: NormalizedFreelanceProject[] = [
       {
         id: "fiverrpro-fallback-1",
         title: "Custom Portfolio Web Development & Performance Refinements",
@@ -76,8 +105,14 @@ export class FiverrProProvider {
         urgency: "medium",
         source: "Fiverr Pro",
         projectUrl: "https://pro.fiverr.com/jobs/custom-portfolio-web-development-performance",
-        scrapeTimestamp: new Date().toISOString()
+        scrapeTimestamp: new Date().toISOString(),
+        sourceStatus: "mock",
+        sourceStatusReason: reason
       }
     ];
+    const res: any = projects;
+    res.sourceStatus = "mock";
+    res.statusReason = reason;
+    return res;
   }
 }

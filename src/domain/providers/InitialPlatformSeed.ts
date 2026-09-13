@@ -1345,6 +1345,8 @@ export function getInitialSeedProjectsForAll40Platforms(): NormalizedFreelancePr
 
   return seedJobs.map(job => ({
     ...job,
+    sourceStatus: "mock" as const,
+    sourceStatusReason: "catalog_seed",
     projectUrl: resolveDirectJobUrl({
       source: job.source,
       title: job.title,

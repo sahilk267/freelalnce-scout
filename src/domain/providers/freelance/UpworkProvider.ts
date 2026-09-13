@@ -6,14 +6,56 @@
 import { NormalizedFreelanceProject } from "../../agent/freelancerTypes";
 import { resilientFetch } from "../../utils/resilientFetch";
 import { DIContainer } from "../../di/DIContainer";
+import { FreelanceHealthMonitor } from "./FreelanceHealthMonitor";
+import { FreelanceSourceStatus, FreelanceStatusReason } from "../IFreelanceProvider";
 
 export class UpworkProvider {
   public name = "Upwork" as const;
+
+  public async checkHealth(): Promise<{ status: FreelanceSourceStatus; reason?: FreelanceStatusReason }> {
+    const hasOfficialKey = Boolean(process.env.UPWORK_API_KEY || process.env.UPWORK_ACCESS_TOKEN);
+    if (hasOfficialKey) {
+      return { status: "live", reason: "official_api_active" };
+    }
+    // Public scraper ping
+    try {
+      const text = await resilientFetch("https://www.upwork.com/ab/feed/jobs/rss?q=react", {
+        timeoutMs: 3000,
+        retryCount: 1,
+        providerName: this.name,
+        isDevMode: false
+      });
+      if (text && text.includes("<item>")) {
+        return { status: "live" };
+      }
+      return { status: "mock", reason: "blocked_403" };
+    } catch {
+      return { status: "mock", reason: "blocked_403" };
+    }
+  }
 
   public async fetchJobs(): Promise<NormalizedFreelanceProject[]> {
     let isDevMode = true;
     let timeoutMs = 10000;
     let retryCount = 3;
+    const monitor = FreelanceHealthMonitor.getInstance();
+
+    // Check preferred official partner API path
+    const officialApiKey = process.env.UPWORK_API_KEY || process.env.UPWORK_ACCESS_TOKEN;
+    if (officialApiKey) {
+      try {
+        const officialProjects = await this.fetchOfficialApiJobs(officialApiKey);
+        if (officialProjects && officialProjects.length > 0) {
+          monitor.recordStatus(this.name, "live", "official_api_active", true);
+          const res: any = officialProjects;
+          res.sourceStatus = "live";
+          res.statusReason = "official_api_active";
+          return res;
+        }
+      } catch (err: any) {
+        console.warn("[UpworkProvider] Official partner API call failed, falling back to public feed:", err?.message || err);
+      }
+    }
 
     let query = "freelance";
     try {
@@ -53,10 +95,14 @@ export class UpworkProvider {
 
       if (!text) {
         if (isDevMode) {
-          console.info("[UpworkProvider] Direct RSS feed fetch returned empty string, using fallback simulation in Development Mode.");
-          return this.getFallbackJobs();
+          monitor.recordStatus(this.name, "mock", "blocked_403");
+          return this.getFallbackJobs("blocked_403");
         }
-        return [];
+        monitor.recordStatus(this.name, "error", "blocked_403");
+        const emptyRes: any = [];
+        emptyRes.sourceStatus = "error";
+        emptyRes.statusReason = "blocked_403";
+        return emptyRes;
       }
 
       const items = text.split("<item>");
@@ -75,7 +121,6 @@ export class UpworkProvider {
         const projectUrl = linkMatch ? linkMatch[1].trim() : "https://www.upwork.com/find-work";
         const rawDesc = descMatch ? descMatch[1].replace(/<[^>]*>/g, "").trim() : "No description provided.";
         
-        // Parse metadata embedded in description
         const budgetMatch = rawDesc.match(/Budget:\s*\$([0-9,]+)/i);
         const hourlyMatch = rawDesc.match(/Hourly Range:\s*\$([0-9.]+)-\$([0-9.]+)/i);
         const locationMatch = rawDesc.match(/Country:\s*([A-Za-z\s]+)/i);
@@ -100,22 +145,65 @@ export class UpworkProvider {
           urgency: "medium",
           source: "Upwork",
           projectUrl,
-          scrapeTimestamp: new Date().toISOString()
+          scrapeTimestamp: new Date().toISOString(),
+          sourceStatus: "live"
         });
       }
 
-      return projects;
+      monitor.recordStatus(this.name, "live");
+      const retProjects: any = projects;
+      retProjects.sourceStatus = "live";
+      return retProjects;
     } catch (error: any) {
+      const reason: FreelanceStatusReason = error?.message?.toLowerCase().includes("timeout") ? "timeout" : "blocked_403";
       if (isDevMode) {
-        console.info("[UpworkProvider] Direct RSS feed fetch restricted, returning verified fallback posting.");
-        return this.getFallbackJobs();
+        monitor.recordStatus(this.name, "mock", reason);
+        return this.getFallbackJobs(reason);
       }
-      throw error;
+      monitor.recordStatus(this.name, "error", reason);
+      const emptyRes: any = [];
+      emptyRes.sourceStatus = "error";
+      emptyRes.statusReason = reason;
+      return emptyRes;
     }
   }
 
-  private getFallbackJobs(): NormalizedFreelanceProject[] {
-    return [
+  private async fetchOfficialApiJobs(apiKey: string): Promise<NormalizedFreelanceProject[]> {
+    const res = await fetch("https://api.upwork.com/v3/jobs/search?q=technology&limit=5", {
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json"
+      }
+    });
+    if (!res.ok) {
+      throw new Error(`Upwork official API returned ${res.status}`);
+    }
+    const data = await res.json();
+    const jobs = Array.isArray(data.jobs) ? data.jobs : [];
+    return jobs.map((j: any) => ({
+      id: `upwork-${j.id || Math.random().toString(36).slice(2, 8)}`,
+      title: j.title || "Enterprise Upwork Opportunity",
+      description: j.snippet || j.description || "Official Upwork job contract.",
+      skills: Array.isArray(j.skills) ? j.skills : ["Software Engineering"],
+      budget: j.amount ? `$${j.amount}` : "$1000",
+      currency: "USD",
+      hourlyOrFixed: j.job_type === "hourly" ? "hourly" : "fixed",
+      clientRating: 5.0,
+      clientReviews: 50,
+      clientSpending: "$50k+",
+      location: j.client?.country || "Global",
+      proposalCount: j.proposals_tier || 5,
+      urgency: "high",
+      source: "Upwork",
+      projectUrl: j.ciphertext ? `https://www.upwork.com/jobs/${j.ciphertext}` : "https://www.upwork.com",
+      scrapeTimestamp: new Date().toISOString(),
+      sourceStatus: "live",
+      sourceStatusReason: "official_api_active"
+    }));
+  }
+
+  private getFallbackJobs(reason: FreelanceStatusReason = "blocked_403"): NormalizedFreelanceProject[] {
+    const projects: NormalizedFreelanceProject[] = [
       {
         id: "upwork-fallback-1",
         title: "Senior Network Engineer & Windows Systems Administrator",
@@ -132,8 +220,14 @@ export class UpworkProvider {
         urgency: "medium",
         source: "Upwork",
         projectUrl: "https://www.upwork.com/jobs/senior-network-system-administrator",
-        scrapeTimestamp: new Date().toISOString()
+        scrapeTimestamp: new Date().toISOString(),
+        sourceStatus: "mock",
+        sourceStatusReason: reason
       }
     ];
+    const res: any = projects;
+    res.sourceStatus = "mock";
+    res.statusReason = reason;
+    return res;
   }
 }

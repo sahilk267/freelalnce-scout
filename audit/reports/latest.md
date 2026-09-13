@@ -151,25 +151,7 @@ The self-perpetuating audit system consists of:
 ## 9. Machine-Readable JSON Issue List (Step 8)
 
 ```json
-[
-  {
-    "id": "ISSUE-001",
-    "title": "Document AZIZ_API_KEY in .env.example",
-    "location": {
-      "file": ".env.example",
-      "function_or_class": "N/A",
-      "line": 1
-    },
-    "category": "config",
-    "status": "⚪ missing",
-    "why": "AZIZ_API_KEY is required for server authentication but was not documented in .env.example",
-    "evidence": "Grep search confirmed AZIZ_API_KEY absent from .env.example",
-    "impact": "New developers deploying the applet may not realize AZIZ_API_KEY needs to be set in environment variables",
-    "suggested_fix": "Add AZIZ_API_KEY= to .env.example",
-    "severity": "low",
-    "effort_estimate_hours": 0.1
-  }
-]
+[]
 ```
 
 ---
@@ -180,15 +162,18 @@ The self-perpetuating audit system consists of:
 
 - **Blocking Issues**: 0 Critical / 0 High severity issues.
 - **Build Status**: ✅ `npm run build` compiled without errors.
-- **Test Status**: ✅ `npm test` passed 62/62 tests across all 9 test suites.
-- **Security Verification**: ✅ Hardcoded API keys removed; authentication middleware fail-closed; generic 401 error messages verified.
+- **Test Status**: ✅ `npm test` passed 186/186 tests across all 21 test suites.
+- **Security Verification**: ✅ Hardcoded API keys removed; authentication middleware fail-closed; generic 401 error messages verified; Google Calendar OAuth 2.0 with AES-256-GCM encrypted token storage and compensation rollback verified.
 
 ---
 
 ## 11. Prioritized TODO List (Step 9)
 
-1. **[Low Severity / 0.1 Hours]** Add `AZIZ_API_KEY=` line to `.env.example`.
-2. **[Low Severity / 0.2 Hours]** Move `test-db-all-allow.cjs` to a dedicated `scripts/` directory.
+1. ✅ **[Resolved]** `AZIZ_API_KEY=` documented in `.env.example`.
+2. ✅ **[Resolved]** `test-db-all-allow.cjs` moved to dedicated `scripts/` directory.
+3. ✅ **[Resolved]** Full 134-file project indexing generated in `docs/PROJECT_INDEX.json` and `docs/PROJECT_INDEX.md`.
+4. ✅ **[Resolved]** Google Calendar Provider test suite and rollback compensation validated.
+5. ✅ **[Resolved]** All Node.js background intervals unref'd for clean asynchronous execution.
 
 ---
 *Report compiled by Persistent Audit & Indexing Engine (Aziz OS).*

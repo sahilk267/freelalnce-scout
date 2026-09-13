@@ -43,6 +43,9 @@ export interface ResumeOrder {
   candidateId: string; // References canonical Candidate record in ICandidateRepository
   tier: ServiceTier;
   priceINR: number;
+  priceAtOrderTime?: number; // Snapshot of price at the time order was created
+  priceMinorUnits?: number; // Snapshot of price in minor units (paise/cents)
+  currency?: string; // Currency snapshot (e.g. "INR")
   maxRevisions: number;
   revisionsUsed: number;
   paymentStatus: PaymentStatus;
@@ -83,16 +86,28 @@ export function createResumeOrder(data: {
   originalResumeText: string;
   targetJobDescription?: string;
   autoDeliverEnabled?: boolean;
+  priceINR?: number;
+  priceAtOrderTime?: number;
+  priceMinorUnits?: number;
+  currency?: string;
+  maxRevisions?: number;
 }): ResumeOrder {
-  const pricing = getTierPricing(data.tier);
+  const defaultPricing = getTierPricing(data.tier);
   const now = new Date().toISOString();
+  const finalPriceINR = data.priceINR ?? data.priceAtOrderTime ?? defaultPricing.priceINR;
+  const finalPriceMinorUnits = data.priceMinorUnits ?? (data.priceAtOrderTime ? data.priceAtOrderTime * 100 : finalPriceINR * 100);
+  const finalCurrency = data.currency || "INR";
+  const finalMaxRevisions = data.maxRevisions ?? defaultPricing.maxRevisions;
 
   return {
     id: data.id || `ord-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`,
     candidateId: data.candidateId,
     tier: data.tier,
-    priceINR: pricing.priceINR,
-    maxRevisions: pricing.maxRevisions,
+    priceINR: finalPriceINR,
+    priceAtOrderTime: finalPriceINR,
+    priceMinorUnits: finalPriceMinorUnits,
+    currency: finalCurrency,
+    maxRevisions: finalMaxRevisions,
     revisionsUsed: 0,
     paymentStatus: "unpaid",
     deliveryStatus: "draft",

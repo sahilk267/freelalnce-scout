@@ -28,7 +28,7 @@ import {
   Layers,
   Sparkles
 } from "lucide-react";
-import { DiagnosticMetrics, SystemLog } from "../types";
+import { DiagnosticMetrics, SystemLog, AIProviderDiagnosticsState, AIProviderStatus } from "../types";
 import { getAdminApiKey, setAdminApiKey } from "../utils/apiAuth";
 
 export interface BackupManifest {
@@ -95,6 +95,11 @@ export interface RestorePreviewResult {
 
 export default function Diagnostics() {
   const [metrics, setMetrics] = useState<DiagnosticMetrics | null>(null);
+  const [aiProviderInfo, setAiProviderInfo] = useState<AIProviderDiagnosticsState | null>(null);
+  const [scraperHealth, setScraperHealth] = useState<{
+    summary: { live: number; mock: number; failed: number };
+    providers: Record<string, { providerName: string; status: "live" | "mock" | "error"; reason?: string; lastChecked: string; isOfficialApi?: boolean }>;
+  } | null>(null);
   const [logs, setLogs] = useState<SystemLog[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -148,9 +153,17 @@ export default function Diagnostics() {
 
   const fetchStats = async () => {
     try {
-      const response = await fetch("/api/diagnostics");
+      const response = await fetch("/api/diagnostics", {
+        headers: apiKey ? { "X-API-Key": apiKey } : {}
+      });
       const data = await response.json();
       setMetrics(data.metrics);
+      if (data.aiProvider) {
+        setAiProviderInfo(data.aiProvider);
+      }
+      if (data.freelanceScrapers) {
+        setScraperHealth(data.freelanceScrapers);
+      }
     } catch (err) {
       console.error(err);
     }
@@ -158,7 +171,9 @@ export default function Diagnostics() {
 
   const fetchLogs = async () => {
     try {
-      const response = await fetch("/api/logs");
+      const response = await fetch("/api/logs", {
+        headers: apiKey ? { "X-API-Key": apiKey } : {}
+      });
       const data = await response.json();
       setLogs(data);
     } catch (err) {
@@ -168,7 +183,9 @@ export default function Diagnostics() {
 
   const fetchPersistenceReport = async () => {
     try {
-      const response = await fetch("/api/persistence/report");
+      const response = await fetch("/api/persistence/report", {
+        headers: apiKey ? { "X-API-Key": apiKey } : {}
+      });
       if (response.ok) {
         const data = await response.json();
         setHealthReport(data);
@@ -180,7 +197,9 @@ export default function Diagnostics() {
 
   const fetchPersistenceConfig = async () => {
     try {
-      const response = await fetch("/api/persistence/config");
+      const response = await fetch("/api/persistence/config", {
+        headers: apiKey ? { "X-API-Key": apiKey } : {}
+      });
       if (response.ok) {
         const data = await response.json();
         setConfig(data);
@@ -192,7 +211,9 @@ export default function Diagnostics() {
 
   const fetchVersionedBackups = async () => {
     try {
-      const response = await fetch("/api/persistence/backups");
+      const response = await fetch("/api/persistence/backups", {
+        headers: apiKey ? { "X-API-Key": apiKey } : {}
+      });
       if (response.ok) {
         const data = await response.json();
         setVersionedBackups(data);
@@ -204,7 +225,9 @@ export default function Diagnostics() {
 
   const fetchStructuredLogs = async () => {
     try {
-      const response = await fetch("/api/persistence/logs");
+      const response = await fetch("/api/persistence/logs", {
+        headers: apiKey ? { "X-API-Key": apiKey } : {}
+      });
       if (response.ok) {
         const data = await response.json();
         setStructuredLogs(data);
@@ -583,6 +606,122 @@ export default function Diagnostics() {
         </div>
       )}
 
+      {/* AI Provider Gateway & Resilient Failover */}
+      {aiProviderInfo && (
+        <div className="bg-slate-900 p-5 rounded-xl border border-slate-800 space-y-4" id="ai-provider-gateway-panel">
+          <div className="flex items-center justify-between flex-wrap gap-2">
+            <div>
+              <h3 className="text-sm font-semibold text-slate-200 uppercase tracking-wider font-sans flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-indigo-400" />
+                AI Model Gateway & Failover Health
+              </h3>
+              <p className="text-xs text-slate-400 mt-0.5">
+                Vendor-neutral routing with automatic provider failover and cooldown recovery
+              </p>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-slate-400">Active Provider:</span>
+              <span className={`text-xs font-mono font-semibold px-2.5 py-1 rounded border ${
+                aiProviderInfo.isFailoverActive
+                  ? "bg-amber-950/60 text-amber-300 border-amber-800"
+                  : "bg-indigo-950 text-indigo-300 border-indigo-800"
+              }`}>
+                {aiProviderInfo.activeProvider.toUpperCase()}
+                {aiProviderInfo.isFailoverActive && " (FAILOVER ACTIVE)"}
+              </span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            <div className="bg-slate-950 p-3 rounded-lg border border-slate-800">
+              <div className="text-[11px] text-slate-400 uppercase font-mono">Primary Provider</div>
+              <div className="text-sm font-semibold text-slate-200 mt-0.5 capitalize font-mono">
+                {aiProviderInfo.primaryProvider}
+              </div>
+            </div>
+            <div className="bg-slate-950 p-3 rounded-lg border border-slate-800">
+              <div className="text-[11px] text-slate-400 uppercase font-mono">Fallback Provider</div>
+              <div className="text-sm font-semibold text-slate-200 mt-0.5 capitalize font-mono">
+                {aiProviderInfo.fallbackProvider || "None (Single Provider Mode)"}
+              </div>
+            </div>
+            <div className="bg-slate-950 p-3 rounded-lg border border-slate-800">
+              <div className="text-[11px] text-slate-400 uppercase font-mono">Failover Threshold</div>
+              <div className="text-sm font-semibold text-slate-200 mt-0.5 font-mono">
+                {aiProviderInfo.failoverThreshold} consecutive errors
+              </div>
+            </div>
+            <div className="bg-slate-950 p-3 rounded-lg border border-slate-800">
+              <div className="text-[11px] text-slate-400 uppercase font-mono">Cooldown Duration</div>
+              <div className="text-sm font-semibold text-slate-200 mt-0.5 font-mono">
+                {Math.round(aiProviderInfo.cooldownPeriodMs / 1000)}s
+              </div>
+            </div>
+          </div>
+
+          {/* Provider Performance & Failure Counter Table */}
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs font-mono border-collapse" id="ai-providers-table">
+              <thead>
+                <tr className="border-b border-slate-800 text-slate-400">
+                  <th className="py-2 px-3">Provider</th>
+                  <th className="py-2 px-3">Role</th>
+                  <th className="py-2 px-3">Consecutive Failures</th>
+                  <th className="py-2 px-3">Total Requests</th>
+                  <th className="py-2 px-3">Total Errors</th>
+                  <th className="py-2 px-3">State</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-800/60 text-slate-300">
+                {(Object.values(aiProviderInfo.providers) as AIProviderStatus[]).map((prov) => {
+                  const isPrimary = prov.id === aiProviderInfo.primaryProvider;
+                  const isActive = prov.id === aiProviderInfo.activeProvider;
+                  return (
+                    <tr key={prov.id} className="hover:bg-slate-950/40">
+                      <td className="py-2 px-3 font-semibold text-slate-200">
+                        {prov.name} ({prov.id})
+                      </td>
+                      <td className="py-2 px-3">
+                        <span className={`px-2 py-0.5 rounded text-[10px] ${
+                          isPrimary ? "bg-blue-950 text-blue-300 border border-blue-800" : "bg-purple-950 text-purple-300 border border-purple-800"
+                        }`}>
+                          {isPrimary ? "PRIMARY" : "FALLBACK"}
+                        </span>
+                      </td>
+                      <td className="py-2 px-3">
+                        <span className={prov.consecutiveFailures > 0 ? "text-amber-400 font-bold" : "text-slate-400"}>
+                          {prov.consecutiveFailures}
+                        </span>
+                        {prov.consecutiveFailures >= aiProviderInfo.failoverThreshold && (
+                          <span className="ml-2 text-[10px] text-rose-400">(Threshold Exceeded)</span>
+                        )}
+                      </td>
+                      <td className="py-2 px-3 text-slate-400">{prov.totalRequests}</td>
+                      <td className="py-2 px-3 text-slate-400">{prov.totalFailures}</td>
+                      <td className="py-2 px-3">
+                        {prov.isCoolingDown ? (
+                          <span className="px-2 py-0.5 rounded text-[10px] bg-rose-950 text-rose-400 border border-rose-900">
+                            COOLING DOWN ({Math.ceil(prov.cooldownRemainingMs / 1000)}s)
+                          </span>
+                        ) : isActive ? (
+                          <span className="px-2 py-0.5 rounded text-[10px] bg-emerald-950 text-emerald-400 border border-emerald-900">
+                            ACTIVE
+                          </span>
+                        ) : (
+                          <span className="px-2 py-0.5 rounded text-[10px] bg-slate-800 text-slate-400">
+                            STANDBY
+                          </span>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
       {/* API Integrations Directory */}
       <div className="bg-slate-900 p-5 rounded-xl border border-slate-800 space-y-4" id="diagnostics-apis">
         <h3 className="text-sm font-semibold text-slate-200 uppercase tracking-wider font-sans">
@@ -606,6 +745,79 @@ export default function Diagnostics() {
             ))}
           </div>
         )}
+      </div>
+
+      {/* Freelance Scrapers Integrity & Health (Resilience & Honest Degradation) */}
+      <div className="bg-slate-900 p-5 rounded-xl border border-slate-800 space-y-4" id="freelance-scraper-health-panel">
+        <div className="flex items-center justify-between flex-wrap gap-2">
+          <div>
+            <h3 className="text-sm font-semibold text-slate-200 uppercase tracking-wider font-sans flex items-center gap-2">
+              <Activity className="w-4 h-4 text-emerald-400" />
+              Freelance Scraper Health & Reachability
+            </h3>
+            <p className="text-xs text-slate-400 mt-0.5">
+              Live vs Degraded / Mock status tracking per independent scraper provider
+            </p>
+          </div>
+          {scraperHealth && (
+            <div className="flex items-center gap-2 text-xs font-mono">
+              <span className="bg-emerald-950/70 border border-emerald-800 text-emerald-300 px-2 py-0.5 rounded">
+                {scraperHealth.summary.live} Live
+              </span>
+              <span className="bg-amber-950/70 border border-amber-800 text-amber-300 px-2 py-0.5 rounded">
+                {scraperHealth.summary.mock} Degraded / Offline
+              </span>
+              {scraperHealth.summary.failed > 0 && (
+                <span className="bg-rose-950/70 border border-rose-800 text-rose-300 px-2 py-0.5 rounded">
+                  {scraperHealth.summary.failed} Failed
+                </span>
+              )}
+            </div>
+          )}
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3" id="scraper-status-cards">
+          {scraperHealth?.providers && Object.entries(scraperHealth.providers).map(([name, prov]: [string, any]) => (
+            <div
+              key={name}
+              id={`scraper-card-${name.toLowerCase().replace(/[^a-z0-9]/g, "-")}`}
+              className="bg-slate-950 p-3.5 rounded-lg border border-slate-850 flex flex-col justify-between gap-2.5"
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-semibold text-white font-mono">{name}</span>
+                <span
+                  className={`text-[10px] font-mono px-2 py-0.5 rounded flex items-center gap-1 ${
+                    prov.status === "live"
+                      ? "bg-emerald-950 text-emerald-400 border border-emerald-900"
+                      : prov.status === "mock"
+                      ? "bg-amber-950 text-amber-400 border border-amber-900"
+                      : "bg-rose-950 text-rose-400 border border-rose-900"
+                  }`}
+                >
+                  <span
+                    className={`w-1.5 h-1.5 rounded-full ${
+                      prov.status === "live" ? "bg-emerald-400" : prov.status === "mock" ? "bg-amber-400" : "bg-rose-400"
+                    }`}
+                  />
+                  {prov.status.toUpperCase()}
+                </span>
+              </div>
+              <div className="text-[11px] font-mono text-slate-400 space-y-0.5">
+                {prov.reason ? (
+                  <div className="text-amber-400/90 text-[10px]">Reason: {prov.reason}</div>
+                ) : (
+                  <div className="text-emerald-400/80 text-[10px]">Endpoint Healthy</div>
+                )}
+                {prov.isOfficialApi && (
+                  <div className="text-blue-400 text-[10px]">Official API Token Active</div>
+                )}
+                <div className="text-slate-600 text-[9px]">
+                  Checked {new Date(prov.lastChecked).toLocaleTimeString()}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* ENTERPRISE PERSISTENCE MANAGEMENT DASHBOARD */}

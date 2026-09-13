@@ -2,9 +2,9 @@ import {StrictMode} from 'react';
 import {createRoot} from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
-import { getAdminApiKey } from './utils/apiAuth';
+import { getAdminApiKey, getCsrfToken } from './utils/apiAuth';
 
-// Global window.fetch interceptor: Auto-attaches X-API-Key on all internal /api/* requests
+// Global window.fetch interceptor: Ensures credentials="include" and attaches CSRF token from readable cookie
 try {
   const originalFetch = typeof window !== "undefined" && window.fetch ? window.fetch.bind(window) : (typeof fetch !== "undefined" ? fetch : null);
   if (originalFetch) {
@@ -30,7 +30,9 @@ try {
 
       if (isInternalApi) {
         const adminKey = getAdminApiKey();
+        const csrfToken = getCsrfToken();
         const method = (init?.method || (input instanceof Request ? input.method : "GET")).toUpperCase();
+        const isStateChanging = ["POST", "PUT", "DELETE", "PATCH"].includes(method);
         const isDangerousAction =
           method === "DELETE" ||
           urlStr === "/api/terminal/execute" ||
@@ -44,16 +46,22 @@ try {
 
         if (typeof Request !== "undefined" && input instanceof Request) {
           const headers = new Headers(input.headers);
+          if (isStateChanging && csrfToken && !headers.has("X-CSRF-Token")) {
+            headers.set("X-CSRF-Token", csrfToken);
+          }
           if (adminKey && !headers.has("X-API-Key") && !headers.has("Authorization")) {
             headers.set("X-API-Key", adminKey);
           }
           if (isDangerousAction && !headers.has("X-Confirm-Dangerous-Action")) {
             headers.set("X-Confirm-Dangerous-Action", "true");
           }
-          input = new Request(input, { headers });
+          input = new Request(input, { headers, credentials: "include" });
         } else {
           init = init || {};
           const headers = new Headers(init.headers || {});
+          if (isStateChanging && csrfToken && !headers.has("X-CSRF-Token")) {
+            headers.set("X-CSRF-Token", csrfToken);
+          }
           if (adminKey && !headers.has("X-API-Key") && !headers.has("Authorization")) {
             headers.set("X-API-Key", adminKey);
           }
@@ -61,6 +69,7 @@ try {
             headers.set("X-Confirm-Dangerous-Action", "true");
           }
           init.headers = headers;
+          init.credentials = "include";
         }
       }
 

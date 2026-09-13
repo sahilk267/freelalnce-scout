@@ -205,6 +205,30 @@ export default function JobSearch({ initialTab = "jsi" }: JobSearchProps) {
         </div>
       )}
 
+      {/* Honest Count & Source Breakdown Bar */}
+      {!loading && activeTab === "freelance" && freelanceProjects.length > 0 && (() => {
+        const liveCount = freelanceProjects.filter(p => p.sourceStatus === "live").length;
+        const mockCount = freelanceProjects.filter(p => p.sourceStatus === "mock" || !p.sourceStatus).length;
+        const errorCount = freelanceProjects.filter(p => p.sourceStatus === "error").length;
+        return (
+          <div className="bg-slate-900/70 border border-slate-800 rounded-xl px-4 py-2.5 flex items-center justify-between text-xs font-mono text-slate-400 flex-wrap gap-2" id="source-status-breakdown">
+            <div className="flex items-center gap-2">
+              <span className="text-slate-300 font-semibold">Integrity Breakdown:</span>
+              <span>Showing <strong className="text-emerald-400">{liveCount}</strong> live {liveCount === 1 ? "result" : "results"}, <strong className="text-amber-400">{mockCount}</strong> fallback {mockCount === 1 ? "sample" : "samples"}</span>
+              {mockCount > 0 && <span className="text-slate-500">(Upwork & Guru rate-limited or blocked by Cloudflare)</span>}
+            </div>
+            <div className="flex items-center gap-2 text-[10px]">
+              <span className="flex items-center gap-1 bg-emerald-950/60 border border-emerald-800 text-emerald-300 px-2 py-0.5 rounded">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Live Scrape
+              </span>
+              <span className="flex items-center gap-1 bg-amber-950/60 border border-amber-800 text-amber-300 px-2 py-0.5 rounded">
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-400"></span> Synthetic / Offline
+              </span>
+            </div>
+          </div>
+        );
+      })()}
+
       {/* Jobs/Freelance list */}
       <div className="space-y-4" id="listings-list">
         {loading ? (
@@ -278,6 +302,21 @@ export default function JobSearch({ initialTab = "jsi" }: JobSearchProps) {
                       : "bg-slate-950 text-slate-500 border border-slate-900"
                   }`}>
                     {proj.verification}
+                  </span>
+                  <span
+                    className={`text-[10px] px-2 py-0.5 rounded font-mono font-medium flex items-center gap-1 border ${
+                      proj.sourceStatus === "live"
+                        ? "bg-emerald-950/60 text-emerald-300 border-emerald-800"
+                        : proj.sourceStatus === "error"
+                        ? "bg-rose-950/60 text-rose-300 border-rose-800"
+                        : "bg-amber-950/60 text-amber-300 border-amber-800"
+                    }`}
+                    title={proj.sourceStatusReason ? `Integrity reason: ${proj.sourceStatusReason}` : undefined}
+                  >
+                    <span className={`w-1.5 h-1.5 rounded-full ${
+                      proj.sourceStatus === "live" ? "bg-emerald-400" : proj.sourceStatus === "error" ? "bg-rose-400" : "bg-amber-400"
+                    }`} />
+                    {proj.sourceStatus === "live" ? "Live Scrape" : proj.sourceStatus === "error" ? "Offline / Error" : "Synthetic / Offline"}
                   </span>
                   <span className="bg-blue-950 text-blue-400 border border-blue-900 text-[10px] px-2 py-0.5 rounded font-mono">
                     Relevance: {proj.confidence}%

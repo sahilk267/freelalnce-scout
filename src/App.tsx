@@ -15,9 +15,15 @@ import Integrations from "./components/Integrations";
 import AgentDashboard from "./components/AgentDashboard";
 import FreelancerDashboard from "./components/FreelancerDashboard";
 import CompanyProfilesManager from "./components/CompanyProfilesManager";
+import UserManager from "./components/UserManager";
+import PricingManager from "./components/PricingManager";
+import AuthScreen from "./components/AuthScreen";
 import { ModuleId, SystemModule, DiagnosticMetrics } from "./types";
+import { UserPublicProfile } from "./domain/models/User";
+import { getAuthUser, setAuthSession, clearAuthSession, apiFetch } from "./utils/apiAuth";
 
 export default function App() {
+  const [user, setUser] = useState<UserPublicProfile | null>(() => getAuthUser());
   const [activeModule, setActiveModule] = useState<ModuleId>("studio");
   const [modules, setModules] = useState<SystemModule[]>([
     { id: "studio", name: "Studio Workspace", description: "AI Prompt prototyping and deployment studio", status: "active" },
@@ -29,35 +35,97 @@ export default function App() {
     { id: "memory", name: "Semantic Memory", description: "Long-term client context storage", status: "active" },
     { id: "diagnostics", name: "Kernel Diagnostics", description: "System logs and micro-service statuses", status: "active" },
     { id: "terminal", name: "Secure CLI Terminal", description: "Execute developer command scripts", status: "active" },
-    { id: "integrations", name: "Unified Integrations", description: "Configure SMTP, Gmail, Hostinger & Telegram", status: "active" }
+    { id: "integrations", name: "Unified Integrations", description: "Configure SMTP, Gmail, Hostinger & Telegram", status: "active" },
+    { id: "users", name: "User Management", description: "Role-Based Access Control, Invites & Directory", status: "active" },
+    { id: "pricing", name: "Dynamic Pricing", description: "Resume Order Tiers, Live Currency & Audit Logs", status: "active" }
   ]);
   const [metrics, setMetrics] = useState<DiagnosticMetrics | null>(null);
   const [loading, setLoading] = useState(true);
 
+  // Sync auth state with window events
+  useEffect(() => {
+    const handleAuthChange = () => {
+      setUser(getAuthUser());
+    };
+
+    const handleUnauthorized = () => {
+      setUser(null);
+    };
+
+    window.addEventListener("aziz-auth-changed", handleAuthChange);
+    window.addEventListener("aziz-api-unauthorized", handleUnauthorized);
+
+    return () => {
+      window.removeEventListener("aziz-auth-changed", handleAuthChange);
+      window.removeEventListener("aziz-api-unauthorized", handleUnauthorized);
+    };
+  }, []);
+
+  // Validate active session with /api/auth/me on boot via HttpOnly cookie
+  useEffect(() => {
+    const checkSession = async () => {
+      try {
+        const res = await apiFetch("/api/auth/me");
+        if (res.ok) {
+          const profile = await res.json();
+          setUser(profile);
+          setAuthSession(profile);
+        } else {
+          clearAuthSession();
+          setUser(null);
+        }
+      } catch {
+        // Network or offline glitch; keep cached profile
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    checkSession();
+  }, []);
+
   const fetchOSState = async () => {
+    if (!user) return;
     try {
-      const response = await fetch("/api/diagnostics");
+      const response = await apiFetch("/api/diagnostics");
       if (response.ok) {
         const data = await response.json();
         if (data.modules && data.modules.length > 0) {
+          // Keep our local 'users' module included if admin
+          const hasUsers = data.modules.some((m: SystemModule) => m.id === "users");
+          if (!hasUsers) {
+            data.modules.push({
+              id: "users",
+              name: "User Management",
+              description: "Role-Based Access Control, Invites & Directory",
+              status: "active"
+            });
+          }
           setModules(data.modules);
         }
         setMetrics(data.metrics || null);
       }
-    } catch (err) {
-      // Handle gracefully without printing console.error during startup
-      console.log("Kernel sync pending, retrying...");
-    } finally {
-      setLoading(false);
+    } catch {
+      console.log("Kernel diagnostics sync pending...");
     }
   };
 
   useEffect(() => {
+    if (!user) return;
     fetchOSState();
-    // Poll system metrics every 5 seconds to keep the sidebar footer stats completely dynamic
     const interval = setInterval(fetchOSState, 5000);
     return () => clearInterval(interval);
-  }, []);
+  }, [user]);
+
+  // If user is recruiter and on an admin-only module, route to studio
+  useEffect(() => {
+    if (user && user.role === "recruiter") {
+      const adminOnlyModules: ModuleId[] = ["terminal", "agents", "integrations", "users", "pricing"];
+      if (adminOnlyModules.includes(activeModule)) {
+        setActiveModule("studio");
+      }
+    }
+  }, [user, activeModule]);
 
   const renderActiveViewport = () => {
     switch (activeModule) {
@@ -81,6 +149,10 @@ export default function App() {
         return <Terminal id="terminal-viewport" />;
       case "integrations":
         return <Integrations />;
+      case "users":
+        return <UserManager />;
+      case "pricing":
+        return <PricingManager />;
       default:
         return (
           <div className="bg-slate-900 border border-slate-800 rounded-xl p-8 text-center font-mono text-sm text-slate-400" id="fallback-viewport">
@@ -94,8 +166,19 @@ export default function App() {
     return (
       <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center gap-3 text-slate-400 font-mono" id="app-loading-screen">
         <div className="w-10 h-10 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
-        <span>Booting Aziz OS Kernel...</span>
+        <span>Booting Aziz OS Kernel & RBAC Gateway...</span>
       </div>
+    );
+  }
+
+  // If unauthenticated, display the full-screen login / bootstrap portal
+  if (!user) {
+    return (
+      <AuthScreen
+        onSuccess={() => {
+          setUser(getAuthUser());
+        }}
+      />
     );
   }
 
@@ -108,6 +191,7 @@ export default function App() {
           setActiveModule(id);
         }}
         modules={modules}
+        user={user}
         metrics={metrics}
       />
 

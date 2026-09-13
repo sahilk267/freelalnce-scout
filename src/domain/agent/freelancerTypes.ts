@@ -22,6 +22,8 @@ export interface NormalizedFreelanceProject {
   scrapeTimestamp: string;
   score?: number; // Calculated score
   scoreReasons?: string[]; // Score breakdowns
+  sourceStatus?: "live" | "mock" | "error";
+  sourceStatusReason?: "blocked_403" | "timeout" | "rate_limited" | "parse_failed" | "unauthorized_401" | "network_error" | "official_api_active" | string;
 }
 
 export type ProposalTone = "professional" | "friendly" | "premium" | "concise";

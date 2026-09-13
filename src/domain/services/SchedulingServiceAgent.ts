@@ -180,6 +180,7 @@ export class SchedulingServiceAgent {
           interviewerId: session.interviewerId,
           candidateId: session.candidateId,
           candidateName: session.candidateName,
+          candidateEmail: session.candidateEmail,
           slotStart: slot.slotStart,
           slotEnd: slot.slotEnd
         });
@@ -300,6 +301,7 @@ export class SchedulingServiceAgent {
         interviewerId: session.interviewerId,
         candidateId: session.candidateId,
         candidateName: session.candidateName,
+        candidateEmail: session.candidateEmail,
         slotStart: slot.slotStart,
         slotEnd: slot.slotEnd
       });
@@ -381,6 +383,14 @@ export class SchedulingServiceAgent {
     }
 
     if (session.selectedSlotId) {
+      const slot = await this.schedulingRepo.findSlotById(session.selectedSlotId);
+      if (slot?.calendarEventId) {
+        try {
+          await this.calendarProvider.cancelEvent(slot.calendarEventId);
+        } catch (calErr: any) {
+          console.warn("[SchedulingServiceAgent] Calendar event cancellation error:", calErr?.message);
+        }
+      }
       await this.schedulingRepo.atomicReleaseSlot(session.selectedSlotId, session.id);
       await this.calendarProvider.releaseSlot(session.selectedSlotId, session.id);
     }

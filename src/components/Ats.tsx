@@ -14,9 +14,11 @@ import {
   TrendingUp, 
   ArrowRight,
   BookOpen,
-  Calendar
+  Calendar,
+  CreditCard
 } from "lucide-react";
 import SchedulingDashboard from "./SchedulingDashboard";
+import ResumeOrderPlacement from "./ResumeOrderPlacement";
 
 interface AtsReport {
   matchScore: number;
@@ -31,7 +33,7 @@ interface AtsReport {
 }
 
 export default function Ats() {
-  const [hubMode, setHubMode] = useState<"ats" | "scheduling">("ats");
+  const [hubMode, setHubMode] = useState<"ats" | "scheduling" | "orders">("ats");
   const [resumeText, setResumeText] = useState("");
   const [jobDescription, setJobDescription] = useState("");
   const [report, setReport] = useState<AtsReport | null>(null);
@@ -114,10 +116,25 @@ You will write clean production-ready modular architectures, integrate advanced 
           <Calendar className="w-4 h-4" />
           Self-Scheduling Agent
         </button>
+
+        <button
+          onClick={() => setHubMode("orders")}
+          id="hub-tab-orders-btn"
+          className={`pb-3 text-sm font-medium transition-colors border-b-2 flex items-center gap-2 ${
+            hubMode === "orders"
+              ? "border-indigo-500 text-indigo-400 font-semibold"
+              : "border-transparent text-slate-400 hover:text-slate-200"
+          }`}
+        >
+          <CreditCard className="w-4 h-4" />
+          Resume Rewrite Packages
+        </button>
       </div>
 
       {hubMode === "scheduling" ? (
         <SchedulingDashboard />
+      ) : hubMode === "orders" ? (
+        <ResumeOrderPlacement />
       ) : (
         <>
           {/* Header Panel */}

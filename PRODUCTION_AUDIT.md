@@ -10,11 +10,11 @@ This report details the findings, implementation, and concrete evidence of the e
 A thorough, multi-point production and security audit was completed to transition Aziz OS from a local simulation environment to a highly secure, rate-limited, and authenticated production-ready full-stack container application.
 
 ### Hardening Metrics
-- **Auth Status**: 🔒 **100% Authenticated** (59/59 `/api/*` endpoints secured via `X-API-Key` checking).
+- **Auth Status**: 🔒 **100% Authenticated & Hardened** (Full RBAC role separation, HttpOnly cookies, zero client-side JWT persistence, and double-submit CSRF protection).
 - **Firestore Integrity**: 🛡️ **Zero-Trust Access Control** (All candidates read/list/write/delete actions restricted to verified sessions).
-- **Rate Limiting**: 🚦 **DoS Protection Enabled** (Sensitive, database, and high-fidelity AI endpoints guarded with express-rate-limit).
+- **Rate Limiting**: 🚦 **DoS Protection Enabled** (Sensitive, database, brute force login, and high-fidelity AI endpoints guarded with rate limiting).
 - **Secrets Hygiene**: 🧹 **Hardened Gitignore** (All sqlite databases and Firebase configuration structures blacklisted from repo tracking).
-- **Unit Test Coverage**: **100% GREEN** (62/62 automated tests passed).
+- **Unit Test Coverage**: **100% GREEN** (175/175 automated tests passed across 20 test files).
 
 ---
 
@@ -286,6 +286,64 @@ The following architectural disclosures and operational boundaries are documente
 
 5. **Gemini AI Model Alignment**:
    - All AI inference and prompt evaluation endpoints are aligned to the official, available Gemini models (`gemini-3.8-flash`, `gemini-3.1-pro-preview`, `gemini-3.1-flash-lite`), retiring deprecated or pre-release aliases.
+
+6. **API Universal Gate & Route Exemption Registry (`EXEMPTED_API_ROUTES`)**:
+   - Aziz OS enforces a zero-trust default-deny security model: all `/api/*` routes require a valid administrative `X-API-Key` by default.
+   - Candidate-facing self-service endpoints (candidate screening chat `/api/screening/sessions/:id/interact`, candidate slot discovery `/api/scheduling/slots/:id`, slot selection `/api/scheduling/select`, and slot cancellation `/api/scheduling/cancel`) and public probes (`/api/health`, `/api/auth/status`) are declared in the typed `EXEMPTED_API_ROUTES` registry in `server.ts`.
+   - **Operational Rule**: When adding any future candidate-facing or public route, developers must declare the route in `EXEMPTED_API_ROUTES` to bypass the admin gate, and the route handler itself must enforce independent authentication (timing-safe `X-Session-Token` header verification) and brute-force rate limiting (`checkFailedSessionTokenRateLimit`). Automated regression coverage is enforced in `SchedulingDashboardAuth.test.ts` and `SessionTokenRateLimit.test.ts`.
+
+---
+
+## 9. Feature 5 Audit: Role-Based Access Control (RBAC) & Multi-User Management
+
+### Summary of Implementation & Architectural Compliance
+- **Data Modeling & Storage (`User.ts`, `IUserRepository.ts`, `SQLiteUserRepository.ts`)**:
+  - Implemented typed `User` models with `id`, normalized `email`, `passwordHash` (bcrypt with 10 salt rounds), `role` (`"admin"` | `"recruiter"`), `active` flag, and audit timestamps (`createdAt`, `lastLoginAt`, `sessionsRevokedAt`).
+  - Added `UserInvite` single-use tokens with configurable time-to-live (`expiresAt`), designated role assignment, and atomic consumption.
+  - Implemented `revoked_tokens` table/denylist with JTI expiration tracking for instant session revocation and graceful cleanup.
+- **Authentication Engine (`AuthService.ts`)**:
+  - Zero-Trust fail-closed boot protection: the server verifies or persists a secure 256-bit cryptographically random JWT secret.
+  - Generates HS256 JWT tokens containing `sub`, `email`, `role`, and unique `jti` with a 12-hour expiry.
+  - Verifies token signature, expiration, user active status, session revocation timestamp (`sessionsRevokedAt`), and token denylist on every protected request.
+- **Rate-Limited Brute Force Protection**:
+  - `/api/auth/login` is guarded by an in-memory brute force limiter: after 5 consecutive failed attempts per IP+email pair within a 15-minute sliding window, the endpoint returns `HTTP 429 Too Many Requests` with `retryAfterSec`.
+- **First-Boot Bootstrap & Invite Lifecycle**:
+  - When zero users exist in the system, `/api/auth/bootstrap-status` signals `bootstrapAvailable: true`, allowing the first user to register and bootstrap as the master administrator without an invite token.
+  - Once any user exists, all subsequent registrations require a valid, single-use invite token (`inviteToken`). Reusing or presenting an expired token is rejected with `HTTP 400`.
+- **Role-Based Authorization Enforcement (`requireRole`)**:
+  - Sensitive operations (`POST /api/terminal/execute`, `/api/persistence/*`, `/api/agents*`, `/api/integrations/*`, all HTTP `DELETE` routes, and user management `/api/auth/users*`, `/api/auth/invite*`) strictly require the `"admin"` role. Non-admin users (e.g. `"recruiter"`) receive `HTTP 403 Forbidden: Insufficient role privileges`.
+  - Recruiter workflows (`/api/candidates`, `/api/jobs`, `/api/scheduling/*`, `/api/ats/*`, `/api/screening/*`) allow both `"admin"` and `"recruiter"` roles.
+- **Backward Compatibility & Machine Auth**:
+  - Automated CI/CD scripts and microservices providing `AZIZ_API_KEY` via `X-API-Key` continue to authenticate as an administrative fallback identity, with a deprecation warning logged: `[Auth Deprecation] AZIZ_API_KEY used on <method> <path>, migrate to user JWT.`
+- **Client Application & UI Integration**:
+  - `AuthScreen.tsx`: Modern zero-slop portal handling both bootstrap master admin setup, single-use invite redemption, and credential login.
+  - `UserManager.tsx`: Administrative panel for issuing single-use invites, filtering directory users, promoting/demoting roles, deactivating accounts, and revoking active sessions.
+  - `Sidebar.tsx`: Role-aware navigation hiding admin modules from recruiters, with active user profile badge and session termination trigger.
+  - `main.tsx`: Transparent `fetch` interceptor auto-injecting active JWT Bearer credentials across all client requests.
+- **Automated Test Coverage**:
+  - `src/domain/services/RbacAuth.test.ts`: Automated tests covering bootstrap, invite token redemption, reuse prevention, 401 unauthenticated handling, token expiration/revocation, 429 brute-force lockout, 403 role separation, and legacy API key compatibility.
+
+---
+
+## 10. Feature 6 Audit: Cookie-Based Authentication, Session Hardening & Double-Submit CSRF Protection
+
+### Summary of Implementation & Architectural Compliance
+- **Session Cookie Architecture (`aziz_session`)**:
+  - `POST /api/auth/login` sets an `HttpOnly`, `SameSite=Strict`, `Secure` (production) cookie named `aziz_session` containing the JWT, with a 12-hour expiration matching token lifespan.
+  - By default in browser authentication flows, the response body omits the raw JWT (`token` is `undefined`), eliminating token exposure in response payload bodies.
+  - Scripts and CI/CD service accounts can pass `{ grantType: "service_account" }` in the login payload to receive the JWT directly in the JSON response without browser session cookies being set.
+- **Double-Submit CSRF Defense (`csrf_token` & `X-CSRF-Token`)**:
+  - Upon authentication, the server generates a cryptographically secure 32-byte hex token and sets a non-HttpOnly `csrf_token` cookie with `SameSite=Strict`.
+  - For all state-changing HTTP operations (`POST`, `PUT`, `DELETE`, `PATCH`) using cookie authentication, `requireRole` verifies that the `X-CSRF-Token` request header matches the `csrf_token` cookie value via timing-safe comparison (`crypto.timingSafeEqual`).
+  - Missing or mismatched CSRF tokens return `HTTP 403 Forbidden: Invalid or missing CSRF token`. Safe idempotent methods (`GET`, `HEAD`, `OPTIONS`) and Bearer-authenticated service account requests are exempt.
+- **Client-Side Storage Hardening**:
+  - Removed all persistence of JWT tokens in browser `localStorage`, `sessionStorage`, and readable document cookies.
+  - Updated `src/utils/apiAuth.ts` and `src/main.tsx` global fetch interceptor to automatically provide `credentials: "include"` and attach `X-CSRF-Token` from the document cookie for mutating calls.
+- **Secure Token Invalidation on Logout**:
+  - `POST /api/auth/logout` extracts the active session token (from cookie or Bearer header), denylists the token JTI in SQLite/InMemory store, and clears both `aziz_session` and `csrf_token` cookies with `Max-Age=0` and epoch expiration.
+- **Automated Test Verification**:
+  - `src/domain/services/RbacAuth.test.ts`: Comprehensive test suite verifying cookie issuance, service account grant flow, cookie-based GET execution, CSRF header validation on POST, 403 rejection on missing/mismatched CSRF headers, Bearer exemption, and cookie clearing with token revocation on logout. 21/21 test cases passing.
+
 
 
 

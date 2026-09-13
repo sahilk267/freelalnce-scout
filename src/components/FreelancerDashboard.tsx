@@ -602,10 +602,20 @@ Looking for high-value Remote contracts to design autonomous agents and scalable
           <div className="p-2 bg-amber-950 border border-amber-900 rounded-lg text-amber-400">
             <AlertCircle className="w-5 h-5" />
           </div>
-          <div className="space-y-1">
-            <h4 className="text-sm font-semibold text-amber-200">System Integration & Scraper Notice</h4>
+          <div className="space-y-1 flex-1">
+            <div className="flex items-center justify-between flex-wrap gap-2">
+              <h4 className="text-sm font-semibold text-amber-200">System Integration & Scraper Notice</h4>
+              <div className="flex items-center gap-2 text-xs font-mono">
+                <span className="bg-emerald-950 border border-emerald-800 text-emerald-300 px-2 py-0.5 rounded">
+                  {projects.filter(p => p.sourceStatus === "live").length} Live Scraped
+                </span>
+                <span className="bg-amber-950 border border-amber-800 text-amber-300 px-2 py-0.5 rounded">
+                  {projects.filter(p => p.sourceStatus === "mock" || !p.sourceStatus).length} Fallback Samples
+                </span>
+              </div>
+            </div>
             <p className="text-slate-400 text-xs leading-relaxed max-w-4xl">
-              Public scrapers for Upwork, Guru, PeoplePerHour, Fiverr Pro, and Freelancer.com operate in <strong>best-effort fallback simulation mode</strong> due to remote anti-bot protection (HTTP 403 blocks) on external endpoints. For live production job discovery, configure enterprise API partner credentials inside your system configuration panel.
+              Showing {projects.filter(p => p.sourceStatus === "live").length} live results and {projects.filter(p => p.sourceStatus === "mock" || !p.sourceStatus).length} fallback samples. Best-effort scrapers (Upwork, Guru, PeoplePerHour, Fiverr Pro) operate in graceful offline fallback mode when blocked by Cloudflare anti-bot firewalls. To activate full live production scraping for Upwork, configure <code className="bg-slate-900 text-amber-300 px-1 py-0.5 rounded font-mono text-[11px]">UPWORK_API_KEY</code> or <code className="bg-slate-900 text-amber-300 px-1 py-0.5 rounded font-mono text-[11px]">UPWORK_ACCESS_TOKEN</code> in your environment or Settings.
             </p>
           </div>
         </div>
@@ -965,6 +975,21 @@ Looking for high-value Remote contracts to design autonomous agents and scalable
                         <h3 className="text-base font-semibold text-white tracking-tight">{proj.title}</h3>
                         <span className="bg-slate-950 text-slate-400 border border-slate-850 text-[10px] px-2 py-0.5 rounded font-mono uppercase">
                           {proj.source}
+                        </span>
+                        <span
+                          className={`text-[10px] px-2 py-0.5 rounded font-mono font-medium flex items-center gap-1 border ${
+                            proj.sourceStatus === "live"
+                              ? "bg-emerald-950/60 text-emerald-300 border-emerald-800"
+                              : proj.sourceStatus === "error"
+                              ? "bg-rose-950/60 text-rose-300 border-rose-800"
+                              : "bg-amber-950/60 text-amber-300 border-amber-800"
+                          }`}
+                          title={proj.sourceStatusReason ? `Integrity reason: ${proj.sourceStatusReason}` : undefined}
+                        >
+                          <span className={`w-1.5 h-1.5 rounded-full ${
+                            proj.sourceStatus === "live" ? "bg-emerald-400" : proj.sourceStatus === "error" ? "bg-rose-400" : "bg-amber-400"
+                          }`} />
+                          {proj.sourceStatus === "live" ? "Live Scrape" : proj.sourceStatus === "error" ? "Offline / Error" : "Synthetic / Offline"}
                         </span>
                         {proj.score !== undefined && (
                           <span

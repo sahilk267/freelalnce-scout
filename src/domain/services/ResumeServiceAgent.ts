@@ -35,8 +35,6 @@ export class ResumeServiceAgent {
     order: ResumeOrder,
     additionalRevisionInstruction?: string
   ): Promise<ResumeServiceAgentResult> {
-    const aiClient = this.aiClientProvider.getClient();
-
     const originalText = order.originalResumeText;
     const targetJobDesc = order.targetJobDescription || "General Industry Best Practices & High Impact ATS Optimization";
 
@@ -112,6 +110,27 @@ export class ResumeServiceAgent {
   }
 
   /**
+   * Safe execution helper supporting both modern IAIClientProvider and legacy test mocks
+   */
+  private async executeModelPrompt(prompt: string, responseMimeType?: string): Promise<string> {
+    if (typeof this.aiClientProvider.generateText === "function") {
+      const res = await this.aiClientProvider.generateText({ prompt, responseMimeType });
+      return res.text || "";
+    }
+    if (typeof (this.aiClientProvider as any).getClient === "function") {
+      const client = (this.aiClientProvider as any).getClient();
+      if (client?.models?.generateContent) {
+        const res = await client.models.generateContent({
+          contents: prompt,
+          config: responseMimeType ? { responseMimeType } : undefined
+        });
+        return res.text || "";
+      }
+    }
+    return "";
+  }
+
+  /**
    * Pass 1: Strict Grounded Resume Rewrite
    */
   private async runPass1Rewrite(
@@ -120,8 +139,6 @@ export class ResumeServiceAgent {
     revisionInstruction?: string,
     feedback?: string
   ): Promise<{ rewrittenResumeText: string; factTraceabilityLog: FactTraceabilityItem[] }> {
-    const aiClient = this.aiClientProvider.getClient();
-
     const prompt = `You are an expert ATS Resume Optimization Specialist & Content Writer. Your sole objective is to restructure, polish, and optimize the candidate's provided resume text for maximum ATS impact and readability while STRICTLY preserving factual truth.
 
 STRICT GROUNDING & TRUTH RULES (ZERO-HALLUCINATION MANDATE):
@@ -154,26 +171,21 @@ Respond strictly with a valid JSON object using the following key schema:
   ]
 }`;
 
-    if (!aiClient) {
-      // Local fallback parser for dev/offline testing
-      return this.fallbackPass1Rewrite(originalText);
-    }
-
     try {
-      const response = await aiClient.models.generateContent({
-        model: "gemini-3.8-flash",
-        contents: prompt,
-      });
-
-      const parsed = cleanAndParseJSON(response.text || "");
-      if (parsed.data && parsed.data.rewrittenResumeText) {
-        return {
-          rewrittenResumeText: parsed.data.rewrittenResumeText,
-          factTraceabilityLog: Array.isArray(parsed.data.factTraceabilityLog) ? parsed.data.factTraceabilityLog : [],
-        };
+      const responseText = await this.executeModelPrompt(prompt, "application/json");
+      if (responseText) {
+        const parsed = cleanAndParseJSON(responseText);
+        if (parsed.data && parsed.data.rewrittenResumeText) {
+          return {
+            rewrittenResumeText: parsed.data.rewrittenResumeText,
+            factTraceabilityLog: Array.isArray(parsed.data.factTraceabilityLog)
+              ? parsed.data.factTraceabilityLog
+              : [],
+          };
+        }
       }
     } catch (error) {
-      console.warn("[ResumeServiceAgent] Gemini Pass 1 rewrite call failed, using fallback:", error);
+      console.warn("[ResumeServiceAgent] AI Pass 1 rewrite call failed, using fallback:", error);
     }
 
     return this.fallbackPass1Rewrite(originalText);
@@ -186,8 +198,6 @@ Respond strictly with a valid JSON object using the following key schema:
     originalText: string,
     rewrittenText: string
   ): Promise<VerificationResult> {
-    const aiClient = this.aiClientProvider.getClient();
-
     const prompt = `You are a strict Compliance & Fact-Verification Auditor. Your job is to verify that the Rewritten Resume contains NO hallucinations or ungrounded claims when compared against the Original Resume.
 
 CHECKLIST FOR FACTUAL GROUNDING:
@@ -224,41 +234,35 @@ Respond strictly with a valid JSON object matching this schema:
   }
 }`;
 
-    if (!aiClient) {
-      return this.fallbackPass2Verification(originalText, rewrittenText);
-    }
-
     try {
-      const response = await aiClient.models.generateContent({
-        model: "gemini-3.8-flash",
-        contents: prompt,
-      });
+      const responseText = await this.executeModelPrompt(prompt, "application/json");
+      if (responseText) {
+        const parsed = cleanAndParseJSON(responseText);
+        if (parsed.data && parsed.data.status) {
+          const checkResults = parsed.data.checkResults || {
+            ungroundedCompaniesOrRoles: false,
+            ungroundedMetrics: false,
+            ungroundedSkillsOrCertifications: false,
+            ungroundedSeniorityOrScope: false,
+          };
 
-      const parsed = cleanAndParseJSON(response.text || "");
-      if (parsed.data && parsed.data.status) {
-        const checkResults = parsed.data.checkResults || {
-          ungroundedCompaniesOrRoles: false,
-          ungroundedMetrics: false,
-          ungroundedSkillsOrCertifications: false,
-          ungroundedSeniorityOrScope: false,
-        };
+          const isHallucinated =
+            checkResults.ungroundedCompaniesOrRoles ||
+            checkResults.ungroundedMetrics ||
+            checkResults.ungroundedSkillsOrCertifications ||
+            checkResults.ungroundedSeniorityOrScope ||
+            (Array.isArray(parsed.data.flaggedItems) && parsed.data.flaggedItems.length > 0);
 
-        const isHallucinated =
-          checkResults.ungroundedCompaniesOrRoles ||
-          checkResults.ungroundedMetrics ||
-          checkResults.ungroundedSkillsOrCertifications ||
-          checkResults.ungroundedSeniorityOrScope ||
-          (Array.isArray(parsed.data.flaggedItems) && parsed.data.flaggedItems.length > 0);
-
-        return {
-          status: isHallucinated ? "HALLUCINATION_DETECTED" : "VERIFIED",
-          auditSummary: parsed.data.auditSummary || "Audit complete.",
-          flaggedItems: Array.isArray(parsed.data.flaggedItems) ? parsed.data.flaggedItems : [],
-          checkResults,
-        };
+          return {
+            status: isHallucinated ? "HALLUCINATION_DETECTED" : "VERIFIED",
+            auditSummary: parsed.data.auditSummary || "Audit complete.",
+            flaggedItems: Array.isArray(parsed.data.flaggedItems) ? parsed.data.flaggedItems : [],
+            checkResults,
+          };
+        }
       }
     } catch (error) {
-      console.warn("[ResumeServiceAgent] Gemini Pass 2 verifier call failed, using fallback:", error);
+      console.warn("[ResumeServiceAgent] AI Pass 2 verifier call failed, using fallback:", error);
     }
 
     return this.fallbackPass2Verification(originalText, rewrittenText);
@@ -268,15 +272,6 @@ Respond strictly with a valid JSON object matching this schema:
    * ATS Score Evaluator
    */
   private async evaluateAtsScore(resumeText: string, jobDesc: string): Promise<number> {
-    const aiClient = this.aiClientProvider.getClient();
-
-    if (!aiClient) {
-      // Heuristic fallback score estimation
-      const wordCount = resumeText.split(/\s+/).length;
-      const score = Math.min(95, Math.max(45, Math.floor(wordCount / 5)));
-      return score;
-    }
-
     try {
       const prompt = `Evaluate the following resume text against the job description for ATS formatting, active action verbs, keyword density, and overall impact. Return a JSON object with a single numeric field "score" between 0 and 100.
 RESUME:
@@ -289,14 +284,12 @@ ${jobDesc}
 """
 JSON schema: {"score": number}`;
 
-      const response = await aiClient.models.generateContent({
-        model: "gemini-3.8-flash",
-        contents: prompt,
-      });
-
-      const parsed = cleanAndParseJSON(response.text || "");
-      if (parsed.data && typeof parsed.data.score === "number") {
-        return Math.min(100, Math.max(0, Math.round(parsed.data.score)));
+      const responseText = await this.executeModelPrompt(prompt, "application/json");
+      if (responseText) {
+        const parsed = cleanAndParseJSON(responseText);
+        if (parsed.data && typeof parsed.data.score === "number") {
+          return Math.min(100, Math.max(0, Math.round(parsed.data.score)));
+        }
       }
     } catch (e) {
       console.warn("[ResumeServiceAgent] ATS score calculation failed, fallback used:", e);

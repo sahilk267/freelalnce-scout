@@ -15,7 +15,12 @@
       "./components/Integrations",
       "./components/AgentDashboard",
       "./components/FreelancerDashboard",
-      "./types"
+      "./components/CompanyProfilesManager",
+      "./components/UserManager",
+      "./components/AuthScreen",
+      "./types",
+      "./domain/models/User",
+      "./utils/apiAuth"
     ]
   },
   {
@@ -32,7 +37,29 @@
     "purpose": "Module file",
     "exports": [],
     "imports": [
-      "react"
+      "react",
+      "./SchedulingDashboard"
+    ]
+  },
+  {
+    "filePath": "src/components/AuthScreen.tsx",
+    "purpose": "Module file",
+    "exports": [],
+    "imports": [
+      "react",
+      "lucide-react",
+      "../utils/apiAuth"
+    ]
+  },
+  {
+    "filePath": "src/components/CompanyProfilesManager.tsx",
+    "purpose": "Exports CATEGORY_METADATA",
+    "exports": [
+      "const CATEGORY_METADATA : Record<"
+    ],
+    "imports": [
+      "react",
+      "../types"
     ]
   },
   {
@@ -46,7 +73,8 @@
     ],
     "imports": [
       "react",
-      "../types"
+      "../types",
+      "../utils/apiAuth"
     ]
   },
   {
@@ -55,6 +83,7 @@
     "exports": [],
     "imports": [
       "react",
+      "./CompanyProfilesManager",
       "../domain/providers/RemotePlatformsCatalog"
     ]
   },
@@ -86,12 +115,24 @@
     ]
   },
   {
+    "filePath": "src/components/SchedulingDashboard.tsx",
+    "purpose": "Module file",
+    "exports": [],
+    "imports": [
+      "react",
+      "../domain/models/Scheduling",
+      "../utils/apiAuth"
+    ]
+  },
+  {
     "filePath": "src/components/Sidebar.tsx",
     "purpose": "Module file",
     "exports": [],
     "imports": [
       "react",
-      "../types"
+      "../types",
+      "../domain/models/User",
+      "../utils/apiAuth"
     ]
   },
   {
@@ -110,7 +151,18 @@
     "imports": [
       "react",
       "lucide-react",
-      "../types"
+      "../types",
+      "../utils/apiAuth"
+    ]
+  },
+  {
+    "filePath": "src/components/UserManager.tsx",
+    "purpose": "Module file",
+    "exports": [],
+    "imports": [
+      "react",
+      "../domain/models/User",
+      "../utils/apiAuth"
     ]
   },
   {
@@ -218,7 +270,8 @@
       "../providers/freelance/PeoplePerHourProvider",
       "../providers/freelance/GuruProvider",
       "../providers/freelance/FiverrProProvider",
-      "../providers/InitialPlatformSeed"
+      "../providers/InitialPlatformSeed",
+      "../services/CompanyProfileService"
     ]
   },
   {
@@ -364,20 +417,35 @@
       "../repositories/FirestoreCandidateRepository",
       "../repositories/SQLiteBackupRepository",
       "../repositories/SQLiteFreelancerRepository",
+      "../repositories/SQLiteOrderRepository",
       "../services/MatchingService",
       "../providers/AggregatedJobProvider",
       "../providers/FreelanceScoutProvider",
       "../providers/GeminiClientProvider",
       "../services/BackupService",
       "../services/MigrationService",
+      "../services/ResumeServiceAgent",
       "../repositories/InMemoryContactRepository",
+      "../repositories/SQLiteContactRepository",
+      "../repositories/SQLiteScreeningRepository",
+      "../repositories/InMemoryScreeningRepository",
+      "../services/ScreeningServiceAgent",
       "../services/PersistenceConfigService",
       "../services/StructuredLoggerService",
       "../services/GlobalOperationLockService",
       "../services/ProgressTrackerService",
       "../services/RetryService",
       "../services/BackupStorageService",
-      "../services/SchedulerService"
+      "../services/SchedulerService",
+      "../repositories/InMemorySchedulingRepository",
+      "../providers/InMemoryCalendarProvider",
+      "../providers/GoogleCalendarProvider",
+      "../models/Scheduling",
+      "../repositories/InMemoryInterviewerCalendarRepository",
+      "../repositories/SQLiteInterviewerCalendarRepository",
+      "../services/SchedulingServiceAgent",
+      "../repositories/InMemoryUserRepository",
+      "../repositories/SQLiteUserRepository"
     ]
   },
   {
@@ -437,8 +505,11 @@
       "function normalizeEmail (email?: string): string",
       "function normalizeLinkedInUrl (url?: string): string",
       "function isDuplicateContact (c1: Partial<Contact>, c2: Partial<Contact>): boolean",
+      "interface DuplicateCheckResult",
+      "function categorizeDuplicates (",
       "function canQueueOutreach (contact: Contact): boolean",
-      "function createContact (data: Partial<Contact> &"
+      "function createContact (",
+      "function verifyContact (contact: Contact): Contact"
     ],
     "imports": []
   },
@@ -447,6 +518,16 @@
     "purpose": "Exports FreelanceProject",
     "exports": [
       "interface FreelanceProject"
+    ],
+    "imports": []
+  },
+  {
+    "filePath": "src/domain/models/InterviewerCalendarAccount.ts",
+    "purpose": "Exports CalendarConnectionStatus, WorkingHoursConfig, InterviewerCalendarAccount",
+    "exports": [
+      "type CalendarConnectionStatus",
+      "interface WorkingHoursConfig",
+      "interface InterviewerCalendarAccount"
     ],
     "imports": []
   },
@@ -463,6 +544,75 @@
     "purpose": "Exports MatchResult",
     "exports": [
       "interface MatchResult"
+    ],
+    "imports": []
+  },
+  {
+    "filePath": "src/domain/models/ResumeOrder.ts",
+    "purpose": "Exports ServiceTier, PaymentStatus, DeliveryStatus",
+    "exports": [
+      "type ServiceTier",
+      "type PaymentStatus",
+      "type DeliveryStatus",
+      "interface FactTraceabilityItem",
+      "interface VerificationCheckResults",
+      "interface VerificationResult",
+      "interface ResumeOrder",
+      "function getTierPricing (tier: ServiceTier):",
+      "function createResumeOrder (data:"
+    ],
+    "imports": []
+  },
+  {
+    "filePath": "src/domain/models/Scheduling.ts",
+    "purpose": "Exports SlotStatus, SchedulingSessionStatus, InterviewerSlot",
+    "exports": [
+      "type SlotStatus",
+      "type SchedulingSessionStatus",
+      "interface InterviewerSlot",
+      "interface SchedulingSession",
+      "type SchedulingAuditAction",
+      "interface SchedulingAuditLog",
+      "interface ICalendarProvider",
+      "function hashToken (token: string): string",
+      "function generateSchedulingToken (): string"
+    ],
+    "imports": [
+      "crypto"
+    ]
+  },
+  {
+    "filePath": "src/domain/models/ScreeningSession.ts",
+    "purpose": "Exports generateSessionToken, SessionStatus, Recommendation",
+    "exports": [
+      "function generateSessionToken (): string",
+      "type SessionStatus",
+      "type Recommendation",
+      "interface ChatMessage",
+      "interface EvaluationCriterion",
+      "interface ScreeningEvaluation",
+      "interface HumanReview",
+      "interface ScreeningSession",
+      "function createScreeningSession (params:",
+      "function isSessionExpired (session: ScreeningSession): boolean"
+    ],
+    "imports": [
+      "crypto"
+    ]
+  },
+  {
+    "filePath": "src/domain/models/User.ts",
+    "purpose": "Exports UserRole, User, UserPublicProfile",
+    "exports": [
+      "type UserRole",
+      "interface User",
+      "interface UserPublicProfile",
+      "interface UserInvite",
+      "interface TokenDenylistEntry",
+      "interface AuthTokenPayload",
+      "function normalizeEmail (email: string): string",
+      "function isValidEmail (email: string): boolean",
+      "function toPublicProfile (user: User): UserPublicProfile"
     ],
     "imports": []
   },
@@ -584,7 +734,8 @@
     "imports": [
       "../models/FreelanceProject",
       "./IFreelanceProvider",
-      "./InitialPlatformSeed"
+      "./InitialPlatformSeed",
+      "../utils/projectUrlHelper"
     ]
   },
   {
@@ -596,6 +747,40 @@
     "imports": [
       "@google/genai",
       "./IAIClientProvider"
+    ]
+  },
+  {
+    "filePath": "src/domain/providers/GoogleCalendarProvider.test.ts",
+    "purpose": "Module file",
+    "exports": [],
+    "imports": [
+      "vitest",
+      "./GoogleCalendarProvider",
+      "../repositories/InMemoryInterviewerCalendarRepository",
+      "../repositories/SQLiteInterviewerCalendarRepository",
+      "../utils/calendarEncryption",
+      "../services/RetryService",
+      "../services/PersistenceConfigService",
+      "../repositories/InMemorySchedulingRepository",
+      "../services/SchedulingServiceAgent"
+    ]
+  },
+  {
+    "filePath": "src/domain/providers/GoogleCalendarProvider.ts",
+    "purpose": "Exports isGoogleTokenRevocationError, GoogleCalendarProviderOptions, GoogleCalendarProvider",
+    "exports": [
+      "function isGoogleTokenRevocationError (err: any): boolean",
+      "interface GoogleCalendarProviderOptions",
+      "class GoogleCalendarProvider implements ICalendarProvider"
+    ],
+    "imports": [
+      "googleapis",
+      "google-auth-library",
+      "../models/Scheduling",
+      "../repositories/IInterviewerCalendarRepository",
+      "../utils/calendarEncryption",
+      "../services/RetryService",
+      "../services/PersistenceConfigService"
     ]
   },
   {
@@ -647,7 +832,18 @@
     ],
     "imports": [
       "../agent/freelancerTypes",
-      "./RemotePlatformsCatalog"
+      "./RemotePlatformsCatalog",
+      "../utils/projectUrlHelper"
+    ]
+  },
+  {
+    "filePath": "src/domain/providers/InMemoryCalendarProvider.ts",
+    "purpose": "Exports InMemoryCalendarProvider",
+    "exports": [
+      "class InMemoryCalendarProvider implements ICalendarProvider"
+    ],
+    "imports": [
+      "../models/Scheduling"
     ]
   },
   {
@@ -687,7 +883,10 @@
     "exports": [],
     "imports": [
       "vitest",
-      "./InMemoryContactRepository"
+      "fs",
+      "path",
+      "./InMemoryContactRepository",
+      "./SQLiteContactRepository"
     ]
   },
   {
@@ -727,6 +926,16 @@
     ]
   },
   {
+    "filePath": "src/domain/repositories/IInterviewerCalendarRepository.ts",
+    "purpose": "Exports IInterviewerCalendarRepository",
+    "exports": [
+      "interface IInterviewerCalendarRepository"
+    ],
+    "imports": [
+      "../models/InterviewerCalendarAccount"
+    ]
+  },
+  {
     "filePath": "src/domain/repositories/InMemoryCandidateRepository.ts",
     "purpose": "Exports InMemoryCandidateRepository",
     "exports": [
@@ -744,8 +953,103 @@
       "class InMemoryContactRepository implements IContactRepository"
     ],
     "imports": [
-      "../models/Contact",
       "./IContactRepository"
+    ]
+  },
+  {
+    "filePath": "src/domain/repositories/InMemoryInterviewerCalendarRepository.ts",
+    "purpose": "Exports InMemoryInterviewerCalendarRepository",
+    "exports": [
+      "class InMemoryInterviewerCalendarRepository implements IInterviewerCalendarRepository"
+    ],
+    "imports": [
+      "./IInterviewerCalendarRepository"
+    ]
+  },
+  {
+    "filePath": "src/domain/repositories/InMemoryOrderRepository.ts",
+    "purpose": "Exports InMemoryOrderRepository",
+    "exports": [
+      "class InMemoryOrderRepository implements IOrderRepository"
+    ],
+    "imports": [
+      "../models/ResumeOrder",
+      "./IOrderRepository"
+    ]
+  },
+  {
+    "filePath": "src/domain/repositories/InMemorySchedulingRepository.ts",
+    "purpose": "Exports InMemorySchedulingRepository",
+    "exports": [
+      "class InMemorySchedulingRepository implements ISchedulingRepository"
+    ],
+    "imports": [
+      "../models/Scheduling",
+      "./ISchedulingRepository"
+    ]
+  },
+  {
+    "filePath": "src/domain/repositories/InMemoryScreeningRepository.ts",
+    "purpose": "Exports InMemoryScreeningRepository",
+    "exports": [
+      "class InMemoryScreeningRepository implements IScreeningRepository"
+    ],
+    "imports": [
+      "./IScreeningRepository",
+      "../models/ScreeningSession"
+    ]
+  },
+  {
+    "filePath": "src/domain/repositories/InMemoryUserRepository.ts",
+    "purpose": "Exports InMemoryUserRepository",
+    "exports": [
+      "class InMemoryUserRepository implements IUserRepository"
+    ],
+    "imports": [
+      "../models/User"
+    ]
+  },
+  {
+    "filePath": "src/domain/repositories/IOrderRepository.ts",
+    "purpose": "Exports IOrderRepository",
+    "exports": [
+      "interface IOrderRepository"
+    ],
+    "imports": [
+      "../models/ResumeOrder"
+    ]
+  },
+  {
+    "filePath": "src/domain/repositories/ISchedulingRepository.ts",
+    "purpose": "Exports ISchedulingRepository",
+    "exports": [
+      "interface ISchedulingRepository"
+    ],
+    "imports": [
+      "../models/Scheduling"
+    ]
+  },
+  {
+    "filePath": "src/domain/repositories/IScreeningRepository.ts",
+    "purpose": "Exports IScreeningRepository",
+    "exports": [
+      "interface IScreeningRepository"
+    ],
+    "imports": [
+      "../models/ScreeningSession"
+    ]
+  },
+  {
+    "filePath": "src/domain/repositories/IUserRepository.ts",
+    "purpose": "Exports CreateUserData, UpdateUserData, CreateInviteData",
+    "exports": [
+      "interface CreateUserData",
+      "interface UpdateUserData",
+      "interface CreateInviteData",
+      "interface IUserRepository"
+    ],
+    "imports": [
+      "../models/User"
     ]
   },
   {
@@ -763,6 +1067,19 @@
     ]
   },
   {
+    "filePath": "src/domain/repositories/SQLiteContactRepository.ts",
+    "purpose": "Exports SQLiteContactRepository",
+    "exports": [
+      "class SQLiteContactRepository implements IContactRepository"
+    ],
+    "imports": [
+      "better-sqlite3",
+      "fs",
+      "path",
+      "./IContactRepository"
+    ]
+  },
+  {
     "filePath": "src/domain/repositories/SQLiteFreelancerRepository.ts",
     "purpose": "Exports SQLiteFreelancerRepository",
     "exports": [
@@ -772,7 +1089,62 @@
       "better-sqlite3",
       "fs",
       "path",
-      "../providers/InitialPlatformSeed"
+      "../providers/InitialPlatformSeed",
+      "../utils/projectUrlHelper"
+    ]
+  },
+  {
+    "filePath": "src/domain/repositories/SQLiteInterviewerCalendarRepository.ts",
+    "purpose": "Exports SQLiteInterviewerCalendarRepository",
+    "exports": [
+      "class SQLiteInterviewerCalendarRepository implements IInterviewerCalendarRepository"
+    ],
+    "imports": [
+      "better-sqlite3",
+      "fs",
+      "path",
+      "./IInterviewerCalendarRepository"
+    ]
+  },
+  {
+    "filePath": "src/domain/repositories/SQLiteOrderRepository.ts",
+    "purpose": "Exports SQLiteOrderRepository",
+    "exports": [
+      "class SQLiteOrderRepository implements IOrderRepository"
+    ],
+    "imports": [
+      "better-sqlite3",
+      "fs",
+      "path",
+      "../models/ResumeOrder",
+      "./IOrderRepository"
+    ]
+  },
+  {
+    "filePath": "src/domain/repositories/SQLiteScreeningRepository.ts",
+    "purpose": "Exports SQLiteScreeningRepository",
+    "exports": [
+      "class SQLiteScreeningRepository implements IScreeningRepository"
+    ],
+    "imports": [
+      "better-sqlite3",
+      "fs",
+      "path",
+      "../models/ScreeningSession",
+      "./IScreeningRepository"
+    ]
+  },
+  {
+    "filePath": "src/domain/repositories/SQLiteUserRepository.ts",
+    "purpose": "Exports SQLiteUserRepository",
+    "exports": [
+      "class SQLiteUserRepository implements IUserRepository"
+    ],
+    "imports": [
+      "better-sqlite3",
+      "fs",
+      "path",
+      "../models/User"
     ]
   },
   {
@@ -788,6 +1160,22 @@
     "imports": [
       "fs",
       "path"
+    ]
+  },
+  {
+    "filePath": "src/domain/services/AuthService.ts",
+    "purpose": "Exports RegisterParams, LoginParams, AuthResult",
+    "exports": [
+      "interface RegisterParams",
+      "interface LoginParams",
+      "interface AuthResult",
+      "class AuthService"
+    ],
+    "imports": [
+      "bcryptjs",
+      "jsonwebtoken",
+      "crypto",
+      "../repositories/IUserRepository"
     ]
   },
   {
@@ -837,6 +1225,30 @@
       "../repositories/SQLiteBackupRepository",
       "./PersistenceConfigService",
       "../models/Candidate"
+    ]
+  },
+  {
+    "filePath": "src/domain/services/CompanyDeliveryApi.test.ts",
+    "purpose": "Module file",
+    "exports": [],
+    "imports": [
+      "vitest",
+      "supertest",
+      "../../../server",
+      "./CompanyProfileService"
+    ]
+  },
+  {
+    "filePath": "src/domain/services/CompanyProfileService.ts",
+    "purpose": "Exports SUPPORTED_FREELANCE_CATEGORIES, CompanyProfileService",
+    "exports": [
+      "const SUPPORTED_FREELANCE_CATEGORIES :",
+      "class CompanyProfileService"
+    ],
+    "imports": [
+      "fs",
+      "path",
+      "../../types"
     ]
   },
   {
@@ -931,8 +1343,12 @@
       "class NotificationService"
     ],
     "imports": [
+      "fs",
+      "path",
       "../repositories/SQLiteFreelancerRepository",
-      "../agent/freelancerTypes"
+      "../agent/freelancerTypes",
+      "../utils/projectUrlHelper",
+      "./CompanyProfileService"
     ]
   },
   {
@@ -954,6 +1370,35 @@
     "imports": []
   },
   {
+    "filePath": "src/domain/services/RbacAuth.test.ts",
+    "purpose": "Module file",
+    "exports": [],
+    "imports": [
+      "vitest",
+      "supertest",
+      "jsonwebtoken",
+      "bcryptjs",
+      "../../../server",
+      "../index"
+    ]
+  },
+  {
+    "filePath": "src/domain/services/ResumeOrderApi.test.ts",
+    "purpose": "Module file",
+    "exports": [],
+    "imports": [
+      "vitest",
+      "supertest",
+      "../../../server",
+      "../index",
+      "../models/ResumeOrder",
+      "../repositories/InMemoryOrderRepository",
+      "../repositories/InMemoryCandidateRepository",
+      "./ResumeServiceAgent",
+      "../providers/IAIClientProvider"
+    ]
+  },
+  {
     "filePath": "src/domain/services/ResumeParserService.ts",
     "purpose": "Exports ResumeParserService",
     "exports": [
@@ -962,6 +1407,30 @@
     "imports": [
       "@google/genai",
       "../models/Candidate"
+    ]
+  },
+  {
+    "filePath": "src/domain/services/ResumeServiceAgent.test.ts",
+    "purpose": "Module file",
+    "exports": [],
+    "imports": [
+      "vitest",
+      "../repositories/InMemoryOrderRepository",
+      "../repositories/SQLiteOrderRepository",
+      "./ResumeServiceAgent",
+      "../providers/IAIClientProvider"
+    ]
+  },
+  {
+    "filePath": "src/domain/services/ResumeServiceAgent.ts",
+    "purpose": "Exports ResumeServiceAgentResult, ResumeServiceAgent",
+    "exports": [
+      "interface ResumeServiceAgentResult",
+      "class ResumeServiceAgent"
+    ],
+    "imports": [
+      "../providers/IAIClientProvider",
+      "../utils/jsonHelper"
     ]
   },
   {
@@ -989,6 +1458,97 @@
     ]
   },
   {
+    "filePath": "src/domain/services/SchedulingCancelApi.test.ts",
+    "purpose": "Module file",
+    "exports": [],
+    "imports": [
+      "vitest",
+      "supertest",
+      "../../../server",
+      "../index",
+      "./SchedulingServiceAgent"
+    ]
+  },
+  {
+    "filePath": "src/domain/services/SchedulingDashboardAuth.test.ts",
+    "purpose": "Module file",
+    "exports": [],
+    "imports": [
+      "vitest",
+      "supertest",
+      "../../../server",
+      "../index",
+      "./SchedulingServiceAgent"
+    ]
+  },
+  {
+    "filePath": "src/domain/services/SchedulingServiceAgent.test.ts",
+    "purpose": "Module file",
+    "exports": [],
+    "imports": [
+      "vitest",
+      "./SchedulingServiceAgent",
+      "../repositories/InMemorySchedulingRepository",
+      "../providers/InMemoryCalendarProvider"
+    ]
+  },
+  {
+    "filePath": "src/domain/services/SchedulingServiceAgent.ts",
+    "purpose": "Exports SchedulingServiceAgent",
+    "exports": [
+      "class SchedulingServiceAgent"
+    ],
+    "imports": [
+      "crypto",
+      "../repositories/ISchedulingRepository"
+    ]
+  },
+  {
+    "filePath": "src/domain/services/ScreeningApi.test.ts",
+    "purpose": "Module file",
+    "exports": [],
+    "imports": [
+      "vitest",
+      "supertest",
+      "../../../server",
+      "../index",
+      "../models/ScreeningSession",
+      "./ScreeningServiceAgent",
+      "../providers/IAIClientProvider"
+    ]
+  },
+  {
+    "filePath": "src/domain/services/ScreeningServiceAgent.test.ts",
+    "purpose": "Module file",
+    "exports": [],
+    "imports": [
+      "vitest",
+      "./ScreeningServiceAgent",
+      "../models/ScreeningSession",
+      "../providers/IAIClientProvider"
+    ]
+  },
+  {
+    "filePath": "src/domain/services/ScreeningServiceAgent.ts",
+    "purpose": "Exports ScreeningServiceAgent",
+    "exports": [
+      "class ScreeningServiceAgent"
+    ],
+    "imports": [
+      "../providers/IAIClientProvider",
+      "../utils/jsonHelper"
+    ]
+  },
+  {
+    "filePath": "src/domain/services/SessionTokenRateLimit.test.ts",
+    "purpose": "Module file",
+    "exports": [],
+    "imports": [
+      "vitest",
+      "supertest"
+    ]
+  },
+  {
     "filePath": "src/domain/services/StructuredLoggerService.ts",
     "purpose": "Exports StructuredLog, StructuredLoggerService",
     "exports": [
@@ -998,6 +1558,28 @@
     "imports": [
       "fs",
       "path"
+    ]
+  },
+  {
+    "filePath": "src/domain/services/TelegramBotService.ts",
+    "purpose": "Exports TelegramBotService",
+    "exports": [
+      "class TelegramBotService"
+    ],
+    "imports": [
+      "fs",
+      "path",
+      "../di/DIContainer",
+      "../repositories/SQLiteFreelancerRepository",
+      "../repositories/ICandidateRepository",
+      "../agent/AgentManager",
+      "../agent/TaskQueue",
+      "../agent/types",
+      "./ResumeParserService",
+      "../agent/FreelancerAgent",
+      "./CompanyProfileService",
+      "../../types",
+      "../utils/projectUrlHelper"
     ]
   },
   {
@@ -1020,6 +1602,17 @@
     ]
   },
   {
+    "filePath": "src/domain/utils/calendarEncryption.ts",
+    "purpose": "Exports encryptRefreshToken, decryptRefreshToken",
+    "exports": [
+      "function encryptRefreshToken (plainToken: string): string",
+      "function decryptRefreshToken (encryptedPayload: string): string"
+    ],
+    "imports": [
+      "crypto"
+    ]
+  },
+  {
     "filePath": "src/domain/utils/jsonHelper.test.ts",
     "purpose": "Module file",
     "exports": [],
@@ -1038,6 +1631,15 @@
     "imports": []
   },
   {
+    "filePath": "src/domain/utils/projectUrlHelper.ts",
+    "purpose": "Checks if a project URL is merely a generic homepage or landing page rather than a deep link or specific search URL.",
+    "exports": [
+      "function isGenericOrHomepageUrl (url?: string): boolean",
+      "function resolveDirectJobUrl (params:"
+    ],
+    "imports": []
+  },
+  {
     "filePath": "src/domain/utils/resilientFetch.ts",
     "purpose": "Exports ResilientFetchOptions, clearFetchCache",
     "exports": [
@@ -1048,12 +1650,13 @@
   },
   {
     "filePath": "src/main.tsx",
-    "purpose": "Module file",
+    "purpose": "Global window.fetch interceptor: Ensures credentials=\"include\" and attaches CSRF token from readable cookie",
     "exports": [],
     "imports": [
       "react",
       "react-dom/client",
-      "./App.tsx"
+      "./App.tsx",
+      "./utils/apiAuth"
     ]
   },
   {
@@ -1067,8 +1670,32 @@
       "interface JobRecord",
       "interface FreelanceProject",
       "interface MemoryEntry",
+      "type FreelanceCategory",
+      "interface CompanyProfile",
       "interface TerminalLine"
     ],
     "imports": []
+  },
+  {
+    "filePath": "src/utils/apiAuth.ts",
+    "purpose": "In-memory user profile cache (No sensitive JWT token stored in JS-accessible memory or Web Storage)",
+    "exports": [
+      "const ADMIN_API_KEY_STORAGE_KEY",
+      "function getAuthToken (): string",
+      "function getCsrfToken (): string",
+      "function getAuthUser (): UserPublicProfile | null",
+      "function setAuthSession (userOrToken: UserPublicProfile | string | null, user?: User",
+      "function clearAuthSession (): void",
+      "function hasRole (...allowedRoles: UserRole[]): boolean",
+      "function isAdmin (): boolean",
+      "function getAdminApiKey (): string",
+      "function setAdminApiKey (key: string): void",
+      "function clearAdminApiKey (): void",
+      "function getAdminAuthHeaders (existingHeaders?: HeadersInit): Headers",
+      "function getDangerousActionHeaders (existingHeaders?: HeadersInit): Headers"
+    ],
+    "imports": [
+      "../domain/models/User"
+    ]
   }
 ]

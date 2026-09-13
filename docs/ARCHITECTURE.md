@@ -42,7 +42,7 @@ This document defines the system architecture, component contracts, tool depende
 - **Domain Model**: `ScreeningSession` linked to candidate via `candidateId` (referencing `ICandidateRepository`) and `jobId`. Uses a secret 24-hour TTL `sessionToken` for candidate access.
 - **Auth & Rate Limiting Boundaries**:
   - **Candidate Endpoints**: `GET /api/screening/sessions/:id/candidate` and `POST /api/screening/sessions/:id/interact` use secret `sessionToken` auth. Includes a dedicated IP rate limiter (`checkFailedSessionTokenRateLimit`) blocking IP addresses after 10 failed authentication attempts (429 Too Many Requests).
-  - **Admin Endpoints**: `POST /api/screening/sessions`, `POST /api/screening/sessions/:id/evaluate`, and `POST /api/screening/sessions/:id/human-review` are secured via `apiKeyAuthMiddleware` and `apiRateLimiter`.
+  - **Admin Endpoints**: `POST /api/screening/sessions`, `POST /api/screening/sessions/:id/evaluate`, and `POST /api/screening/sessions/:id/human-review` are secured via `requireRole` and `apiRateLimiter`.
 - **Grounding & Prompt Injection Defense**:
   - Candidate inputs wrapped inside `<candidate_input>...</candidate_input>` XML tags. System instructions explicitly instruct the model to treat candidate text strictly as data and ignore embedded prompt overrides.
   - Evaluation scores candidates solely against explicit job requirements.
@@ -51,5 +51,45 @@ This document defines the system architecture, component contracts, tool depende
   - **Pass 2 Audit**: Verifies candidate evidence claims and ensures no unstated requirement penalties were applied.
   - **Idempotency**: `POST /api/screening/sessions/:id/evaluate` rejects duplicate calls with `409 Conflict` to preserve audit trails.
   - **Human Sign-off Gate**: All evaluated candidates transition to `needs_human_review`. Rejection or approval recommendations require human recruiter sign-off via `POST /api/screening/sessions/:id/human-review`.
+
+---
+
+### 4. Self-Scheduling Agent & Calendar Sync (Feature 4)
+- **Purpose**: Coordinates candidate interview booking, slot reservation holds, conflict locking, and recruiter confirmation workflows.
+- **Domain Model**: `SchedulingSession` with 24-hour token validity, `InterviewSlot` with atomic locks, and `SchedulingAuditLog` recording state transitions.
+- **Auto-Booking vs. Recruiter Confirmation**:
+  - `autoBookEnabled: false` (default): Candidate selections place slots in `pending_confirmation` with a 48-hour hold expiration (`holdExpiresAt`). Recruiter manually confirms via `POST /api/scheduling/confirm`.
+  - `autoBookEnabled: true`: Candidate slot selection atomically books and dispatches calendar synchronization immediately.
+- **Concurrency & Compensation Rollback**:
+  - Double-booking prevented by `atomicLockSlot` checks; concurrent attempts return `409 Conflict`.
+  - Calendar sync failures trigger automatic compensation rollback to release the slot. If compensation fails, session status transitions to `needs_human_review` with audit logging.
+
+---
+
+### 5. Role-Based Access Control (RBAC) & Multi-User Management (Feature 5)
+- **Purpose**: Multi-user governance with role hierarchy (`admin` and `recruiter`), invite tokens, and session denylist.
+- **Domain Model**: `User` with bcrypt-hashed passwords (10 rounds), `UserInvite` single-use tokens with configurable TTL, and `revoked_tokens` denylist.
+- **Bootstrap & Invite Flow**:
+  - First-boot bootstrap: allows first user creation as master administrator without an invite token.
+  - Subsequent user registration strictly requires an unconsumed, unexpired `inviteToken`.
+- **Role Permissions Hierarchy**:
+  - `admin`: Full administrative access (terminal execution, system persistence/backups, integrations, user management, and destructive actions).
+  - `recruiter`: Operational workflow access (candidate CRM, screening interviews, scheduling sessions, ATS optimization). Destructive/administrative endpoints return `403 Forbidden`.
+- **Brute Force Protection**:
+  - Rate limiting on `/api/auth/login` blocking IP + email pairs after 5 consecutive failures for 15 minutes.
+
+---
+
+### 6. Cookie-Based Authentication, Session Hardening & CSRF Protection (Feature 6)
+- **Purpose**: Enterprise session storage hardening eliminating XSS-vulnerable localStorage/sessionStorage JWT persistence and enforcing double-submit CSRF protection on state-changing API operations.
+- **Session Transport**:
+  - `aziz_session`: Transported in an `HttpOnly`, `SameSite=Strict`, `Secure` (production) cookie with 12-hour expiration matching JWT lifecycle. Not accessible via client-side JavaScript.
+  - Service accounts: Dedicated `grantType: "service_account"` flow returns JWT in the JSON body without browser cookies for automation scripts.
+- **Double-Submit CSRF Defense**:
+  - `csrf_token`: Transported in a non-HttpOnly, `SameSite=Strict` cookie readable by the frontend application.
+  - State-changing HTTP methods (`POST`, `PUT`, `DELETE`, `PATCH`) validate the client-provided `X-CSRF-Token` against the `csrf_token` cookie, rejecting mismatched/missing tokens with `403 Forbidden`. Safe `GET` requests and Bearer-authenticated service account calls are exempt.
+- **Logout & Token Revocation**:
+  - `/api/auth/logout` revokes the token's JTI in the server-side denylist and clears both `aziz_session` and `csrf_token` cookies with `Max-Age=0`.
+
 
 

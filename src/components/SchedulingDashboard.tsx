@@ -64,6 +64,61 @@ export default function SchedulingDashboard() {
   const [portalSessionStatus, setPortalSessionStatus] = useState<string | null>(null);
   const [portalAutoBook, setPortalAutoBook] = useState<boolean>(false);
 
+  // Calendar Integration state
+  const [calendarAccounts, setCalendarAccounts] = useState<any[]>([]);
+  const [calendarProvider, setCalendarProvider] = useState<string>("inmemory");
+  const [calendarLoading, setCalendarLoading] = useState(false);
+  const [disconnectingId, setDisconnectingId] = useState<string | null>(null);
+
+  const fetchCalendarAccounts = async () => {
+    setCalendarLoading(true);
+    try {
+      const res = await fetch("/api/calendar/accounts", { headers: getAdminAuthHeaders() });
+      if (res.ok) {
+        const data = await res.json();
+        setCalendarAccounts(data.accounts || []);
+        setCalendarProvider(data.provider || "inmemory");
+      }
+    } catch (e) {
+      console.warn("Could not load calendar accounts:", e);
+    } finally {
+      setCalendarLoading(false);
+    }
+  };
+
+  const handleConnectCalendar = (intId: string, intName?: string) => {
+    const url = `/api/calendar/oauth/start?interviewerId=${encodeURIComponent(intId)}&interviewerName=${encodeURIComponent(intName || "")}`;
+    const popup = window.open(url, "google_oauth_popup", "width=600,height=700");
+    if (!popup) {
+      window.location.href = url;
+    }
+  };
+
+  const handleDisconnectCalendar = async (intId: string) => {
+    setDisconnectingId(intId);
+    try {
+      const res = await fetch("/api/calendar/disconnect", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...getAdminAuthHeaders()
+        },
+        body: JSON.stringify({ interviewerId: intId })
+      });
+      if (res.ok) {
+        setActionSuccess(`Calendar disconnected for interviewer [${intId}].`);
+        fetchCalendarAccounts();
+      } else {
+        const data = await res.json();
+        setError(data.error || "Failed to disconnect calendar.");
+      }
+    } catch (err: any) {
+      setError(`Error disconnecting calendar: ${err.message}`);
+    } finally {
+      setDisconnectingId(null);
+    }
+  };
+
   const fetchSessionsAndLogs = async () => {
     setLoading(true);
     setError(null);
@@ -100,10 +155,12 @@ export default function SchedulingDashboard() {
 
   useEffect(() => {
     fetchSessionsAndLogs();
+    fetchCalendarAccounts();
 
     const handleKeyUpdate = () => {
       setApiKeyInput(getAdminApiKey());
       fetchSessionsAndLogs();
+      fetchCalendarAccounts();
     };
 
     const handleUnauthorized = (e: any) => {
@@ -113,12 +170,33 @@ export default function SchedulingDashboard() {
       }
     };
 
+    const handleOAuthMessage = (e: MessageEvent) => {
+      if (e.data?.type === "CALENDAR_AUTH_SUCCESS") {
+        setActionSuccess(`Google Calendar connected for interviewer [${e.data.interviewerId || "account"}]!`);
+        fetchCalendarAccounts();
+      } else if (e.data?.type === "CALENDAR_AUTH_ERROR") {
+        setError(`Calendar authorization failed: ${decodeURIComponent(e.data.message || "")}`);
+      }
+    };
+
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get("calendar_connected") === "success") {
+      const intId = urlParams.get("interviewerId") || "";
+      setActionSuccess(`Google Calendar connected successfully${intId ? ` for interviewer [${intId}]` : ""}!`);
+      window.history.replaceState({}, document.title, window.location.pathname + "?tab=scheduling");
+    } else if (urlParams.get("calendar_connected") === "error") {
+      setError("Calendar authorization failed or was denied by Google.");
+      window.history.replaceState({}, document.title, window.location.pathname + "?tab=scheduling");
+    }
+
     window.addEventListener("aziz-api-key-updated", handleKeyUpdate);
     window.addEventListener("aziz-api-unauthorized", handleUnauthorized);
+    window.addEventListener("message", handleOAuthMessage);
 
     return () => {
       window.removeEventListener("aziz-api-key-updated", handleKeyUpdate);
       window.removeEventListener("aziz-api-unauthorized", handleUnauthorized);
+      window.removeEventListener("message", handleOAuthMessage);
     };
   }, []);
 
@@ -533,7 +611,156 @@ export default function SchedulingDashboard() {
 
       {/* RECRUITER MANAGEMENT TAB */}
       {activeTab === "recruiter" && (
-        <div className="space-y-4" id="recruiter-sessions-panel">
+        <div className="space-y-6" id="recruiter-sessions-panel">
+          {/* Interviewer Calendar Integrations Card */}
+          <div className="bg-slate-900 border border-slate-800 rounded-xl p-5" id="interviewer-calendar-integrations-panel">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+                  <Calendar className="w-5 h-5" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h3 className="text-sm font-semibold text-white">Interviewer Calendar Connections</h3>
+                    <span className={`text-[10px] px-2 py-0.5 rounded font-mono font-medium border ${
+                      calendarProvider === "google"
+                        ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
+                        : "bg-slate-800 text-slate-400 border-slate-700"
+                    }`}>
+                      Provider: {calendarProvider === "google" ? "Google Calendar (Live)" : "InMemory (Simulated)"}
+                    </span>
+                  </div>
+                  <p className="text-xs text-slate-400 mt-0.5">
+                    Connect interviewer Google Calendars via OAuth 2.0 to query real-time availability and auto-generate Google Meet invites.
+                  </p>
+                </div>
+              </div>
+
+              <button
+                onClick={fetchCalendarAccounts}
+                disabled={calendarLoading}
+                className="text-xs text-slate-400 hover:text-white px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 transition-colors flex items-center gap-1.5"
+                title="Refresh calendar connection statuses"
+              >
+                <RefreshCw className={`w-3.5 h-3.5 ${calendarLoading ? "animate-spin" : ""}`} />
+                Sync Statuses
+              </button>
+            </div>
+
+            {/* Any accounts requiring reconnection banner */}
+            {calendarAccounts.some((acc) => acc.status === "needs_reconnect") && (
+              <div className="mb-4 p-3.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs flex items-center justify-between gap-3 flex-wrap">
+                <div className="flex items-center gap-2">
+                  <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 animate-pulse" />
+                  <span>
+                    <strong>Action Required:</strong> One or more interviewers have revoked or expired Google Calendar tokens. Live bookings for those interviewers are paused until reconnected.
+                  </span>
+                </div>
+              </div>
+            )}
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+              {[
+                { id: "int_sarah_vance", name: "Dr. Sarah Vance", role: "Principal Tech Lead" },
+                { id: "int_01", name: "Sarah Connor", role: "Engineering Lead" },
+                { id: "int_02", name: "Alex Rivera", role: "Engineering Director" },
+                ...calendarAccounts.filter(
+                  (a) => !["int_sarah_vance", "int_01", "int_02"].includes(a.interviewerId)
+                ).map((a) => ({ id: a.interviewerId, name: a.interviewerName || a.interviewerId, role: "Interviewer" }))
+              ].map((interviewer) => {
+                const account = calendarAccounts.find((a) => a.interviewerId === interviewer.id);
+                const isNeedsReconnect = account?.status === "needs_reconnect";
+                const isConnected = account?.status === "connected";
+
+                return (
+                  <div 
+                    key={interviewer.id} 
+                    className={`p-3.5 rounded-lg border transition-all flex flex-col justify-between gap-3 ${
+                      isNeedsReconnect
+                        ? "bg-amber-950/20 border-amber-500/40 shadow-sm shadow-amber-900/10"
+                        : isConnected
+                        ? "bg-slate-950/60 border-slate-800"
+                        : "bg-slate-950/30 border-slate-800/60"
+                    }`}
+                  >
+                    <div>
+                      <div className="flex items-start justify-between gap-2 mb-1">
+                        <div>
+                          <div className="text-xs font-semibold text-white">{interviewer.name}</div>
+                          <div className="text-[11px] text-slate-500 font-mono">{interviewer.id} • {interviewer.role}</div>
+                        </div>
+
+                        {isNeedsReconnect ? (
+                          <span className="text-[10px] px-2 py-0.5 rounded font-mono bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center gap-1 shrink-0">
+                            <AlertTriangle className="w-3 h-3" /> Reconnect
+                          </span>
+                        ) : isConnected ? (
+                          <span className="text-[10px] px-2 py-0.5 rounded font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center gap-1 shrink-0">
+                            <CheckCircle2 className="w-3 h-3" /> Live
+                          </span>
+                        ) : (
+                          <span className="text-[10px] px-2 py-0.5 rounded font-mono bg-slate-800 text-slate-500 border border-slate-700 shrink-0">
+                            Disconnected
+                          </span>
+                        )}
+                      </div>
+
+                      {account && (
+                        <div className="text-[11px] text-slate-400 mt-2 space-y-0.5">
+                          {account.connectedAt && (
+                            <div>Connected: {new Date(account.connectedAt).toLocaleDateString()}</div>
+                          )}
+                          {account.lastError && (
+                            <div className="text-amber-400 font-mono text-[10px] truncate" title={account.lastError}>
+                              Error: {account.lastError}
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="flex items-center gap-2 pt-2 border-t border-slate-800/80">
+                      {isNeedsReconnect ? (
+                        <button
+                          onClick={() => handleConnectCalendar(interviewer.id, interviewer.name)}
+                          className="flex-1 py-1.5 px-3 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-semibold transition-colors flex items-center justify-center gap-1.5 shadow"
+                        >
+                          <RefreshCw className="w-3.5 h-3.5" />
+                          Reconnect Calendar
+                        </button>
+                      ) : isConnected ? (
+                        <div className="flex items-center gap-2 w-full">
+                          <button
+                            onClick={() => handleConnectCalendar(interviewer.id, interviewer.name)}
+                            className="flex-1 py-1.5 px-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium transition-colors"
+                          >
+                            Re-auth
+                          </button>
+                          <button
+                            onClick={() => handleDisconnectCalendar(interviewer.id)}
+                            disabled={disconnectingId === interviewer.id}
+                            className="py-1.5 px-3 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20 text-xs font-medium transition-colors disabled:opacity-50"
+                          >
+                            {disconnectingId === interviewer.id ? "..." : "Disconnect"}
+                          </button>
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => handleConnectCalendar(interviewer.id, interviewer.name)}
+                          className="w-full py-1.5 px-3 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-medium transition-colors flex items-center justify-center gap-1.5"
+                        >
+                          <Calendar className="w-3.5 h-3.5" />
+                          Connect Google Calendar
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Sessions Table */}
           <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
             <table className="w-full text-left text-sm text-slate-300">
               <thead className="bg-slate-950 text-slate-400 font-medium text-xs uppercase tracking-wider border-b border-slate-800">

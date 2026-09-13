@@ -6,7 +6,7 @@
 import { BaseAgent } from "./BaseAgent";
 import { Task } from "./types";
 import { EventBus } from "./EventBus";
-import { GoogleGenAI } from "@google/genai";
+import { IAIClientProvider } from "../providers/IAIClientProvider";
 import { DIContainer } from "../di/DIContainer";
 import { SQLiteFreelancerRepository } from "../repositories/SQLiteFreelancerRepository";
 import { ICandidateRepository } from "../repositories/ICandidateRepository";
@@ -30,7 +30,7 @@ import { CompanyProfileService } from "../services/CompanyProfileService";
 export class FreelancerAgent extends BaseAgent {
   private freelanceRepo!: SQLiteFreelancerRepository;
   private candidateRepo!: ICandidateRepository;
-  private geminiClient!: GoogleGenAI;
+  private aiProvider?: IAIClientProvider;
 
   constructor(id: string, name: string) {
     super(id, name);
@@ -52,12 +52,9 @@ export class FreelancerAgent extends BaseAgent {
         console.warn("[FreelancerAgent] Could not resolve ICandidateRepository:", e);
       }
     }
-    if (!this.geminiClient) {
+    if (!this.aiProvider) {
       try {
-        const aiProvider = DIContainer.get<any>("IAIClientProvider");
-        if (aiProvider) {
-          this.geminiClient = aiProvider.getClient();
-        }
+        this.aiProvider = DIContainer.get<IAIClientProvider>("IAIClientProvider");
       } catch {}
     }
   }
@@ -320,17 +317,29 @@ The proposal must contain these contiguous sections:
 6. CLOSING: Professional sign-off.
 `;
 
-    const response = await this.geminiClient.models.generateContent({
-      model: "gemini-3.8-flash",
-      contents: promptText,
-      config: {
-        systemInstruction: "You are a professional freelance business development assistant. You generate ready-to-send, highly personalized bids without any placeholders or brackets."
+    let proposalText = "";
+    if (this.aiProvider) {
+      if (typeof this.aiProvider.generateText === "function") {
+        const response = await this.aiProvider.generateText({
+          prompt: promptText,
+          systemInstruction: "You are a professional freelance business development assistant. You generate ready-to-send, highly personalized bids without any placeholders or brackets."
+        });
+        proposalText = response.text || "";
+      } else if (typeof this.aiProvider.getClient === "function") {
+        const client = this.aiProvider.getClient();
+        if (client?.models?.generateContent) {
+          const res = await client.models.generateContent({
+            contents: promptText
+          });
+          proposalText = res.text || "";
+        }
       }
-    });
+    } else {
+      throw new Error("AI provider not configured for proposal drafting.");
+    }
 
-    const proposalText = response.text || "";
     if (!proposalText) {
-      throw new Error("Gemini returned empty text for proposal draft.");
+      throw new Error("AI provider returned empty text for proposal draft.");
     }
 
     const proposalId = `prop-${projectId}-${Date.now().toString().slice(-4)}`;

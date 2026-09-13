@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+export type FreelanceSourceStatus = "live" | "mock" | "error";
+
 export interface FreelanceProject {
   id: string;
   title: string;
@@ -14,4 +16,6 @@ export interface FreelanceProject {
   originalUrl: string;
   skills: string[];
   description: string;
+  sourceStatus?: FreelanceSourceStatus;
+  sourceStatusReason?: string;
 }

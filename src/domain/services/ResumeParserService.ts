@@ -3,19 +3,41 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { GoogleGenAI } from "@google/genai";
+import { IAIClientProvider } from "../providers/IAIClientProvider";
 import { Candidate } from "../models/Candidate";
+import { cleanAndParseJSON } from "../utils/jsonHelper";
 
 export class ResumeParserService {
-  constructor(private geminiClient?: GoogleGenAI) {}
+  private aiProvider?: IAIClientProvider;
+
+  constructor(providerOrClient?: IAIClientProvider | any) {
+    if (providerOrClient) {
+      if (typeof providerOrClient.generateText === "function") {
+        this.aiProvider = providerOrClient as IAIClientProvider;
+      } else if (typeof providerOrClient.models?.generateContent === "function") {
+        // Adapt legacy GoogleGenAI client
+        this.aiProvider = {
+          id: "legacy",
+          name: "Legacy Gemini Client",
+          generateText: async (opts) => {
+            const prompt = typeof opts === "string" ? opts : opts.prompt;
+            const res = await providerOrClient.models.generateContent({
+              contents: prompt
+            });
+            return { text: res.text || "" };
+          }
+        };
+      }
+    }
+  }
 
   public async parseResume(resumeText: string): Promise<Omit<Candidate, "id">> {
     if (!resumeText || !resumeText.trim()) {
       throw new Error("Resume content is empty.");
     }
 
-    if (!this.geminiClient) {
-      console.warn("[ResumeParserService] Gemini client not configured, falling back to local heuristic parsing.");
+    if (!this.aiProvider) {
+      console.warn("[ResumeParserService] AI provider not configured, falling back to local heuristic parsing.");
       return this.fallbackParse(resumeText);
     }
 
@@ -34,14 +56,25 @@ JSON Schema:
 Resume Text:
 ${resumeText}`;
 
-      const response = await this.geminiClient.models.generateContent({
-        model: "gemini-3.8-flash",
-        contents: prompt
-      });
+      let responseText = "";
+      if (typeof this.aiProvider.generateStructured === "function") {
+        const res = await this.aiProvider.generateStructured({ prompt });
+        if (res.data && res.data.name) {
+          return {
+            name: res.data.name || "Parsed Candidate",
+            skills: Array.isArray(res.data.skills) ? res.data.skills : [],
+            experienceYears: typeof res.data.experienceYears === "number" ? res.data.experienceYears : 2,
+            locationPreference: res.data.locationPreference || "Remote"
+          };
+        }
+        responseText = res.text;
+      } else {
+        const res = await this.aiProvider.generateText({ prompt, responseMimeType: "application/json" });
+        responseText = res.text;
+      }
 
-      const responseText = response.text || "";
-      const cleaned = responseText.replace(/```json/g, "").replace(/```/g, "").trim();
-      const parsed = JSON.parse(cleaned);
+      const parsedResult = cleanAndParseJSON(responseText);
+      const parsed = parsedResult.data || {};
 
       return {
         name: parsed.name || "Parsed Candidate",
@@ -50,7 +83,7 @@ ${resumeText}`;
         locationPreference: parsed.locationPreference || "Remote"
       };
     } catch (e) {
-      console.error("[ResumeParserService] Failed to parse CV with Gemini:", e);
+      console.error("[ResumeParserService] Failed to parse CV with AI:", e);
       return this.fallbackParse(resumeText);
     }
   }

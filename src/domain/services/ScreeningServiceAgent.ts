@@ -19,6 +19,24 @@ export class ScreeningServiceAgent {
     this.aiProvider = aiProvider;
   }
 
+  private async executeModelPrompt(prompt: string, responseMimeType?: string): Promise<string> {
+    if (typeof this.aiProvider.generateText === "function") {
+      const res = await this.aiProvider.generateText({ prompt, responseMimeType });
+      return res.text || "";
+    }
+    if (typeof (this.aiProvider as any).getClient === "function") {
+      const client = (this.aiProvider as any).getClient();
+      if (client?.models?.generateContent) {
+        const res = await client.models.generateContent({
+          contents: prompt,
+          config: responseMimeType ? { responseMimeType } : undefined
+        });
+        return res.text || "";
+      }
+    }
+    return "";
+  }
+
   /**
    * Conversational Interaction: Process candidate message and return assistant follow-up
    */
@@ -70,17 +88,13 @@ ${historyText}
 
 ASSISTANT RESPONSE:`;
 
-    const aiClient = this.aiProvider.getClient();
     let assistantReply = "";
 
     try {
-      const response = await aiClient.models.generateContent({
-        model: "gemini-3.8-flash",
-        contents: prompt
-      });
-      assistantReply = response.text || "Thank you for sharing that information. Could you elaborate on your experience with the primary technical requirements listed for this role?";
+      const responseText = await this.executeModelPrompt(prompt);
+      assistantReply = responseText || "Thank you for sharing that information. Could you elaborate on your experience with the primary technical requirements listed for this role?";
     } catch (err: any) {
-      console.error("[ScreeningServiceAgent] Gemini API call failed:", err.message);
+      console.error("[ScreeningServiceAgent] AI API call failed:", err.message);
       assistantReply = "Thank you for your response. Could you provide a specific example of how you've applied these skills in a previous role?";
     }
 
@@ -158,17 +172,11 @@ STRICT GROUNDING & EVALUATION RULES:
 }
 `;
 
-    const aiClient = this.aiProvider.getClient();
     let evaluationResult: ScreeningEvaluation;
 
     try {
-      const p1Res = await aiClient.models.generateContent({
-        model: "gemini-3.8-flash",
-        contents: pass1Prompt,
-        config: { responseMimeType: "application/json" }
-      });
-
-      const parsedResult = cleanAndParseJSON(p1Res.text || "{}");
+      const p1Text = await this.executeModelPrompt(pass1Prompt, "application/json");
+      const parsedResult = cleanAndParseJSON(p1Text || "{}");
       if (!parsedResult.success || !parsedResult.data || typeof parsedResult.data.overallScore !== "number") {
         throw new Error("Invalid response format from Pass 1 evaluation.");
       }
@@ -222,12 +230,8 @@ AUDIT AUDITING INSTRUCTIONS:
     };
 
     try {
-      const p2Res = await aiClient.models.generateContent({
-        model: "gemini-3.8-flash",
-        contents: pass2Prompt,
-        config: { responseMimeType: "application/json" }
-      });
-      const p2ParsedResult = cleanAndParseJSON(p2Res.text || "{}");
+      const p2Text = await this.executeModelPrompt(pass2Prompt, "application/json");
+      const p2ParsedResult = cleanAndParseJSON(p2Text || "{}");
       if (p2ParsedResult.success && p2ParsedResult.data && p2ParsedResult.data.status) {
         pass2Audit = p2ParsedResult.data;
       }

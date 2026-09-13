@@ -30,8 +30,8 @@ export class InMemoryCalendarProvider implements ICalendarProvider {
     for (let dayOffset = 1; dayOffset <= 5; dayOffset++) {
       for (const intv of interviewers) {
         for (const hour of [9, 11, 14, 16]) {
-          const start = new Date(today.getFullYear(), today.getMonth(), today.getDate() + dayOffset, hour, 0, 0);
-          const end = new Date(today.getFullYear(), today.getMonth(), today.getDate() + dayOffset, hour + 1, 0, 0);
+          const start = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate() + dayOffset, hour, 0, 0));
+          const end = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate() + dayOffset, hour + 1, 0, 0));
           const slotId = `slot_${intv.id}_${start.getTime()}`;
 
           this.slots.set(slotId, {
@@ -93,6 +93,7 @@ export class InMemoryCalendarProvider implements ICalendarProvider {
     interviewerId: string;
     candidateId: string;
     candidateName: string;
+    candidateEmail?: string;
     slotStart: string;
     slotEnd: string;
   }): Promise<{ calendarEventId: string }> {

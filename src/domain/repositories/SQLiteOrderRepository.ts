@@ -82,6 +82,24 @@ export class SQLiteOrderRepository implements IOrderRepository {
     } catch (e) {
       // Column exists
     }
+
+    try {
+      this.db.exec(`ALTER TABLE resume_orders ADD COLUMN price_at_order_time INTEGER;`);
+    } catch (e) {
+      // Column exists
+    }
+
+    try {
+      this.db.exec(`ALTER TABLE resume_orders ADD COLUMN currency TEXT DEFAULT 'INR';`);
+    } catch (e) {
+      // Column exists
+    }
+
+    try {
+      this.db.exec(`ALTER TABLE resume_orders ADD COLUMN price_minor_units INTEGER;`);
+    } catch (e) {
+      // Column exists
+    }
   }
 
   public close(): void {
@@ -111,6 +129,9 @@ export class SQLiteOrderRepository implements IOrderRepository {
       candidateId: row.candidate_id,
       tier: row.tier as any,
       priceINR: row.price_inr,
+      priceAtOrderTime: row.price_at_order_time ?? row.price_inr,
+      priceMinorUnits: row.price_minor_units ?? (row.price_at_order_time ? row.price_at_order_time * 100 : row.price_inr * 100),
+      currency: row.currency || "INR",
       maxRevisions: row.max_revisions,
       revisionsUsed: row.revisions_used,
       paymentStatus: row.payment_status as any,
@@ -156,13 +177,14 @@ export class SQLiteOrderRepository implements IOrderRepository {
   async save(order: ResumeOrder): Promise<ResumeOrder> {
     const stmt = this.db.prepare(`
       INSERT OR REPLACE INTO resume_orders (
-        id, candidate_id, tier, price_inr, max_revisions, revisions_used,
+        id, candidate_id, tier, price_inr, price_at_order_time, currency, price_minor_units,
+        max_revisions, revisions_used,
         payment_status, delivery_status, auto_deliver_enabled,
         original_resume_text, target_job_description, rewritten_resume_text,
         fact_traceability_log, before_ats_score, after_ats_score,
         verification_audit, verification_attempts, revision_instructions, approved_by, approved_at,
         created_at, updated_at
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
 
     stmt.run(
@@ -170,6 +192,9 @@ export class SQLiteOrderRepository implements IOrderRepository {
       order.candidateId,
       order.tier,
       order.priceINR,
+      order.priceAtOrderTime ?? order.priceINR,
+      order.currency || "INR",
+      order.priceMinorUnits ?? ((order.priceAtOrderTime ?? order.priceINR) * 100),
       order.maxRevisions,
       order.revisionsUsed,
       order.paymentStatus,

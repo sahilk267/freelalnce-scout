@@ -64,6 +64,9 @@ export class TelegramBotService {
         }
       });
     }, delayMs);
+    if (this.pollTimer && typeof this.pollTimer.unref === "function") {
+      this.pollTimer.unref();
+    }
   }
 
   private loadConfig(): { token?: string; chatId?: string; configured?: boolean } | null {

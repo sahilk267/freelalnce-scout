@@ -242,38 +242,86 @@ describe("AggregatedJobProvider", () => {
     expect(result[2].id).toBe("himalayas-4");
   });
 
-  it("should tolerate partial failures of job providers and return successful ones", async () => {
+  it("should handle all-live provider scenario with accurate summary", async () => {
     const aggregator = new AggregatedJobProvider();
 
-    const mockRemotiveJobs = [
-      {
-        id: "remotive-1",
-        title: "Staff React Engineer",
-        company: "Stripe",
-        location: "US Remote",
-        salary: "$150k",
-        source: "Remotive Live API",
-        timestamp: "2026-07-12T10:00:00Z",
-        verification: "verified" as const,
-        confidence: 95,
-        originalUrl: "https://stripe.com/jobs/1",
-        duplicateStatus: "original" as const,
-        skills: ["react"]
-      }
-    ];
+    const mockJob = (id: string, src: string, title: string) => ({
+      id,
+      title,
+      company: `Company-${id}`,
+      location: "Remote",
+      salary: "$120k",
+      source: src,
+      timestamp: "2026-07-12T10:00:00Z",
+      verification: "verified" as const,
+      confidence: 95,
+      originalUrl: `https://acme.com/job/${id}`,
+      duplicateStatus: "original" as const,
+      skills: ["typescript"]
+    });
 
-    vi.spyOn(aggregator["providers"][0].instance, "fetchJobs").mockResolvedValue(mockRemotiveJobs);
-    vi.spyOn(aggregator["providers"][1].instance, "fetchJobs").mockRejectedValue(new Error("Rate Limit on Remote OK"));
+    vi.spyOn(aggregator["providers"][0].instance, "fetchJobs").mockResolvedValue([mockJob("job-1", "Remotive", "Frontend Lead")]);
+    vi.spyOn(aggregator["providers"][1].instance, "fetchJobs").mockResolvedValue([mockJob("job-2", "Remote OK", "Backend Lead")]);
+    vi.spyOn(aggregator["providers"][2].instance, "fetchJobs").mockResolvedValue([mockJob("job-3", "Himalayas", "Fullstack Lead")]);
+    vi.spyOn(aggregator["providers"][3].instance, "fetchJobs").mockResolvedValue([mockJob("job-4", "Arbeitnow", "DevOps Lead")]);
+
+    const result = await aggregator.fetchJobs();
+    expect(result).toHaveLength(4);
+    expect((result as any).summary).toEqual({ live: 4, mock: 0, failed: 0 });
+    expect(aggregator.getLastSummary()).toEqual({ live: 4, mock: 0, failed: 0 });
+  });
+
+  it("should handle mixed live/mock/error scenario without throwing and track summary accurately", async () => {
+    const aggregator = new AggregatedJobProvider();
+
+    const liveJob = {
+      id: "remotive-1",
+      title: "Staff React Engineer",
+      company: "Stripe",
+      location: "US Remote",
+      salary: "$150k",
+      source: "Remotive Live API",
+      timestamp: "2026-07-12T10:00:00Z",
+      verification: "verified" as const,
+      confidence: 95,
+      originalUrl: "https://stripe.com/jobs/1",
+      duplicateStatus: "original" as const,
+      skills: ["react"]
+    };
+
+    const mockJob: any = {
+      id: "remoteok-mock-1",
+      title: "Fallback Engineer",
+      company: "RemoteOK",
+      location: "Global",
+      salary: "$100k",
+      source: "Remote OK",
+      timestamp: "2026-07-12T10:00:00Z",
+      verification: "unverified" as const,
+      confidence: 70,
+      originalUrl: "https://remoteok.com/fallback",
+      duplicateStatus: "original" as const,
+      skills: ["javascript"],
+      sourceStatus: "mock"
+    };
+
+    vi.spyOn(aggregator["providers"][0].instance, "fetchJobs").mockResolvedValue([liveJob]);
+    vi.spyOn(aggregator["providers"][1].instance, "fetchJobs").mockResolvedValue([mockJob]);
     vi.spyOn(aggregator["providers"][2].instance, "fetchJobs").mockRejectedValue(new Error("Timeout on Himalayas"));
     vi.spyOn(aggregator["providers"][3].instance, "fetchJobs").mockRejectedValue(new Error("Network Error on Arbeitnow"));
 
-    // Should not throw, since Remotive succeeded
     const result = await aggregator.fetchJobs();
-    expect(result).toHaveLength(1);
-    expect(result[0].id).toBe("remotive-1");
+    expect(result).toHaveLength(2);
+    expect((result as any).summary).toEqual({ live: 1, mock: 1, failed: 2 });
+    expect(aggregator.getLastSummary()).toEqual({ live: 1, mock: 1, failed: 2 });
+    const statuses = aggregator.getProviderStatuses();
+    expect(statuses["Remotive"].status).toBe("live");
+    expect(statuses["Remote OK"].status).toBe("mock");
+    expect(statuses["Himalayas"].status).toBe("error");
+    expect(statuses["Arbeitnow"].status).toBe("error");
   });
 
-  it("should throw error if all job providers fail", async () => {
+  it("should never throw when all job providers fail, returning empty results and accurate failure summary", async () => {
     const aggregator = new AggregatedJobProvider();
 
     vi.spyOn(aggregator["providers"][0].instance, "fetchJobs").mockRejectedValue(new Error("Err1"));
@@ -281,6 +329,9 @@ describe("AggregatedJobProvider", () => {
     vi.spyOn(aggregator["providers"][2].instance, "fetchJobs").mockRejectedValue(new Error("Err3"));
     vi.spyOn(aggregator["providers"][3].instance, "fetchJobs").mockRejectedValue(new Error("Err4"));
 
-    await expect(aggregator.fetchJobs()).rejects.toThrow("All job providers failed");
+    const result = await aggregator.fetchJobs();
+    expect(result).toHaveLength(0);
+    expect((result as any).summary).toEqual({ live: 0, mock: 0, failed: 4 });
+    expect(aggregator.getLastSummary()).toEqual({ live: 0, mock: 0, failed: 4 });
   });
 });

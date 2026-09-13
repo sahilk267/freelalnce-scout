@@ -5,7 +5,7 @@
 
 import { describe, it, expect, beforeEach } from "vitest";
 import request from "supertest";
-import { app } from "../../../server";
+import { app, EXEMPTED_API_ROUTES, isExemptFromAdminApiKey } from "../../../server";
 import { DIContainer } from "../index";
 import { SchedulingServiceAgent } from "./SchedulingServiceAgent";
 
@@ -136,6 +136,38 @@ describe("Scheduling Dashboard API Key Authentication Tests", () => {
         .set("X-API-Key", apiKey);
       expect(res.status).toBe(200);
       expect(res.body.authenticated).toBe(true);
+    });
+  });
+
+  describe("API Gate Route Exemption Registry", () => {
+    it("centralized registry includes all candidate-facing portals and public probes", () => {
+      expect(EXEMPTED_API_ROUTES.length).toBeGreaterThanOrEqual(6);
+      expect(isExemptFromAdminApiKey("/health")).toBe(true);
+      expect(isExemptFromAdminApiKey("/auth/status")).toBe(true);
+      expect(isExemptFromAdminApiKey("/screening/sessions/sess_123/candidate")).toBe(true);
+      expect(isExemptFromAdminApiKey("/screening/sessions/sess_123/interact")).toBe(true);
+      expect(isExemptFromAdminApiKey("/scheduling/slots/sess_456")).toBe(true);
+      expect(isExemptFromAdminApiKey("/scheduling/select")).toBe(true);
+      expect(isExemptFromAdminApiKey("/scheduling/cancel")).toBe(true);
+    });
+
+    it("rejects non-exempted admin routes and requires admin X-API-Key", () => {
+      expect(isExemptFromAdminApiKey("/scheduling/sessions")).toBe(false);
+      expect(isExemptFromAdminApiKey("/scheduling/invite")).toBe(false);
+      expect(isExemptFromAdminApiKey("/scheduling/audit-logs")).toBe(false);
+      expect(isExemptFromAdminApiKey("/screening/sessions/sess_123/evaluate")).toBe(false);
+      expect(isExemptFromAdminApiKey("/freelance/dashboard")).toBe(false);
+      expect(isExemptFromAdminApiKey("/diagnostics")).toBe(false);
+    });
+
+    it("candidate slot endpoint is accessible without admin X-API-Key (delegated to session token)", async () => {
+      // Calling candidate slot discovery with an invalid session token returns 401 from candidate token auth, NOT admin gate
+      const res = await request(app)
+        .get(`/api/scheduling/slots/${validSessionId}`)
+        .set("X-Session-Token", "invalid-candidate-token");
+      
+      expect(res.status).toBe(401);
+      expect(res.body.error).toMatch(/invalid or expired session token/i);
     });
   });
 });

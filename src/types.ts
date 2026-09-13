@@ -13,7 +13,9 @@ export type ModuleId =
   | "memory"
   | "diagnostics"
   | "terminal"
-  | "integrations";
+  | "integrations"
+  | "users"
+  | "pricing";
 
 export interface SystemModule {
   id: ModuleId;
@@ -31,15 +33,38 @@ export interface SystemLog {
   message: string;
 }
 
+export interface AIProviderStatus {
+  id: string;
+  name: string;
+  consecutiveFailures: number;
+  totalRequests: number;
+  totalFailures: number;
+  isCoolingDown: boolean;
+  cooldownRemainingMs: number;
+}
+
+export interface AIProviderDiagnosticsState {
+  activeProvider: string;
+  primaryProvider: string;
+  fallbackProvider: string | null;
+  failoverThreshold: number;
+  cooldownPeriodMs: number;
+  isFailoverActive: boolean;
+  providers: Record<string, AIProviderStatus>;
+}
+
 export interface DiagnosticMetrics {
   cpuUsage: number;
   memoryUsage: number; // in MB
   latency: number; // in ms
   apiStatus: {
     gemini: "online" | "offline" | "unconfigured";
+    anthropic?: "online" | "offline" | "unconfigured";
+    aiActiveProvider?: string;
     smtp: "online" | "offline" | "unconfigured";
     telegram: "online" | "offline" | "unconfigured";
     gmail: "online" | "offline" | "unconfigured";
+    [key: string]: any;
   };
   activeAgents: number;
   uptime: number; // in seconds
@@ -71,6 +96,8 @@ export interface FreelanceProject {
   originalUrl: string;
   skills: string[];
   description: string;
+  sourceStatus?: "live" | "mock" | "error";
+  sourceStatusReason?: string;
 }
 
 export interface MemoryEntry {
