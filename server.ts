@@ -102,11 +102,7 @@ export function validateJwtSecret(secret: string | undefined): string {
   return secret.trim();
 }
 
-if (!process.env.JWT_SECRET || process.env.JWT_SECRET.trim().length < 32) {
-  console.error("[FATAL] JWT_SECRET is missing or too short (must be >= 32 chars). Refusing to boot.");
-  process.exit(1);
-}
-const activeJwtSecret = process.env.JWT_SECRET.trim();
+const activeJwtSecret = validateJwtSecret(process.env.JWT_SECRET);
 
 const app = express();
 
